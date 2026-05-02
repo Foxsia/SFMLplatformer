@@ -1,0 +1,44 @@
+# =========================
+# Build folders
+# =========================
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+*.vcxproj.user
+*.vcxproj.filters
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# =========================
+# Compiled / temporary files
+# =========================
+*.exe
+*.obj
+*.pdb
+*.ilk
+*.log
+*.tlog
+
+# =========================
+# System files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Optional (cache, etc.)
+# =========================
+ipch/
+*.aps
+*.cache
+*.tmp
