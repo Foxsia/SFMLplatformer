@@ -3,6 +3,7 @@
 void Game::initWindow()
 {
 	window.create(sf::VideoMode(800, 600), "Platformer", sf::Style::Close | sf::Style::Titlebar);
+	window.setFramerateLimit(144);
 }
 
 void Game::initPlayer()
@@ -36,9 +37,17 @@ void Game::update()
 	updatePlayer();
 }
 
+void Game::renderPlayer()
+{
+	player->render(window);
+}
+
 void Game::render()
 {
 	window.clear();
+
+	renderPlayer();
+
 	window.display();
 }
 

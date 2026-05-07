@@ -8,6 +8,9 @@ private:
 	sf::Sprite sprite;
 	sf::Texture textureSheet;
 
+	//animation
+	sf::IntRect currentFrame;
+
 	void initTexture();
 	void initSprite();
 public:
@@ -15,6 +18,7 @@ public:
 	virtual ~Player();
 
 	//func
+	void updateMovement();
 	void update();
 	void render(sf::RenderTarget& target);
 };
