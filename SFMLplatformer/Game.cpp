@@ -33,7 +33,14 @@ void Game::update()
 	while (window.pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window.close();
+
+		if (event.type == sf::Event::KeyReleased &&
+			(event.key.code == sf::Keyboard::A ||
+			event.key.code == sf::Keyboard::D ||
+			event.key.code == sf::Keyboard::W ||
+			event.key.code == sf::Keyboard::S)) player->resetAnimationTimer();
 	}
+
 	updatePlayer();
 }
 

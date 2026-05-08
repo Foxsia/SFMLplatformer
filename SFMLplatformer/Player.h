@@ -14,21 +14,31 @@ private:
 	//animation
 	short animState;
 	sf::IntRect currentFrame;
+	bool animationSwitch;
 
 	//physics
 	sf::Vector2f velocity;
+	float velocityMax;
+	float velocityMin;
 	float acceleration;
-	float deceleration;
+	float drag;
+	float gravity;
+	float velocityMaxY;
 
 	void initVariables();
 	void initTexture();
 	void initSprite();
 	void initAnimations();
+	void initPhysics();
 public:
 	Player();
 	virtual ~Player();
 
+	const bool& getAnimSwitch();
+
 	//func
+	void resetAnimationTimer();
+	void move(const float dir_x, const float dir_y);
 	void updatePhysics();
 	void updateMovement();
 	void updateAnimation();
