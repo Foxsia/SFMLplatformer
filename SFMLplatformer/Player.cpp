@@ -60,6 +60,21 @@ const bool& Player::getAnimSwitch()
 	return anim_switch;
 }
 
+const sf::FloatRect Player::getGlobalBounds() const
+{
+	return sprite.getGlobalBounds();
+}
+
+void Player::setPosition(const float x, const float y)
+{
+	sprite.setPosition(x, y);
+}
+
+void Player::resetVelocityY()
+{
+	velocity.y = 0.f;
+}
+
 void Player::resetAnimationTimer()
 {
 	animationTimer.restart();

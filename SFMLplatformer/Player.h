@@ -34,7 +34,13 @@ public:
 	Player();
 	virtual ~Player();
 
+	//geters
 	const bool& getAnimSwitch();
+	const sf::FloatRect getGlobalBounds() const;
+
+	//modifiers
+	void setPosition(const float x, const float y);
+	void resetVelocityY();
 
 	//func
 	void resetAnimationTimer();
