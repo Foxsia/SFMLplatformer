@@ -17,9 +17,9 @@ void Player::initTexture()
 void Player::initSprite()
 {
 	sprite.setTexture(textureSheet);
-	currentFrame = sf::IntRect(0, 0, 32, 32);
+	currentFrame = sf::IntRect(0, 0, 32, 28);
 	sprite.setTextureRect(currentFrame);
-	sprite.setScale(5.5f, 5.5f);
+	sprite.setScale(3.f, 3.f);
 }
 
 void Player::initAnimations()
@@ -30,10 +30,10 @@ void Player::initAnimations()
 
 void Player::initPhysics()
 {
-	velocityMax = 4.f;
+	velocityMax = 3.f;
 	velocityMin = 0.1f;
-	acceleration = 0.4f;
-	drag = 0.85f;
+	acceleration = 0.5f;
+	drag = 0.9f;
 	gravity = 4.f;
 	velocityMaxY = 15.f;
 }
@@ -58,6 +58,11 @@ const bool& Player::getAnimSwitch()
 	if (animationSwitch) animationSwitch = false;
 
 	return anim_switch;
+}
+
+const sf::Vector2f Player::getPosition() const
+{
+	return sprite.getPosition();
 }
 
 const sf::FloatRect Player::getGlobalBounds() const
@@ -153,7 +158,7 @@ void Player::updateAnimation()
 	}
 	else if (animState == MOVING_RIGHT)
 	{
-		if (animationTimer.getElapsedTime().asSeconds() >= 0.2f || getAnimSwitch())
+		if (animationTimer.getElapsedTime().asSeconds() >= 0.1f || getAnimSwitch())
 		{
 			currentFrame.top = 64.f;
 			currentFrame.left += 32.f;
@@ -162,6 +167,24 @@ void Player::updateAnimation()
 			animationTimer.restart();
 			sprite.setTextureRect(currentFrame);
 		}
+
+		sprite.setScale(3.f, 3.f);
+		sprite.setOrigin(0.f, 0.f);
+	}
+	else if (animState == MOVING_LEFT)
+	{
+		if (animationTimer.getElapsedTime().asSeconds() >= 0.1f || getAnimSwitch())
+		{
+			currentFrame.top = 64.f;
+			currentFrame.left += 32.f;
+			if (currentFrame.left >= 224.f) currentFrame.left = 0;
+
+			animationTimer.restart();
+			sprite.setTextureRect(currentFrame);
+		}
+
+		sprite.setScale(-3.f, 3.f);
+		sprite.setOrigin(sprite.getGlobalBounds().width / 3.f, 0.f);
 	}
 	else
 	{
@@ -179,4 +202,11 @@ void Player::update()
 void Player::render(sf::RenderTarget& target)
 {
 	target.draw(sprite);
+
+	sf::CircleShape circle;
+	circle.setFillColor(sf::Color::Red);
+	circle.setRadius(2.f);
+	circle.setPosition(sprite.getPosition());
+
+	target.draw(circle);
 }

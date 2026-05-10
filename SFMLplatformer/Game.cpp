@@ -29,10 +29,10 @@ void Game::updatePlayer()
 
 void Game::updateCollision()
 {
-	if (player->getGlobalBounds().top + player->getGlobalBounds().height > window.getSize().y)
+	if (player->getPosition().y + player->getGlobalBounds().height > window.getSize().y)
 	{
 		player->resetVelocityY();
-		player->setPosition(player->getGlobalBounds().left, window.getSize().y - player->getGlobalBounds().height);
+		player->setPosition(player->getPosition().x, window.getSize().y - player->getGlobalBounds().height);
 	}
 }
 
