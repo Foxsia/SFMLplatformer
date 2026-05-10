@@ -11,6 +11,8 @@ private:
 	sf::RenderWindow window;
 	sf::Event event;
 	sf::Texture tileSheet;
+	sf::Clock dtClock;
+	float deltaTime;
 
 	Player* player;
 	TileMap* tileMap;

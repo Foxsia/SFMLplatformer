@@ -31,12 +31,12 @@ void Player::initAnimations()
 
 void Player::initPhysics()
 {
-	velocityMax = 3.f;
-	velocityMin = 0.1f;
-	acceleration = 0.5f;
-	drag = 0.9f;
-	gravity = 0.8f;
-	velocityMaxY = 25.f;
+	velocityMax = 500.f;
+	velocityMin = 1.f;
+	acceleration = 4000.f;
+	drag = 0.95f;
+	gravity = 1500.f;
+	velocityMaxY = 1000.f;
 	canJump = false;
 }
 
@@ -88,10 +88,10 @@ void Player::resetAnimationTimer()
 	animationSwitch = true;
 }
 
-void Player::move(const float dir_x, const float dir_y)
+void Player::move(const float dir_x, const float dir_y, const float& delta_time)
 {
 	//acceleration
-	velocity.x += dir_x * acceleration;
+	velocity.x += dir_x * acceleration * delta_time;
 
 	//limit velocity
 	if (std::abs(velocity.x) > velocityMax)
@@ -102,20 +102,20 @@ void Player::move(const float dir_x, const float dir_y)
 
 void Player::jump()
 {
-	velocity.y = -25.f;
+	velocity.y = -700.f;
 	canJump = false;
 }
 
-void Player::updatePhysics()
+void Player::updatePhysics(const float& delta_time)
 {
 	//Gravity
-	velocity.y += 1.0 * gravity;
+	velocity.y += delta_time * gravity;
 	if (std::abs(velocity.y) > velocityMaxY)
 	{
 		velocity.y = velocityMaxY;
 	}
 	//deceleration
-	velocity *= drag;
+	velocity.x *= drag;
 
 	//limit deceleration
 	if (std::abs(velocity.x) < velocityMin) velocity.x = 0.f;
@@ -123,7 +123,7 @@ void Player::updatePhysics()
 
 	if (std::abs(velocity.x) <= 0.1f) velocity.x = 0.f;
 
-	sprite.move(velocity);
+	sprite.move(velocity * delta_time);
 }
 
 void Player::updateMovement()
@@ -195,11 +195,11 @@ void Player::updateAnimation()
 	}
 }
 
-void Player::update()
+void Player::update(const float& delta_time)
 {
+	updatePhysics(delta_time);
 	updateMovement();
 	updateAnimation();
-	updatePhysics();
 }
 
 void Player::render(sf::RenderTarget& target)

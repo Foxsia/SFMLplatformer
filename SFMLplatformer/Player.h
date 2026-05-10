@@ -51,12 +51,12 @@ public:
 
 	//func
 	void resetAnimationTimer();
-	void move(const float dir_x, const float dir_y);
+	void move(const float dir_x, const float dir_y, const float& delta_time);
 	void jump();
-	void updatePhysics();
+	void updatePhysics(const float& delta_time);
 	void updateMovement();
 	void updateAnimation();
-	void update();
+	void update(const float& delta_time);
 	void render(sf::RenderTarget& target);
 };
 

@@ -40,6 +40,8 @@ void Game::initTileMap()
 
 Game::Game()
 {
+	deltaTime = 0.f;
+
 	initWindow();
 	initInput();
 	initTileSheet();
@@ -62,11 +64,11 @@ void Game::updateInput()
 	//player movement
 	if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_MOVE_LEFT"]))
 	{
-		player->move(-1.f, 0.f);
+		player->move(-1.f, 0.f, deltaTime);
 	}
 	else if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_MOVE_RIGHT"]))
 	{
-		player->move(1.f, 0.f);
+		player->move(1.f, 0.f, deltaTime);
 	}
 
 	if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_JUMP"]) && player->getCanJump())
@@ -87,7 +89,7 @@ void Game::updateInput()
 
 void Game::updatePlayer()
 {
-	player->update();
+	player->update(deltaTime);
 }
 
 void Game::updateCollision()
@@ -107,6 +109,8 @@ void Game::updateTileMap()
 
 void Game::update()
 {
+	deltaTime = dtClock.restart().asSeconds();
+
 	//poll window event
 	while (window.pollEvent(event))
 	{
