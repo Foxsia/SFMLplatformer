@@ -26,6 +26,7 @@ void Player::initAnimations()
 {
 	animationTimer.restart();
 	animationSwitch = true;
+	currentFrame.left = 0.f;
 }
 
 void Player::initPhysics()
@@ -34,8 +35,9 @@ void Player::initPhysics()
 	velocityMin = 0.1f;
 	acceleration = 0.5f;
 	drag = 0.9f;
-	gravity = 4.f;
-	velocityMaxY = 15.f;
+	gravity = 0.8f;
+	velocityMaxY = 25.f;
+	canJump = false;
 }
 
 Player::Player()
@@ -94,19 +96,24 @@ void Player::move(const float dir_x, const float dir_y)
 	//limit velocity
 	if (std::abs(velocity.x) > velocityMax)
 	{
-		velocity.x = velocityMax * ((velocity.x < 0) ? -1.f : 1.f);
+		velocity.x = velocityMax * ((velocity.x < 0.f) ? -1.f : 1.f);
 	}
+}
+
+void Player::jump()
+{
+	velocity.y = -25.f;
+	canJump = false;
 }
 
 void Player::updatePhysics()
 {
 	//Gravity
 	velocity.y += 1.0 * gravity;
-	if (std::abs(velocity.x) > velocityMaxY)
+	if (std::abs(velocity.y) > velocityMaxY)
 	{
-		velocity.y = velocityMaxY * ((velocity.y < 0) ? -1.f : 1.f);
+		velocity.y = velocityMaxY;
 	}
-	
 	//deceleration
 	velocity *= drag;
 
@@ -121,17 +128,6 @@ void Player::updatePhysics()
 
 void Player::updateMovement()
 {
-	animState = IDLE;
-	//change it to be outside of player(too many ifs)
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))//left
-	{
-		this->move(-1.f, 0.f);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))//right
-	{
-		this->move(1.f, 0.f);
-	}
-
 	if (velocity.x > 0.f)
 	{
 		animState = MOVING_RIGHT;
@@ -148,14 +144,16 @@ void Player::updateMovement()
 
 void Player::updateAnimation()
 {
+	float speedPercent = (abs(velocity.x) / velocityMax);
+
 	if (animState == IDLE)
 	{
 		//seperate classes in the future
-		if (animationTimer.getElapsedTime().asSeconds() >= 0.2f || getAnimSwitch())
+		if (animationTimer.getElapsedTime().asMilliseconds() >= 200.f || getAnimSwitch())
 		{
 			currentFrame.top = 0.f;
 			currentFrame.left += 32.f;
-			if (currentFrame.left >= 96.f) currentFrame.left = 0;
+			if (currentFrame.left > 96.f) currentFrame.left = 0;
 
 			animationTimer.restart();
 			sprite.setTextureRect(currentFrame);
@@ -163,11 +161,11 @@ void Player::updateAnimation()
 	}
 	else if (animState == MOVING_RIGHT)
 	{
-		if (animationTimer.getElapsedTime().asSeconds() >= 0.1f || getAnimSwitch())
+		if (animationTimer.getElapsedTime().asMilliseconds() >= 100.f /speedPercent || getAnimSwitch())
 		{
 			currentFrame.top = 64.f;
 			currentFrame.left += 32.f;
-			if (currentFrame.left >= 224.f) currentFrame.left = 0;
+			if (currentFrame.left > 224.f) currentFrame.left = 0;
 
 			animationTimer.restart();
 			sprite.setTextureRect(currentFrame);
@@ -178,11 +176,11 @@ void Player::updateAnimation()
 	}
 	else if (animState == MOVING_LEFT)
 	{
-		if (animationTimer.getElapsedTime().asSeconds() >= 0.1f || getAnimSwitch())
+		if (animationTimer.getElapsedTime().asMilliseconds() >= 100.f / speedPercent || getAnimSwitch())
 		{
 			currentFrame.top = 64.f;
 			currentFrame.left += 32.f;
-			if (currentFrame.left >= 224.f) currentFrame.left = 0;
+			if (currentFrame.left > 224.f) currentFrame.left = 0;
 
 			animationTimer.restart();
 			sprite.setTextureRect(currentFrame);

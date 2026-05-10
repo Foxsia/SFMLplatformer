@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include <map>
 #include "Player.h"
 #include "TileMap.h"
 
@@ -13,8 +14,11 @@ private:
 
 	Player* player;
 	TileMap* tileMap;
+	std::map<std::string, sf::Keyboard::Key> keyboardMappings;
+	std::map<std::string, sf::Mouse::Button> mouseMappings;
 
 	void initWindow();
+	void initInput();
 	void initTileSheet();
 	void initPlayer();
 	void initTileMap();
@@ -23,6 +27,7 @@ public:
 	virtual ~Game();
 
 	//functions
+	void updateInput();
 	void updatePlayer();
 	void updateCollision();
 	void updateTileMap();

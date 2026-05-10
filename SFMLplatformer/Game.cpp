@@ -6,9 +6,23 @@ void Game::initWindow()
 	window.setFramerateLimit(144);
 }
 
+void Game::initInput()
+{
+	//mouse
+	mouseMappings["BTN_ADD_TILE"] = sf::Mouse::Button::Left;
+	mouseMappings["BTN_REMOVE_TILE"] = sf::Mouse::Button::Right;
+
+	//keyboard
+	keyboardMappings["KEY_MOVE_LEFT"] = sf::Keyboard::Key::A;
+	keyboardMappings["KEY_MOVE_RIGHT"] = sf::Keyboard::Key::D;
+	keyboardMappings["KEY_MOVE_UP"] = sf::Keyboard::Key::W;
+	keyboardMappings["KEY_MOVE_DOWN"] = sf::Keyboard::Key::S;
+	keyboardMappings["KEY_JUMP"] = sf::Keyboard::Key::Space;
+}
+
 void Game::initTileSheet()
 {
-	if (!tileSheet.loadFromFile("assets/player.png"))
+	if (!tileSheet.loadFromFile("assets/tile_sheet.png"))
 	{
 		std::cout << "Error::Game::Couldn't load the tile sheet!\n";
 	}
@@ -22,12 +36,12 @@ void Game::initPlayer()
 void Game::initTileMap()
 {
 	tileMap = new TileMap(20, 20, &tileSheet, 32);
-	tileMap->addTile(0, 0);
 }
 
 Game::Game()
 {
 	initWindow();
+	initInput();
 	initTileSheet();
 	initPlayer();
 	initTileMap();
@@ -39,6 +53,38 @@ Game::~Game()
 	delete tileMap;
 }
 
+void Game::updateInput()
+{
+	//update mouse pos
+	const int mouseX = int(sf::Mouse::getPosition(getWindow()).x / int(tileMap->getTileSize()));
+	const int mouseY = int(sf::Mouse::getPosition(getWindow()).y / int(tileMap->getTileSize()));
+
+	//player movement
+	if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_MOVE_LEFT"]))
+	{
+		player->move(-1.f, 0.f);
+	}
+	else if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_MOVE_RIGHT"]))
+	{
+		player->move(1.f, 0.f);
+	}
+
+	if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_JUMP"]) && player->getCanJump())
+	{
+		player->jump();
+	}
+
+	//tile func
+	if (sf::Mouse::isButtonPressed(mouseMappings["BTN_ADD_TILE"]))
+	{
+		tileMap->addTile(mouseX, mouseY);
+	}
+	else if (sf::Mouse::isButtonPressed(mouseMappings["BTN_REMOVE_TILE"]))
+	{
+		tileMap->removeTile(mouseX, mouseY);
+	}
+}
+
 void Game::updatePlayer()
 {
 	player->update();
@@ -48,6 +94,7 @@ void Game::updateCollision()
 {
 	if (player->getPosition().y + player->getGlobalBounds().height > window.getSize().y)
 	{
+		player->setCanJump(true);
 		player->resetVelocityY();
 		player->setPosition(player->getPosition().x, window.getSize().y - player->getGlobalBounds().height);
 	}
@@ -64,14 +111,9 @@ void Game::update()
 	while (window.pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window.close();
-
-		if (event.type == sf::Event::KeyReleased &&
-			(event.key.code == sf::Keyboard::A ||
-			event.key.code == sf::Keyboard::D ||
-			event.key.code == sf::Keyboard::W ||
-			event.key.code == sf::Keyboard::S)) player->resetAnimationTimer();
 	}
 
+	updateInput();
 	updatePlayer();
 	updateCollision();
 	updateTileMap();

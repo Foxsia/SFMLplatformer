@@ -25,6 +25,8 @@ private:
 	float gravity;
 	float velocityMaxY;
 
+	bool canJump;
+
 	void initVariables();
 	void initTexture();
 	void initSprite();
@@ -39,6 +41,10 @@ public:
 	const sf::Vector2f getPosition() const;
 	const sf::FloatRect getGlobalBounds() const;
 
+	//inline func
+	inline const bool& getCanJump() const { return canJump; }
+	inline void setCanJump(const bool canJump) { this->canJump = canJump; }
+
 	//modifiers
 	void setPosition(const float x, const float y);
 	void resetVelocityY();
@@ -46,6 +52,7 @@ public:
 	//func
 	void resetAnimationTimer();
 	void move(const float dir_x, const float dir_y);
+	void jump();
 	void updatePhysics();
 	void updateMovement();
 	void updateAnimation();

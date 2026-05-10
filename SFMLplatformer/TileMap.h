@@ -14,6 +14,9 @@ public:
 	TileMap(unsigned width, unsigned height, sf::Texture* tile_sheet, unsigned tile_size);
 	virtual ~TileMap();
 
+	//inline func
+	inline const unsigned& getTileSize() const { return tileSize; }
+
 	//func
 	void addTile(unsigned x, unsigned y);
 	void removeTile(unsigned x, unsigned y);
