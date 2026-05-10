@@ -114,6 +114,8 @@ void Player::updatePhysics()
 	if (std::abs(velocity.x) < velocityMin) velocity.x = 0.f;
 	if (std::abs(velocity.y) < velocityMin) velocity.y = 0.f;
 
+	if (std::abs(velocity.x) <= 0.1f) velocity.x = 0.f;
+
 	sprite.move(velocity);
 }
 
@@ -124,21 +126,24 @@ void Player::updateMovement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))//left
 	{
 		this->move(-1.f, 0.f);
-		animState = MOVING_LEFT;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))//right
 	{
 		this->move(1.f, 0.f);
+	}
+
+	if (velocity.x > 0.f)
+	{
 		animState = MOVING_RIGHT;
 	}
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))//top
-	//{
-	//	sprite.move(0.f, -1.f);
-	//}
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))//down
-	//{
-	//	sprite.move(0.f, 1.f);
-	//}
+	else if (velocity.x < 0.f)
+	{
+		animState = MOVING_LEFT;
+	}
+	else
+	{
+		animState = IDLE;
+	}
 }
 
 void Player::updateAnimation()
@@ -202,11 +207,4 @@ void Player::update()
 void Player::render(sf::RenderTarget& target)
 {
 	target.draw(sprite);
-
-	sf::CircleShape circle;
-	circle.setFillColor(sf::Color::Red);
-	circle.setRadius(2.f);
-	circle.setPosition(sprite.getPosition());
-
-	target.draw(circle);
 }

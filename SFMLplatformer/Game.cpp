@@ -6,20 +6,37 @@ void Game::initWindow()
 	window.setFramerateLimit(144);
 }
 
+void Game::initTileSheet()
+{
+	if (!tileSheet.loadFromFile("assets/player.png"))
+	{
+		std::cout << "Error::Game::Couldn't load the tile sheet!\n";
+	}
+}
+
 void Game::initPlayer()
 {
 	player = new Player();
 }
 
+void Game::initTileMap()
+{
+	tileMap = new TileMap(20, 20, &tileSheet, 32);
+	tileMap->addTile(0, 0);
+}
+
 Game::Game()
 {
 	initWindow();
+	initTileSheet();
 	initPlayer();
+	initTileMap();
 }
 
 Game::~Game()
 {
 	delete player;
+	delete tileMap;
 }
 
 void Game::updatePlayer()
@@ -34,6 +51,11 @@ void Game::updateCollision()
 		player->resetVelocityY();
 		player->setPosition(player->getPosition().x, window.getSize().y - player->getGlobalBounds().height);
 	}
+}
+
+void Game::updateTileMap()
+{
+	tileMap->update();
 }
 
 void Game::update()
@@ -52,6 +74,7 @@ void Game::update()
 
 	updatePlayer();
 	updateCollision();
+	updateTileMap();
 }
 
 void Game::renderPlayer()
@@ -59,10 +82,16 @@ void Game::renderPlayer()
 	player->render(window);
 }
 
+void Game::renderTileMap()
+{
+	tileMap->render(window);
+}
+
 void Game::render()
 {
 	window.clear();
 
+	renderTileMap();
 	renderPlayer();
 
 	window.display();
