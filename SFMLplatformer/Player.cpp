@@ -17,16 +17,12 @@ void Player::initTexture()
 void Player::initSprite()
 {
 	sprite.setTexture(textureSheet);
-	currentFrame = sf::IntRect(0, 0, 32, 28);
-	sprite.setTextureRect(currentFrame);
 	sprite.setScale(3.f, 3.f);
 }
 
 void Player::initAnimations()
 {
-	animationTimer.restart();
-	animationSwitch = true;
-	currentFrame.left = 0.f;
+	animationComponent = new AnimationComponent(sprite, textureSheet);
 }
 
 void Player::initPhysics()
@@ -51,15 +47,7 @@ Player::Player()
 
 Player::~Player()
 {
-}
-
-const bool& Player::getAnimSwitch()
-{
-	bool anim_switch = animationSwitch;
-
-	if (animationSwitch) animationSwitch = false;
-
-	return anim_switch;
+	delete animationComponent;
 }
 
 const sf::Vector2f Player::getPosition() const
@@ -80,12 +68,6 @@ void Player::setPosition(const float x, const float y)
 void Player::resetVelocityY()
 {
 	velocity.y = 0.f;
-}
-
-void Player::resetAnimationTimer()
-{
-	animationTimer.restart();
-	animationSwitch = true;
 }
 
 void Player::move(const float dir_x, const float dir_y, const float& delta_time)
@@ -131,10 +113,14 @@ void Player::updateMovement()
 	if (velocity.x > 0.f)
 	{
 		animState = MOVING_RIGHT;
+		sprite.setScale(3.f, 3.f);
+		sprite.setOrigin(0.f, 0.f);
 	}
 	else if (velocity.x < 0.f)
 	{
 		animState = MOVING_LEFT;
+		sprite.setScale(-3.f, 3.f);
+		sprite.setOrigin(sprite.getGlobalBounds().width / 3.f, 0.f);
 	}
 	else
 	{
@@ -142,64 +128,19 @@ void Player::updateMovement()
 	}
 }
 
-void Player::updateAnimation()
+void Player::updateAnimation(const float& delta_time)
 {
-	float speedPercent = (abs(velocity.x) / velocityMax);
-
 	if (animState == IDLE)
-	{
-		//seperate classes in the future
-		if (animationTimer.getElapsedTime().asMilliseconds() >= 200.f || getAnimSwitch())
-		{
-			currentFrame.top = 0.f;
-			currentFrame.left += 32.f;
-			if (currentFrame.left > 96.f) currentFrame.left = 0;
-
-			animationTimer.restart();
-			sprite.setTextureRect(currentFrame);
-		}
-	}
-	else if (animState == MOVING_RIGHT)
-	{
-		if (animationTimer.getElapsedTime().asMilliseconds() >= 100.f /speedPercent || getAnimSwitch())
-		{
-			currentFrame.top = 64.f;
-			currentFrame.left += 32.f;
-			if (currentFrame.left > 224.f) currentFrame.left = 0;
-
-			animationTimer.restart();
-			sprite.setTextureRect(currentFrame);
-		}
-
-		sprite.setScale(3.f, 3.f);
-		sprite.setOrigin(0.f, 0.f);
-	}
-	else if (animState == MOVING_LEFT)
-	{
-		if (animationTimer.getElapsedTime().asMilliseconds() >= 100.f / speedPercent || getAnimSwitch())
-		{
-			currentFrame.top = 64.f;
-			currentFrame.left += 32.f;
-			if (currentFrame.left > 224.f) currentFrame.left = 0;
-
-			animationTimer.restart();
-			sprite.setTextureRect(currentFrame);
-		}
-
-		sprite.setScale(-3.f, 3.f);
-		sprite.setOrigin(sprite.getGlobalBounds().width / 3.f, 0.f);
-	}
+		animationComponent->play("IDLE", delta_time);
 	else
-	{
-		animationTimer.restart();
-	}
+		animationComponent->play("RUN", delta_time);
 }
 
 void Player::update(const float& delta_time)
 {
 	updatePhysics(delta_time);
 	updateMovement();
-	updateAnimation();
+	updateAnimation(delta_time);
 }
 
 void Player::render(sf::RenderTarget& target)
