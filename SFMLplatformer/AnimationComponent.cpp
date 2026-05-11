@@ -8,14 +8,14 @@ AnimationComponent::AnimationComponent(sf::Sprite& sprite, sf::Texture& textureS
             0, 0,
             32, 28,
             3,
-            200.f));
+            40.f));
 
     add("RUN",
         new Animation(sprite,
             0, 64,
             32, 28,
             8,
-            100.f));
+            20.f));
 }
 
 AnimationComponent::~AnimationComponent()

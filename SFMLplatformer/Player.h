@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "AnimationComponent.h"
+#include "MovementComponent.h"
 
 enum PLAYER_ANIMATION_STATES {IDLE = 0, MOVING_LEFT, MOVING_RIGHT, JUMPING, FALLING};
 
@@ -16,13 +17,7 @@ private:
 	AnimationComponent* animationComponent;
 
 	//physics
-	sf::Vector2f velocity;
-	float velocityMax;
-	float velocityMin;
-	float acceleration;
-	float drag;
-	float gravity;
-	float velocityMaxY;
+	MovementComponent* movementComponent;
 
 	bool canJump;
 
