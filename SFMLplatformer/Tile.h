@@ -12,6 +12,7 @@ public:
 
 	const sf::FloatRect getGlobalBounds() const;
 
+	const sf::FloatRect getHitbox() const;
 
 	void update();
 	void render(sf::RenderTarget& target);

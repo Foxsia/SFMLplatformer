@@ -2,7 +2,7 @@
 
 void Game::initWindow()
 {
-	window.create(sf::VideoMode(800, 600), "Platformer", sf::Style::Close | sf::Style::Titlebar);
+	window.create(sf::VideoMode(800, 640), "Platformer", sf::Style::Close | sf::Style::Titlebar);
 	window.setFramerateLimit(144);
 }
 
@@ -35,7 +35,7 @@ void Game::initPlayer()
 
 void Game::initTileMap()
 {
-	tileMap = new TileMap(20, 20, &tileSheet, 32);
+	tileMap = new TileMap(25, 20, &tileSheet, 32);
 }
 
 Game::Game()
@@ -107,6 +107,46 @@ void Game::updateTileMap()
 	tileMap->update();
 }
 
+void Game::updateTileCollision()
+{
+	bool grounded = false;
+
+	sf::FloatRect playerBounds = player->getGlobalBounds();
+
+	for (int x = 0; x < 25; x++)
+	{
+		for (int y = 0; y < 20; y++)
+		{
+			Tile* tile = tileMap->getTile(x, y);
+
+			if (!tile) continue;
+
+			sf::FloatRect tileBounds = tile->getHitbox();
+
+			if (!playerBounds.intersects(tileBounds)) continue;
+
+			// collision only from top
+			float playerBottom = playerBounds.top + playerBounds.height;
+
+			if (playerBottom <= tileBounds.top + 20.f)
+			{
+				player->setPosition(
+					playerBounds.left,
+					tileBounds.top - playerBounds.height
+				);
+
+				player->resetVelocityY();
+
+				grounded = true;
+
+				playerBounds = player->getGlobalBounds();
+			}
+		}
+	}
+
+	player->setCanJump(grounded);
+}
+
 void Game::update()
 {
 	deltaTime = dtClock.restart().asSeconds();
@@ -119,6 +159,7 @@ void Game::update()
 
 	updateInput();
 	updatePlayer();
+	updateTileCollision();
 	updateCollision();
 	updateTileMap();
 }

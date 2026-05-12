@@ -30,6 +30,19 @@ TileMap::~TileMap()
 	}
 }
 
+Tile* TileMap::getTile(unsigned x, unsigned y)
+{
+	if (x < tiles.size())
+	{
+		if (y < tiles[x].size())
+		{
+			return tiles[x][y];
+		}
+	}
+
+	return nullptr;
+}
+
 void TileMap::addTile(unsigned x, unsigned y)
 {
 	if (x < tiles.size() && x >= 0)

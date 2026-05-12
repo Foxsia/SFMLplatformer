@@ -17,6 +17,9 @@ public:
 	//inline func
 	inline const unsigned& getTileSize() const { return tileSize; }
 
+	//getters
+	Tile* getTile(unsigned x, unsigned y);
+
 	//func
 	void addTile(unsigned x, unsigned y);
 	void removeTile(unsigned x, unsigned y);

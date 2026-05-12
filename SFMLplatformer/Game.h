@@ -33,6 +33,7 @@ public:
 	void updatePlayer();
 	void updateCollision();
 	void updateTileMap();
+	void updateTileCollision();
 	void update();
 
 	void renderPlayer();

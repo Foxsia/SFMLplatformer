@@ -13,6 +13,11 @@ const sf::FloatRect Tile::getGlobalBounds() const
 	return sprite.getGlobalBounds();
 }
 
+const sf::FloatRect Tile::getHitbox() const
+{
+	return sf::FloatRect(sprite.getPosition(), sf::Vector2f(28.f, 32.f));
+}
+
 void Tile::update()
 {
 }
