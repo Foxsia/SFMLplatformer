@@ -6,15 +6,16 @@ class Tile
 {
 private:
 	sf::Sprite sprite;
-	const bool damaging;
+	static constexpr unsigned size = 32;
 public:
-	Tile(const unsigned& grid_pos_x, const unsigned& grid_pos_y, const unsigned& tile_size, sf::Texture* texture_sheet, sf::IntRect texture_rect, bool damaging = false);
+	Tile(unsigned grid_pos_x, unsigned grid_pos_y, sf::Texture* texture_sheet, sf::IntRect texture_rect);
 
 	const sf::FloatRect getGlobalBounds() const;
 
 	const sf::FloatRect getHitbox() const;
 
-	void update();
+	static constexpr unsigned getSize() { return size; }
+
 	void render(sf::RenderTarget& target);
 };
 

@@ -29,7 +29,7 @@ void AnimationComponent::add(const std::string& key, Animation* animation)
     animations[key] = animation;
 }
 
-void AnimationComponent::play(const std::string& key, const float& delta_time)
+void AnimationComponent::play(const std::string& key, float delta_time)
 {
     animations[key]->play(delta_time);
 }

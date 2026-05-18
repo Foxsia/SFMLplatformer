@@ -15,6 +15,6 @@ public:
 	~AnimationComponent();
 
 	void add(const std::string& key, Animation* animation);
-	void play(const std::string& key, const float& dt);
+	void play(const std::string& key, float dt);
 };
 

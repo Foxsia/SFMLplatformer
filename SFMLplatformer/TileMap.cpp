@@ -2,7 +2,7 @@
 
 TileMap::TileMap()
 {
-	tileSheet = NULL;
+	tileSheet = nullptr;
 	tileSize = 0;
 }
 
@@ -51,7 +51,7 @@ void TileMap::addTile(unsigned x, unsigned y)
 		{
 			if (tiles[x][y] == nullptr)
 			{
-				tiles[x][y] = new Tile(x, y, tileSize, tileSheet, sf::IntRect(0, 0, tileSize, tileSize), false);
+				tiles[x][y] = new Tile(x, y, tileSheet, sf::IntRect(0, 0, tileSize, tileSize));
 			}
 		}
 	}
@@ -68,17 +68,6 @@ void TileMap::removeTile(unsigned x, unsigned y)
 				delete tiles[x][y];
 				tiles[x][y] = nullptr;
 			}
-		}
-	}
-}
-
-void TileMap::update()
-{
-	for (int i = 0; i < tiles.size(); i++)
-	{
-		for (int k = 0; k < tiles[i].size(); k++)
-		{
-			if (tiles[i][k] != nullptr) tiles[i][k]->update();
 		}
 	}
 }

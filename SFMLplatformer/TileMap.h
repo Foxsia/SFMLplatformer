@@ -17,14 +17,22 @@ public:
 	//inline func
 	inline const unsigned& getTileSize() const { return tileSize; }
 
+	inline unsigned getWidth() const
+	{
+		return tiles.size();
+	}
+	inline unsigned getHeight() const
+	{
+		return tiles.empty() ? 0 : tiles[0].size();
+	}
+
 	//getters
 	Tile* getTile(unsigned x, unsigned y);
-
+	
 	//func
 	void addTile(unsigned x, unsigned y);
 	void removeTile(unsigned x, unsigned y);
 
-	void update();
 	void render(sf::RenderTarget& target);
 };
 

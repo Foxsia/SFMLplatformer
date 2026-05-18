@@ -35,7 +35,10 @@ void Game::initPlayer()
 
 void Game::initTileMap()
 {
-	tileMap = new TileMap(25, 20, &tileSheet, 32);
+	const unsigned width = window.getSize().x / Tile::getSize();
+	const unsigned height = window.getSize().y / Tile::getSize();
+
+	tileMap = new TileMap(width, height, &tileSheet, Tile::getSize());
 }
 
 Game::Game()
@@ -102,20 +105,15 @@ void Game::updateCollision()
 	}
 }
 
-void Game::updateTileMap()
-{
-	tileMap->update();
-}
-
 void Game::updateTileCollision()
 {
 	bool grounded = false;
 
 	sf::FloatRect playerBounds = player->getGlobalBounds();
 
-	for (int x = 0; x < 25; x++)
+	for (int x = 0; x < tileMap->getWidth(); x++)
 	{
-		for (int y = 0; y < 20; y++)
+		for (int y = 0; y < tileMap->getHeight(); y++)
 		{
 			Tile* tile = tileMap->getTile(x, y);
 
@@ -161,7 +159,6 @@ void Game::update()
 	updatePlayer();
 	updateTileCollision();
 	updateCollision();
-	updateTileMap();
 }
 
 void Game::renderPlayer()

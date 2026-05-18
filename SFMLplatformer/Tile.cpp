@@ -1,11 +1,10 @@
 #include "Tile.h"
 
-Tile::Tile(const unsigned& grid_pos_x, const unsigned& grid_pos_y, const unsigned& tile_size, sf::Texture* texture_sheet, sf::IntRect texture_rect, bool damaging)
-	: damaging(damaging)
+Tile::Tile(unsigned grid_pos_x, unsigned grid_pos_y, sf::Texture* texture_sheet, sf::IntRect texture_rect)
 {
 	sprite.setTexture(*texture_sheet);
 	sprite.setTextureRect(texture_rect);
-	sprite.setPosition(float(grid_pos_x * tile_size), float(grid_pos_y * tile_size));
+	sprite.setPosition(float(grid_pos_x * size), float(grid_pos_y * size));
 }
 
 const sf::FloatRect Tile::getGlobalBounds() const
@@ -16,10 +15,6 @@ const sf::FloatRect Tile::getGlobalBounds() const
 const sf::FloatRect Tile::getHitbox() const
 {
 	return sf::FloatRect(sprite.getPosition(), sf::Vector2f(28.f, 32.f));
-}
-
-void Tile::update()
-{
 }
 
 void Tile::render(sf::RenderTarget& target)

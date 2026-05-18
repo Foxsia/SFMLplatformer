@@ -4,7 +4,7 @@
 #include "AnimationComponent.h"
 #include "MovementComponent.h"
 
-enum PLAYER_ANIMATION_STATES {IDLE = 0, MOVING_LEFT, MOVING_RIGHT, JUMPING, FALLING};
+enum PLAYER_ANIMATION_STATES {IDLE = 0, MOVING_LEFT, MOVING_RIGHT};
 
 class Player
 {
@@ -14,10 +14,10 @@ private:
 
 	//animation
 	short animState;
-	AnimationComponent* animationComponent;
+	AnimationComponent* animationComponent = nullptr;
 
 	//physics
-	MovementComponent* movementComponent;
+	MovementComponent* movementComponent = nullptr;
 
 	bool canJump;
 
@@ -28,7 +28,7 @@ private:
 	void initPhysics();
 public:
 	Player();
-	virtual ~Player();
+	~Player();
 
 	//geters
 	const sf::Vector2f getPosition() const;
@@ -43,12 +43,12 @@ public:
 	void resetVelocityY();
 
 	//func
-	void move(const float dir_x, const float dir_y, const float& delta_time);
+	void move(float dir_x, float dir_y, float delta_time);
 	void jump();
-	void updatePhysics(const float& delta_time);
+	void updatePhysics(float delta_time);
 	void updateMovement();
-	void updateAnimation(const float& delta_time);
-	void update(const float& delta_time);
+	void updateAnimation(float delta_time);
+	void update(float delta_time);
 	void render(sf::RenderTarget& target);
 };
 

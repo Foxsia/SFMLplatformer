@@ -28,14 +28,12 @@ public:
 		float velocityMaxY
 	);
 
-	virtual ~MovementComponent();
-
 	const sf::Vector2f& getVelocity() const;
 
-	void move(const float dir_x, const float dir_y, const float& delta_time);
+	void move(float dir_x, float dir_y, float delta_time);
 	void jump(const float force);
 
 	void stopVelocityY();
 
-	void update(const float& delta_time);
+	void update(float delta_time);
 };

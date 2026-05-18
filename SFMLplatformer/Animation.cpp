@@ -12,7 +12,7 @@ Animation::Animation(sf::Sprite& sprite, int startX, int startY, int width, int 
 	sprite.setTextureRect(currentRect);
 }
 
-void Animation::play(const float& delta_time)
+void Animation::play(float delta_time)
 {
 	timer += 200.f * delta_time;
 

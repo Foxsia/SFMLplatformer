@@ -75,7 +75,7 @@ void Player::resetVelocityY()
 	movementComponent->stopVelocityY();
 }
 
-void Player::move(const float dir_x, const float dir_y, const float& delta_time)
+void Player::move(float dir_x, float dir_y, float delta_time)
 {
 	movementComponent->move(dir_x, dir_y, delta_time);
 }
@@ -86,7 +86,7 @@ void Player::jump()
 	canJump = false;
 }
 
-void Player::updatePhysics(const float& delta_time)
+void Player::updatePhysics(float delta_time)
 {
 	movementComponent->update(delta_time);
 }
@@ -111,7 +111,7 @@ void Player::updateMovement()
 	}
 }
 
-void Player::updateAnimation(const float& delta_time)
+void Player::updateAnimation(float delta_time)
 {
 	if (animState == IDLE)
 		animationComponent->play("IDLE", delta_time);
@@ -119,7 +119,7 @@ void Player::updateAnimation(const float& delta_time)
 		animationComponent->play("RUN", delta_time);
 }
 
-void Player::update(const float& delta_time)
+void Player::update(float delta_time)
 {
 	updatePhysics(delta_time);
 	updateMovement();

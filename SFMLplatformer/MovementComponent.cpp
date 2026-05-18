@@ -10,19 +10,14 @@ MovementComponent::MovementComponent(
 	float gravity,
 	float velocityMaxY
 )
-	: sprite(sprite)
-{
-	this->velocityMax = velocityMax;
-	this->velocityMin = velocityMin;
-	this->acceleration = acceleration;
-	this->drag = drag;
-	this->gravity = gravity;
-	this->velocityMaxY = velocityMaxY;
-}
-
-MovementComponent::~MovementComponent()
-{
-}
+	: sprite(sprite), 
+	velocityMax(velocityMax),
+	velocityMin(velocityMin),
+	acceleration(acceleration),
+	drag(drag),
+	gravity(gravity),
+	velocityMaxY(velocityMaxY)
+{}
 
 const sf::Vector2f& MovementComponent::getVelocity() const
 {
@@ -30,9 +25,9 @@ const sf::Vector2f& MovementComponent::getVelocity() const
 }
 
 void MovementComponent::move(
-	const float dir_x,
-	const float dir_y,
-	const float& delta_time
+	float dir_x,
+	float dir_y,
+	float delta_time
 )
 {
 	velocity.x += dir_x * acceleration * delta_time;
@@ -57,7 +52,7 @@ void MovementComponent::stopVelocityY()
 	velocity.y = 0.f;
 }
 
-void MovementComponent::update(const float& delta_time)
+void MovementComponent::update(float delta_time)
 {
 	// gravity
 	velocity.y += gravity * delta_time;

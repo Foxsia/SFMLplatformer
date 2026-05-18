@@ -14,8 +14,8 @@ private:
 	sf::Clock dtClock;
 	float deltaTime;
 
-	Player* player;
-	TileMap* tileMap;
+	Player* player = nullptr;
+	TileMap* tileMap = nullptr;
 	std::map<std::string, sf::Keyboard::Key> keyboardMappings;
 	std::map<std::string, sf::Mouse::Button> mouseMappings;
 
@@ -26,13 +26,11 @@ private:
 	void initTileMap();
 public:
 	Game();
-	virtual ~Game();
+	~Game();
 
-	//functions
 	void updateInput();
 	void updatePlayer();
 	void updateCollision();
-	void updateTileMap();
 	void updateTileCollision();
 	void update();
 
