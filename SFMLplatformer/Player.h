@@ -8,24 +8,6 @@ enum PLAYER_ANIMATION_STATES {IDLE = 0, MOVING_LEFT, MOVING_RIGHT};
 
 class Player
 {
-private:
-	sf::Sprite sprite;
-	sf::Texture textureSheet;
-
-	//animation
-	short animState;
-	AnimationComponent* animationComponent = nullptr;
-
-	//physics
-	MovementComponent* movementComponent = nullptr;
-
-	bool canJump;
-
-	void initVariables();
-	void initTexture();
-	void initSprite();
-	void initAnimations();
-	void initPhysics();
 public:
 	Player();
 	~Player();
@@ -45,10 +27,31 @@ public:
 	//func
 	void move(float dir_x, float dir_y, float delta_time);
 	void jump();
+
 	void updatePhysics(float delta_time);
 	void updateMovement();
 	void updateAnimation(float delta_time);
 	void update(float delta_time);
+
 	void render(sf::RenderTarget& target);
+
+private:
+	void initVariables();
+	void initTexture();
+	void initSprite();
+	void initAnimations();
+	void initPhysics();
+
+	sf::Sprite sprite;
+	sf::Texture textureSheet;
+
+	//animation
+	short animState;
+	AnimationComponent* animationComponent = nullptr;
+
+	//physics
+	MovementComponent* movementComponent = nullptr;
+
+	bool canJump;
 };
 

@@ -7,23 +7,6 @@
 
 class Game
 {
-private:
-	sf::RenderWindow window;
-	sf::Event event;
-	sf::Texture tileSheet;
-	sf::Clock dtClock;
-	float deltaTime;
-
-	Player* player = nullptr;
-	TileMap* tileMap = nullptr;
-	std::map<std::string, sf::Keyboard::Key> keyboardMappings;
-	std::map<std::string, sf::Mouse::Button> mouseMappings;
-
-	void initWindow();
-	void initInput();
-	void initTileSheet();
-	void initPlayer();
-	void initTileMap();
 public:
 	Game();
 	~Game();
@@ -39,5 +22,23 @@ public:
 	void render();
 
 	const sf::RenderWindow& getWindow() const;
+
+private:
+	void initWindow();
+	void initInput();
+	void initTileSheet();
+	void initPlayer();
+	void initTileMap();
+
+	sf::RenderWindow window;
+	sf::Event event;
+	sf::Texture tileSheet;
+	sf::Clock dtClock;
+	float deltaTime;
+
+	Player* player = nullptr;
+	TileMap* tileMap = nullptr;
+	std::map<std::string, sf::Keyboard::Key> keyboardMappings;
+	std::map<std::string, sf::Mouse::Button> mouseMappings;
 };
 

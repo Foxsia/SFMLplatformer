@@ -4,19 +4,6 @@
 
 class MovementComponent
 {
-private:
-	sf::Sprite& sprite;
-
-	sf::Vector2f velocity;
-
-	float velocityMax;
-	float velocityMin;
-	float acceleration;
-	float drag;
-
-	float gravity;
-	float velocityMaxY;
-
 public:
 	MovementComponent(
 		sf::Sprite& sprite,
@@ -31,9 +18,22 @@ public:
 	const sf::Vector2f& getVelocity() const;
 
 	void move(float dir_x, float dir_y, float delta_time);
-	void jump(const float force);
+	void jump(float force);
 
 	void stopVelocityY();
 
 	void update(float delta_time);
+
+private:
+	sf::Sprite& sprite;
+
+	sf::Vector2f velocity;
+
+	float velocityMax;
+	float velocityMin;
+	float acceleration;
+	float drag;
+
+	float gravity;
+	float velocityMaxY;
 };

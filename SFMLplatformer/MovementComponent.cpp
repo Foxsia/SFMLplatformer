@@ -42,7 +42,7 @@ void MovementComponent::move(
 	}
 }
 
-void MovementComponent::jump(const float force)
+void MovementComponent::jump(float force)
 {
 	velocity.y = -force;
 }
