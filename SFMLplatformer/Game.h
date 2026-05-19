@@ -5,40 +5,43 @@
 #include "Player.h"
 #include "TileMap.h"
 
-class Game
+namespace fp
 {
-public:
-	Game();
-	~Game();
+	class Game
+	{
+	public:
+		Game();
+		~Game();
 
-	void updateInput();
-	void updatePlayer();
-	void updateCollision();
-	void updateTileCollision();
-	void update();
+		void updateInput();
+		void updatePlayer();
+		void updateCollision();
+		void updateTileCollision();
+		void update();
 
-	void renderPlayer();
-	void renderTileMap();
-	void render();
+		void renderPlayer();
+		void renderTileMap();
+		void render();
 
-	const sf::RenderWindow& getWindow() const;
+		const sf::RenderWindow& getWindow() const;
 
-private:
-	void initWindow();
-	void initInput();
-	void initTileSheet();
-	void initPlayer();
-	void initTileMap();
+	private:
+		void initWindow();
+		void initInput();
+		void initTileSheet();
+		void initPlayer();
+		void initTileMap();
 
-	sf::RenderWindow window;
-	sf::Event event;
-	sf::Texture tileSheet;
-	sf::Clock dtClock;
-	float deltaTime;
+		sf::RenderWindow window;
+		sf::Event event;
+		sf::Texture tileSheet;
+		sf::Clock dtClock;
+		float deltaTime;
 
-	Player* player = nullptr;
-	TileMap* tileMap = nullptr;
-	std::map<std::string, sf::Keyboard::Key> keyboardMappings;
-	std::map<std::string, sf::Mouse::Button> mouseMappings;
-};
+		Player* player = nullptr;
+		TileMap* tileMap = nullptr;
+		std::map<std::string, sf::Keyboard::Key> keyboardMappings;
+		std::map<std::string, sf::Mouse::Button> mouseMappings;
+	};
+}
 

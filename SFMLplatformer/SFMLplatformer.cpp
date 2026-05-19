@@ -6,9 +6,9 @@
 
 int main()
 {
-    srand(static_cast<unsigned>(time(0)));
+    std::srand(static_cast<unsigned>(time(0)));
 
-    Game game;
+    fp::Game game;
     while (game.getWindow().isOpen())
     {
         game.update();

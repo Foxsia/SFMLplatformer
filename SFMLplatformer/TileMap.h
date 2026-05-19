@@ -2,37 +2,40 @@
 #include "Tile.h"
 #include <vector>
 
-class TileMap
+namespace fp
 {
-public:
-	TileMap();
-	TileMap(unsigned width, unsigned height, sf::Texture* tile_sheet, unsigned tile_size);
-	virtual ~TileMap();
-
-	//inline func
-	inline const unsigned& getTileSize() const { return tileSize; }
-
-	inline unsigned getWidth() const
+	class TileMap
 	{
-		return tiles.size();
-	}
-	inline unsigned getHeight() const
-	{
-		return tiles.empty() ? 0 : tiles[0].size();
-	}
+	public:
+		TileMap();
+		TileMap(unsigned width, unsigned height, sf::Texture* tile_sheet, unsigned tile_size);
+		virtual ~TileMap();
 
-	//getters
-	Tile* getTile(unsigned x, unsigned y);
-	
-	//func
-	void addTile(unsigned x, unsigned y);
-	void removeTile(unsigned x, unsigned y);
+		//inline func
+		inline const unsigned& getTileSize() const { return tileSize; }
 
-	void render(sf::RenderTarget& target);
+		inline unsigned getWidth() const
+		{
+			return tiles.size();
+		}
+		inline unsigned getHeight() const
+		{
+			return tiles.empty() ? 0 : tiles[0].size();
+		}
 
-private:
-	std::vector< std::vector<Tile*> > tiles;
-	sf::Texture* tileSheet;
-	unsigned tileSize;
-};
+		//getters
+		Tile* getTile(unsigned x, unsigned y);
+
+		//func
+		void addTile(unsigned x, unsigned y);
+		void removeTile(unsigned x, unsigned y);
+
+		void render(sf::RenderTarget& target);
+
+	private:
+		std::vector< std::vector<Tile*> > tiles;
+		sf::Texture* tileSheet;
+		unsigned tileSize;
+	};
+}
 

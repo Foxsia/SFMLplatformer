@@ -1,84 +1,93 @@
 #include "TileMap.h"
 
-TileMap::TileMap()
+namespace fp
 {
-	tileSheet = nullptr;
-	tileSize = 0;
-}
-
-TileMap::TileMap(unsigned width, unsigned height, sf::Texture* tile_sheet, unsigned tile_size)
-{
-	tileSheet = tile_sheet;
-	tileSize = tile_size;
-
-	tiles.resize(width);
-	for (int i = 0; i < tiles.size(); i++)
+	namespace
 	{
-		tiles[i].resize(height, nullptr);
+		const unsigned TILE_TEXTURE_X = 0;
+		const unsigned TILE_TEXTURE_Y = 0;
 	}
-}
 
-TileMap::~TileMap()
-{
-	for (int i = 0; i < tiles.size(); i++)
+	TileMap::TileMap()
 	{
-		for (int k = 0; k < tiles[i].size(); k++)
-		{
-			delete tiles[i][k];
-			tiles[i][k] = nullptr;
-		}
+		tileSheet = nullptr;
+		tileSize = 0;
 	}
-}
 
-Tile* TileMap::getTile(unsigned x, unsigned y)
-{
-	if (x < tiles.size())
+	TileMap::TileMap(unsigned width, unsigned height, sf::Texture* tile_sheet, unsigned tile_size)
 	{
-		if (y < tiles[x].size())
+		tileSheet = tile_sheet;
+		tileSize = tile_size;
+
+		tiles.resize(width);
+		for (int i = 0; i < tiles.size(); i++)
 		{
-			return tiles[x][y];
+			tiles[i].resize(height, nullptr);
 		}
 	}
 
-	return nullptr;
-}
-
-void TileMap::addTile(unsigned x, unsigned y)
-{
-	if (x < tiles.size() && x >= 0)
+	TileMap::~TileMap()
 	{
-		if (y < tiles[x].size() && y >= 0)
+		for (int i = 0; i < tiles.size(); i++)
 		{
-			if (tiles[x][y] == nullptr)
+			for (int k = 0; k < tiles[i].size(); k++)
 			{
-				tiles[x][y] = new Tile(x, y, tileSheet, sf::IntRect(0, 0, tileSize, tileSize));
+				delete tiles[i][k];
+				tiles[i][k] = nullptr;
 			}
 		}
 	}
-}
 
-void TileMap::removeTile(unsigned x, unsigned y)
-{
-	if (x < tiles.size())
+	Tile* TileMap::getTile(unsigned x, unsigned y)
 	{
-		if (y < tiles[x].size())
+		if (x < tiles.size())
 		{
-			if (tiles[x][y] != nullptr)
+			if (y < tiles[x].size())
 			{
-				delete tiles[x][y];
-				tiles[x][y] = nullptr;
+				return tiles[x][y];
+			}
+		}
+
+		return nullptr;
+	}
+
+	void TileMap::addTile(unsigned x, unsigned y)
+	{
+		if (x < tiles.size() && x >= 0)
+		{
+			if (y < tiles[x].size() && y >= 0)
+			{
+				if (tiles[x][y] == nullptr)
+				{
+					tiles[x][y] = new Tile(x, y, tileSheet, sf::IntRect(TILE_TEXTURE_X, TILE_TEXTURE_Y, tileSize, tileSize));
+				}
 			}
 		}
 	}
-}
 
-void TileMap::render(sf::RenderTarget& target)
-{
-	for (int i = 0; i < tiles.size(); i++)
+	void TileMap::removeTile(unsigned x, unsigned y)
 	{
-		for (int k = 0; k < tiles[i].size(); k++)
+		if (x < tiles.size())
 		{
-			if(tiles[i][k] != nullptr) tiles[i][k]->render(target);
+			if (y < tiles[x].size())
+			{
+				if (tiles[x][y] != nullptr)
+				{
+					delete tiles[x][y];
+					tiles[x][y] = nullptr;
+				}
+			}
+		}
+	}
+
+	void TileMap::render(sf::RenderTarget& target)
+	{
+		for (int i = 0; i < tiles.size(); i++)
+		{
+			for (int k = 0; k < tiles[i].size(); k++)
+			{
+				if (tiles[i][k] != nullptr) tiles[i][k]->render(target);
+			}
 		}
 	}
 }

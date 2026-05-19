@@ -1,26 +1,29 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class Animation
+namespace fp
 {
-public:
-	Animation(sf::Sprite& sprite, int startX, int startY, int width, int height, int frameCount, float delay);
+	class Animation
+	{
+	public:
+		Animation(sf::Sprite& sprite, int startX, int startY, int width, int height, int frameCount, float delay);
 
-	void play(float delta_time);
-	void reset();
+		void play(float delta_time);
+		void reset();
 
-private:
-	sf::Sprite& sprite;
+	private:
+		sf::Sprite& sprite;
 
-	sf::IntRect currentRect;
+		sf::IntRect currentRect;
 
-	float timer;
-	float delay;
+		float timer;
+		float delay;
 
-	int frameCount;
-	int startX;
-	int startY;
-	int width;
-	int height;
-};
+		int frameCount;
+		int startX;
+		int startY;
+		int width;
+		int height;
+	};
+}
 

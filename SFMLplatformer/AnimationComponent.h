@@ -2,19 +2,22 @@
 #include <map>
 #include "Animation.h"
 
-class AnimationComponent
+namespace fp
 {
-public:
-	AnimationComponent(sf::Sprite& sprite, sf::Texture& textureSheet);
-	~AnimationComponent();
+	class AnimationComponent
+	{
+	public:
+		AnimationComponent(sf::Sprite& sprite, sf::Texture& textureSheet);
+		~AnimationComponent();
 
-	void add(const std::string& key, Animation* animation);
-	void play(const std::string& key, float dt);
+		void add(const std::string& key, Animation* animation);
+		void play(const std::string& key, float dt);
 
-private:
-	sf::Sprite& sprite;
-	sf::Texture& textureSheet;
+	private:
+		sf::Sprite& sprite;
+		sf::Texture& textureSheet;
 
-	std::map<std::string, Animation*> animations;
-};
+		std::map<std::string, Animation*> animations;
+	};
+}
 

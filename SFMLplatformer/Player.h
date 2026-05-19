@@ -4,54 +4,57 @@
 #include "AnimationComponent.h"
 #include "MovementComponent.h"
 
-enum PLAYER_ANIMATION_STATES {IDLE = 0, MOVING_LEFT, MOVING_RIGHT};
-
-class Player
+namespace fp
 {
-public:
-	Player();
-	~Player();
+	enum PLAYER_ANIMATION_STATES { IDLE = 0, MOVING_LEFT, MOVING_RIGHT };
 
-	//geters
-	const sf::Vector2f getPosition() const;
-	const sf::FloatRect getGlobalBounds() const;
+	class Player
+	{
+	public:
+		Player();
+		~Player();
 
-	//inline func
-	inline const bool& getCanJump() const { return canJump; }
-	inline void setCanJump(const bool canJump) { this->canJump = canJump; }
+		//geters
+		const sf::Vector2f getPosition() const;
+		const sf::FloatRect getGlobalBounds() const;
 
-	//modifiers
-	void setPosition(const float x, const float y);
-	void resetVelocityY();
+		//inline func
+		inline const bool& getCanJump() const { return canJump; }
+		inline void setCanJump(const bool canJump) { this->canJump = canJump; }
 
-	//func
-	void move(float dir_x, float dir_y, float delta_time);
-	void jump();
+		//modifiers
+		void setPosition(const float x, const float y);
+		void resetVelocityY();
 
-	void updatePhysics(float delta_time);
-	void updateMovement();
-	void updateAnimation(float delta_time);
-	void update(float delta_time);
+		//func
+		void move(float dir_x, float dir_y, float delta_time);
+		void jump();
 
-	void render(sf::RenderTarget& target);
+		void updatePhysics(float delta_time);
+		void updateMovement();
+		void updateAnimation(float delta_time);
+		void update(float delta_time);
 
-private:
-	void initVariables();
-	void initTexture();
-	void initSprite();
-	void initAnimations();
-	void initPhysics();
+		void render(sf::RenderTarget& target);
 
-	sf::Sprite sprite;
-	sf::Texture textureSheet;
+	private:
+		void initVariables();
+		void initTexture();
+		void initSprite();
+		void initAnimations();
+		void initPhysics();
 
-	//animation
-	short animState;
-	AnimationComponent* animationComponent = nullptr;
+		sf::Sprite sprite;
+		sf::Texture textureSheet;
 
-	//physics
-	MovementComponent* movementComponent = nullptr;
+		//animation
+		short animState;
+		AnimationComponent* animationComponent = nullptr;
 
-	bool canJump;
-};
+		//physics
+		MovementComponent* movementComponent = nullptr;
+
+		bool canJump;
+	};
+}
 
