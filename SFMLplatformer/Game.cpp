@@ -144,8 +144,13 @@ namespace fp
 
 				// collision only from top
 				float playerBottom = playerBounds.top + playerBounds.height;
+				float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
 
-				if (playerBottom <= tileBounds.top + TILE_TOP_COLLISION_OFFSET)
+				bool insideTileX =
+					playerCenterX > tileBounds.left &&
+					playerCenterX < tileBounds.left + tileBounds.width;
+
+				if (insideTileX && playerBottom <= tileBounds.top + TILE_TOP_COLLISION_OFFSET)
 				{
 					player->setPosition(
 						playerBounds.left,
