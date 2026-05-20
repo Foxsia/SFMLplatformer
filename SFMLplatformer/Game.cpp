@@ -150,7 +150,7 @@ namespace fp
 					playerCenterX > tileBounds.left &&
 					playerCenterX < tileBounds.left + tileBounds.width;
 
-				if (insideTileX && playerBottom <= tileBounds.top + TILE_TOP_COLLISION_OFFSET)
+				if (insideTileX && player->getVelocity().y >= 0.f && playerBottom <= tileBounds.top + TILE_TOP_COLLISION_OFFSET)
 				{
 					player->setPosition(
 						playerBounds.left,
@@ -160,8 +160,6 @@ namespace fp
 					player->resetVelocityY();
 
 					grounded = true;
-
-					playerBounds = player->getGlobalBounds();
 				}
 			}
 		}

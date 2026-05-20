@@ -94,6 +94,11 @@ namespace fp
 		return sprite.getGlobalBounds();
 	}
 
+	const sf::Vector2f& Player::getVelocity() const
+	{
+		return sf::Vector2f();
+	}
+
 	void Player::setPosition(const float x, const float y)
 	{
 		sprite.setPosition(x, y);

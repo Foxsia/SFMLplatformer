@@ -17,6 +17,7 @@ namespace fp
 		//geters
 		const sf::Vector2f getPosition() const;
 		const sf::FloatRect getGlobalBounds() const;
+		const sf::Vector2f& getVelocity() const;
 
 		//inline func
 		inline const bool& getCanJump() const { return canJump; }
