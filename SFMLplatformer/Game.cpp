@@ -24,6 +24,16 @@ namespace fp
 	{
 		window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE, sf::Style::Close | sf::Style::Titlebar);
 		window.setFramerateLimit(FRAME_RATE_LIMIT);
+
+		camera.setSize(
+			static_cast<float>(WINDOW_WIDTH),
+			static_cast<float>(WINDOW_HEIGHT)
+		);
+
+		camera.setCenter(
+			WINDOW_WIDTH / 2.f,
+			WINDOW_HEIGHT / 2.f
+		);
 	}
 
 	void Game::initInput()
@@ -55,7 +65,7 @@ namespace fp
 
 	void Game::initTileMap()
 	{
-		const unsigned width = window.getSize().x / Tile::getSize();
+		const unsigned width = 224;
 		const unsigned height = window.getSize().y / Tile::getSize();
 
 		tileMap = new TileMap(width, height, &tileSheet, Tile::getSize());
@@ -79,9 +89,13 @@ namespace fp
 
 	void Game::updateInput()
 	{
-		//update mouse pos
-		const int mouseX = int(sf::Mouse::getPosition(getWindow()).x / int(tileMap->getTileSize()));
-		const int mouseY = int(sf::Mouse::getPosition(getWindow()).y / int(tileMap->getTileSize()));
+		sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+
+		sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+	
+		const int mouseX = static_cast<int>(worldPos.x) / tileMap->getTileSize();
+
+		const int mouseY = static_cast<int>(worldPos.y) / tileMap->getTileSize();
 
 		//player movement
 		if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_MOVE_LEFT"]))
@@ -167,6 +181,46 @@ namespace fp
 		player->setCanJump(grounded);
 	}
 
+	void Game::updateCamera()
+	{
+		sf::FloatRect playerBounds = player->getGlobalBounds();
+
+		float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
+
+		float cameraCenterX = camera.getCenter().x;
+
+		float halfWidth = camera.getSize().x / 2.f;
+
+		// deadzone
+		float rightBorder = cameraCenterX + (WINDOW_WIDTH / 2.f);
+
+		float leftBorder = cameraCenterX - (WINDOW_WIDTH / 2.f);
+
+		// move camera right
+		if (playerCenterX > rightBorder)
+		{
+			cameraCenterX = playerCenterX - (WINDOW_WIDTH / 2.f);
+		}
+
+		// move camera left
+		if (playerCenterX < leftBorder)
+		{
+			cameraCenterX = playerCenterX + (WINDOW_WIDTH / 2.f);
+		}
+
+		// map bounds
+		float mapWidth = tileMap->getWidth() * tileMap->getTileSize();
+
+		if (cameraCenterX < halfWidth) cameraCenterX = halfWidth;
+
+		if (cameraCenterX > mapWidth - halfWidth) cameraCenterX = mapWidth - halfWidth;
+
+		camera.setCenter(
+			cameraCenterX,
+			WINDOW_HEIGHT / 2.f
+		);
+	}
+
 	void Game::update()
 	{
 		deltaTime = dtClock.restart().asSeconds();
@@ -181,6 +235,7 @@ namespace fp
 		updatePlayer();
 		updateTileCollision();
 		updateCollision();
+		updateCamera();
 	}
 
 	void Game::renderPlayer()
@@ -196,6 +251,7 @@ namespace fp
 	void Game::render()
 	{
 		window.clear();
+		window.setView(camera);
 
 		renderTileMap();
 		renderPlayer();

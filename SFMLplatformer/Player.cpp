@@ -109,6 +109,11 @@ namespace fp
 		movementComponent->stopVelocityY();
 	}
 
+	void Player::resetVelocityX()
+	{
+		movementComponent->stopVelocityX();
+	}
+
 	void Player::move(float dir_x, float dir_y, float delta_time)
 	{
 		movementComponent->move(dir_x, dir_y, delta_time);

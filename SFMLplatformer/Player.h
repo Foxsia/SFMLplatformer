@@ -26,6 +26,7 @@ namespace fp
 		//modifiers
 		void setPosition(const float x, const float y);
 		void resetVelocityY();
+		void resetVelocityX();
 
 		//func
 		void move(float dir_x, float dir_y, float delta_time);

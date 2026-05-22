@@ -23,6 +23,7 @@ namespace fp
 		void jump(float force);
 
 		void stopVelocityY();
+		void stopVelocityX();
 
 		void update(float delta_time);
 

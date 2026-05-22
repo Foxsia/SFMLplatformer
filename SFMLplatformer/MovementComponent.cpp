@@ -63,6 +63,11 @@ namespace fp
 		velocity.y = 0.f;
 	}
 
+	void MovementComponent::stopVelocityX()
+	{
+		velocity.x = 0.f;
+	}
+
 	void MovementComponent::update(float delta_time)
 	{
 		// gravity

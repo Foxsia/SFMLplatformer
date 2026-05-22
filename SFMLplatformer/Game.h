@@ -17,6 +17,7 @@ namespace fp
 		void updatePlayer();
 		void updateCollision();
 		void updateTileCollision();
+		void updateCamera();
 		void update();
 
 		void renderPlayer();
@@ -33,6 +34,7 @@ namespace fp
 		void initTileMap();
 
 		sf::RenderWindow window;
+		sf::View camera;
 		sf::Event event;
 		sf::Texture tileSheet;
 		sf::Clock dtClock;
