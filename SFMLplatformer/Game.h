@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <map>
+#include <vector>
 #include "Player.h"
 #include "TileMap.h"
 
@@ -18,11 +19,18 @@ namespace fp
 		void updateCollision();
 		void updateTileCollision();
 		void updateCamera();
+		void updateMenu();
+		void updateEditor();
+		void updateGameplay();
 		void update();
 
+		void renderEditor();
+		void renderMenu();
 		void renderPlayer();
 		void renderTileMap();
 		void render();
+
+		void loadLevelList();
 
 		const sf::RenderWindow& getWindow() const;
 
@@ -32,6 +40,16 @@ namespace fp
 		void initTileSheet();
 		void initPlayer();
 		void initTileMap();
+
+		enum class GameState
+		{
+			Menu,
+			Editor,
+			Playing
+		};
+
+		GameState state;
+		std::string currentLevel;
 
 		sf::RenderWindow window;
 		sf::View camera;
@@ -44,6 +62,19 @@ namespace fp
 		TileMap* tileMap = nullptr;
 		std::map<std::string, sf::Keyboard::Key> keyboardMappings;
 		std::map<std::string, sf::Mouse::Button> mouseMappings;
+		//file saving
+		bool typingFileName = false;
+		std::string fileNameInput;
+
+		sf::Font font;
+		sf::Text fileNameText;
+		//editor help
+		sf::Text editorHelp;
+		//menu
+		std::vector<std::string> levelFiles;
+		std::size_t selectedMenuIndex = 0;
+		sf::Text menuText;
+		sf::Text titleMenuText;
 	};
 }
 

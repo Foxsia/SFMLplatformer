@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <iostream>
+#include <filesystem>
 
 namespace fp
 {
@@ -34,6 +35,26 @@ namespace fp
 			WINDOW_WIDTH / 2.f,
 			WINDOW_HEIGHT / 2.f
 		);
+		//fonts
+
+		font.loadFromFile("assets/fonts/Roboto_Condensed-Black.ttf");
+
+		fileNameText.setFont(font);
+		fileNameText.setCharacterSize(24);
+		fileNameText.setFillColor(sf::Color::White);
+		titleMenuText.setFont(font);
+		titleMenuText.setCharacterSize(40);
+		titleMenuText.setFillColor(sf::Color::White);
+		titleMenuText.setPosition(250.f, 80.f);
+
+		menuText.setFont(font);
+		menuText.setCharacterSize(28);
+		menuText.setFillColor(sf::Color::White);
+
+		editorHelp.setFont(font);
+		editorHelp.setCharacterSize(15);
+		editorHelp.setFillColor(sf::Color::White);
+		editorHelp.setPosition(10.f, 10.f);
 	}
 
 	void Game::initInput()
@@ -79,6 +100,8 @@ namespace fp
 		initTileSheet();
 		initPlayer();
 		initTileMap();
+		state = GameState::Menu;
+		loadLevelList();
 	}
 
 	Game::~Game()
@@ -89,6 +112,7 @@ namespace fp
 
 	void Game::updateInput()
 	{
+		if (typingFileName) return;
 		sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 
 		sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
@@ -221,6 +245,63 @@ namespace fp
 		);
 	}
 
+	void Game::updateMenu()
+	{
+		const int totalOptions = levelFiles.size() + 1;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			selectedMenuIndex++;
+
+			if (selectedMenuIndex >= totalOptions) selectedMenuIndex = 0;
+
+			sf::sleep(sf::milliseconds(150));
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			selectedMenuIndex == 0 ? selectedMenuIndex = totalOptions - 1 : selectedMenuIndex--;
+
+			sf::sleep(sf::milliseconds(150));
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		{
+			// levels
+			if (selectedMenuIndex < levelFiles.size())
+			{
+				currentLevel = levelFiles[selectedMenuIndex];
+
+				tileMap->loadFromFile(currentLevel);
+
+				state = GameState::Playing;
+			}
+			// editor
+			else
+			{
+				state = GameState::Editor;
+			}
+			sf::sleep(sf::milliseconds(150));
+		}
+	}
+
+	void Game::updateEditor()
+	{
+		updateInput();
+		updatePlayer();
+		updateTileCollision();
+		updateCollision();
+		updateCamera();
+	}
+
+	void Game::updateGameplay()
+	{
+		updateInput();
+		updatePlayer();
+		updateTileCollision();
+		updateCollision();
+		updateCamera();
+	}
+
 	void Game::update()
 	{
 		deltaTime = dtClock.restart().asSeconds();
@@ -229,13 +310,108 @@ namespace fp
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window.close();
+
+			if (event.type == sf::Event::KeyPressed)
+			{
+				if (event.key.code == sf::Keyboard::E)
+				{
+					state = GameState::Editor;
+				}
+				if (event.key.code == sf::Keyboard::F2)
+				{
+					typingFileName = true;
+					fileNameInput.clear();
+				}
+				if (typingFileName && event.key.code == sf::Keyboard::C)
+				{
+					typingFileName = false;
+					fileNameInput.clear();
+				}
+				if (typingFileName && event.key.code == sf::Keyboard::Enter)
+				{
+					tileMap->saveToFile("levels/" + fileNameInput + ".txt");
+					typingFileName = false;
+				}
+				if (typingFileName && event.key.code == sf::Keyboard::BackSpace)
+				{
+					if (!fileNameInput.empty()) fileNameInput.pop_back();
+				}
+				
+				if ((state == GameState::Editor || state == GameState::Playing) && event.key.code == sf::Keyboard::M)
+				{
+					state = GameState::Menu;
+				}
+			}
+			if (typingFileName && event.type == sf::Event::TextEntered)
+			{
+				if (event.text.unicode < 128)
+				{
+					char c = static_cast<char>(event.text.unicode);
+					if (c != '\b' && c != '\r')
+					{
+						fileNameInput += c;
+					}
+				}
+			}
 		}
 
-		updateInput();
-		updatePlayer();
-		updateTileCollision();
-		updateCollision();
-		updateCamera();
+		switch (state)
+		{
+		case GameState::Menu:
+			updateMenu();
+			break;
+
+		case GameState::Editor:
+			updateEditor();
+			break;
+
+		case GameState::Playing:
+			updateGameplay();
+			break;
+		}
+	}
+
+	void Game::renderEditor()
+	{
+		window.setView(camera);
+		renderTileMap();
+		renderPlayer();
+		editorHelp.setString("Press F2 to save and enter C to proceed or cancel\nPress M to open menu");
+		window.draw(editorHelp);
+	}
+
+	void Game::renderMenu()
+	{
+		window.setView(window.getDefaultView());
+		window.clear(sf::Color::Black);
+
+		titleMenuText.setString("LEVEL SELECT");
+		window.draw(titleMenuText);
+
+		for (int i = 0; i < levelFiles.size(); i++)
+		{
+			std::filesystem::path path(levelFiles[i]);
+			menuText.setString(path.stem().string());
+
+			menuText.setPosition(250.f, 180.f + i * 50.f);
+
+			i == selectedMenuIndex ? menuText.setFillColor(sf::Color::Yellow) : menuText.setFillColor(sf::Color::White);
+
+			window.draw(menuText);
+		}
+
+		menuText.setString("EDITOR");
+		menuText.setPosition(
+			250.f,
+			180.f + levelFiles.size() * 50.f
+		);
+
+		if (selectedMenuIndex == levelFiles.size())
+			menuText.setFillColor(sf::Color::Cyan);
+		else
+			menuText.setFillColor(sf::Color::White);
+
+		window.draw(menuText);
 	}
 
 	void Game::renderPlayer()
@@ -253,10 +429,48 @@ namespace fp
 		window.clear();
 		window.setView(camera);
 
-		renderTileMap();
-		renderPlayer();
+		switch (state)
+		{
+		case GameState::Menu:
+			renderMenu();
+			break;
+
+		case GameState::Editor:
+			renderEditor();
+			break;
+
+		case GameState::Playing:
+			window.setView(camera);
+			renderTileMap();
+			renderPlayer();
+			break;
+		}
+
+		if (typingFileName)
+		{
+			fileNameText.setString("Save as: " + fileNameInput);
+
+			fileNameText.setPosition(
+				camera.getCenter().x - 300.f,
+				camera.getCenter().y
+			);
+			window.draw(fileNameText);
+		}
 
 		window.display();
+	}
+
+	void Game::loadLevelList()
+	{
+		levelFiles.clear();
+
+		for (const auto& entry : std::filesystem::directory_iterator("levels"))
+		{
+			if (entry.path().extension() == ".txt")
+			{
+				levelFiles.push_back(entry.path().string());
+			}
+		}
 	}
 
 	const sf::RenderWindow& Game::getWindow() const

@@ -31,6 +31,8 @@ namespace fp
 		void removeTile(unsigned x, unsigned y);
 
 		void render(sf::RenderTarget& target);
+		void saveToFile(const std::string& filename);
+		void loadFromFile(const std::string& filename);
 
 	private:
 		std::vector< std::vector<Tile*> > tiles;

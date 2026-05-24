@@ -1,4 +1,5 @@
 #include "TileMap.h"
+#include <fstream>
 
 namespace fp
 {
@@ -87,6 +88,43 @@ namespace fp
 			for (int k = 0; k < tiles[i].size(); k++)
 			{
 				if (tiles[i][k] != nullptr) tiles[i][k]->render(target);
+			}
+		}
+	}
+
+	void TileMap::saveToFile(const std::string& filename)
+	{
+		std::ofstream file(filename);
+		if (!file.is_open()) return;
+
+		for (size_t y = 0; y < tiles[0].size(); y++)
+		{
+			for (size_t x = 0; x < tiles.size(); x++)
+			{
+				file << (tiles[x][y] ? 1 : 0) << " ";
+			}
+			file << "\n";
+		}
+	}
+
+	void TileMap::loadFromFile(const std::string& filename)
+	{
+		std::ifstream file(filename);
+		if (!file.is_open()) return;
+
+		// clear map first
+		for (size_t x = 0; x < tiles.size(); x++)
+			for (size_t y = 0; y < tiles[x].size(); y++)
+				removeTile(x, y);
+
+		for (size_t y = 0; y < tiles[0].size(); y++)
+		{
+			for (size_t x = 0; x < tiles.size(); x++)
+			{
+				int value;
+				file >> value;
+
+				if (value == 1) addTile(x, y);
 			}
 		}
 	}
