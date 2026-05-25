@@ -1,4 +1,7 @@
 #include "Game.h"
+#include "MenuState.h"
+#include "EditorState.h"
+#include "GameContext.h"
 #include <iostream>
 #include <filesystem>
 
@@ -42,19 +45,6 @@ namespace fp
 		fileNameText.setFont(font);
 		fileNameText.setCharacterSize(24);
 		fileNameText.setFillColor(sf::Color::White);
-		titleMenuText.setFont(font);
-		titleMenuText.setCharacterSize(40);
-		titleMenuText.setFillColor(sf::Color::White);
-		titleMenuText.setPosition(250.f, 80.f);
-
-		menuText.setFont(font);
-		menuText.setCharacterSize(28);
-		menuText.setFillColor(sf::Color::White);
-
-		editorHelp.setFont(font);
-		editorHelp.setCharacterSize(15);
-		editorHelp.setFillColor(sf::Color::White);
-		editorHelp.setPosition(10.f, 10.f);
 	}
 
 	void Game::initInput()
@@ -100,7 +90,7 @@ namespace fp
 		initTileSheet();
 		initPlayer();
 		initTileMap();
-		state = GameState::Menu;
+		state = new fp::MenuState();
 		loadLevelList();
 	}
 
@@ -108,198 +98,12 @@ namespace fp
 	{
 		delete player;
 		delete tileMap;
-	}
-
-	void Game::updateInput()
-	{
-		if (typingFileName) return;
-		sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
-
-		sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-	
-		const int mouseX = static_cast<int>(worldPos.x) / tileMap->getTileSize();
-
-		const int mouseY = static_cast<int>(worldPos.y) / tileMap->getTileSize();
-
-		//player movement
-		if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_MOVE_LEFT"]))
-		{
-			player->move(PLAYER_MOVE_LEFT, PLAYER_MOVE_Y, deltaTime);
-		}
-		else if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_MOVE_RIGHT"]))
-		{
-			player->move(PLAYER_MOVE_RIGHT, PLAYER_MOVE_Y, deltaTime);
-		}
-
-		if (sf::Keyboard::isKeyPressed(keyboardMappings["KEY_JUMP"]) && player->getCanJump())
-		{
-			player->jump();
-		}
-
-		//tile func
-		if (sf::Mouse::isButtonPressed(mouseMappings["BTN_ADD_TILE"]))
-		{
-			tileMap->addTile(mouseX, mouseY);
-		}
-		else if (sf::Mouse::isButtonPressed(mouseMappings["BTN_REMOVE_TILE"]))
-		{
-			tileMap->removeTile(mouseX, mouseY);
-		}
+		delete state;
 	}
 
 	void Game::updatePlayer()
 	{
 		player->update(deltaTime);
-	}
-
-	void Game::updateCollision()
-	{
-		if (player->getPosition().y + player->getGlobalBounds().height > window.getSize().y)
-		{
-			player->setCanJump(true);
-			player->resetVelocityY();
-			player->setPosition(player->getPosition().x, window.getSize().y - player->getGlobalBounds().height);
-		}
-	}
-
-	void Game::updateTileCollision()
-	{
-		bool grounded = false;
-
-		sf::FloatRect playerBounds = player->getGlobalBounds();
-
-		for (int x = 0; x < tileMap->getWidth(); x++)
-		{
-			for (int y = 0; y < tileMap->getHeight(); y++)
-			{
-				Tile* tile = tileMap->getTile(x, y);
-
-				if (!tile) continue;
-
-				sf::FloatRect tileBounds = tile->getHitbox();
-
-				if (!playerBounds.intersects(tileBounds)) continue;
-
-				// collision only from top
-				float playerBottom = playerBounds.top + playerBounds.height;
-				float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
-
-				bool insideTileX =
-					playerCenterX > tileBounds.left &&
-					playerCenterX < tileBounds.left + tileBounds.width;
-
-				if (insideTileX && player->getVelocity().y >= 0.f && playerBottom <= tileBounds.top + TILE_TOP_COLLISION_OFFSET)
-				{
-					player->setPosition(
-						playerBounds.left,
-						tileBounds.top - playerBounds.height
-					);
-
-					player->resetVelocityY();
-
-					grounded = true;
-				}
-			}
-		}
-
-		player->setCanJump(grounded);
-	}
-
-	void Game::updateCamera()
-	{
-		sf::FloatRect playerBounds = player->getGlobalBounds();
-
-		float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
-
-		float cameraCenterX = camera.getCenter().x;
-
-		float halfWidth = camera.getSize().x / 2.f;
-
-		// deadzone
-		float rightBorder = cameraCenterX + (WINDOW_WIDTH / 2.f);
-
-		float leftBorder = cameraCenterX - (WINDOW_WIDTH / 2.f);
-
-		// move camera right
-		if (playerCenterX > rightBorder)
-		{
-			cameraCenterX = playerCenterX - (WINDOW_WIDTH / 2.f);
-		}
-
-		// move camera left
-		if (playerCenterX < leftBorder)
-		{
-			cameraCenterX = playerCenterX + (WINDOW_WIDTH / 2.f);
-		}
-
-		// map bounds
-		float mapWidth = tileMap->getWidth() * tileMap->getTileSize();
-
-		if (cameraCenterX < halfWidth) cameraCenterX = halfWidth;
-
-		if (cameraCenterX > mapWidth - halfWidth) cameraCenterX = mapWidth - halfWidth;
-
-		camera.setCenter(
-			cameraCenterX,
-			WINDOW_HEIGHT / 2.f
-		);
-	}
-
-	void Game::updateMenu()
-	{
-		const int totalOptions = levelFiles.size() + 1;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			selectedMenuIndex++;
-
-			if (selectedMenuIndex >= totalOptions) selectedMenuIndex = 0;
-
-			sf::sleep(sf::milliseconds(150));
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			selectedMenuIndex == 0 ? selectedMenuIndex = totalOptions - 1 : selectedMenuIndex--;
-
-			sf::sleep(sf::milliseconds(150));
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-		{
-			// levels
-			if (selectedMenuIndex < levelFiles.size())
-			{
-				currentLevel = levelFiles[selectedMenuIndex];
-
-				tileMap->loadFromFile(currentLevel);
-
-				state = GameState::Playing;
-			}
-			// editor
-			else
-			{
-				state = GameState::Editor;
-			}
-			sf::sleep(sf::milliseconds(150));
-		}
-	}
-
-	void Game::updateEditor()
-	{
-		updateInput();
-		updatePlayer();
-		updateTileCollision();
-		updateCollision();
-		updateCamera();
-	}
-
-	void Game::updateGameplay()
-	{
-		updateInput();
-		updatePlayer();
-		updateTileCollision();
-		updateCollision();
-		updateCamera();
 	}
 
 	void Game::update()
@@ -315,7 +119,8 @@ namespace fp
 			{
 				if (event.key.code == sf::Keyboard::E)
 				{
-					state = GameState::Editor;
+					delete state;
+					state = new fp::EditorState();
 				}
 				if (event.key.code == sf::Keyboard::F2)
 				{
@@ -336,10 +141,11 @@ namespace fp
 				{
 					if (!fileNameInput.empty()) fileNameInput.pop_back();
 				}
-				
-				if ((state == GameState::Editor || state == GameState::Playing) && event.key.code == sf::Keyboard::M)
+
+				if (event.key.code == sf::Keyboard::M)
 				{
-					state = GameState::Menu;
+					delete state;
+					state = new fp::MenuState();
 				}
 			}
 			if (typingFileName && event.type == sf::Event::TextEntered)
@@ -355,63 +161,29 @@ namespace fp
 			}
 		}
 
-		switch (state)
+		fp::GameContext context;
+
+		context.window = &window;
+		context.font = &font;
+
+		context.tileMap = tileMap;
+		context.player = player;
+
+		context.selectedMenuIndex = &selectedMenuIndex;
+		context.levelFiles = &levelFiles;
+
+		context.currentLevel = &currentLevel;
+
+		context.state = &state;
+		context.camera = &camera;
+
+		context.keyboardMappings = &keyboardMappings;
+		context.mouseMappings = &mouseMappings;
+
+		if (state)
 		{
-		case GameState::Menu:
-			updateMenu();
-			break;
-
-		case GameState::Editor:
-			updateEditor();
-			break;
-
-		case GameState::Playing:
-			updateGameplay();
-			break;
+			state->update(deltaTime, context);
 		}
-	}
-
-	void Game::renderEditor()
-	{
-		window.setView(camera);
-		renderTileMap();
-		renderPlayer();
-		editorHelp.setString("Press F2 to save and enter C to proceed or cancel\nPress M to open menu");
-		window.draw(editorHelp);
-	}
-
-	void Game::renderMenu()
-	{
-		window.setView(window.getDefaultView());
-		window.clear(sf::Color::Black);
-
-		titleMenuText.setString("LEVEL SELECT");
-		window.draw(titleMenuText);
-
-		for (int i = 0; i < levelFiles.size(); i++)
-		{
-			std::filesystem::path path(levelFiles[i]);
-			menuText.setString(path.stem().string());
-
-			menuText.setPosition(250.f, 180.f + i * 50.f);
-
-			i == selectedMenuIndex ? menuText.setFillColor(sf::Color::Yellow) : menuText.setFillColor(sf::Color::White);
-
-			window.draw(menuText);
-		}
-
-		menuText.setString("EDITOR");
-		menuText.setPosition(
-			250.f,
-			180.f + levelFiles.size() * 50.f
-		);
-
-		if (selectedMenuIndex == levelFiles.size())
-			menuText.setFillColor(sf::Color::Cyan);
-		else
-			menuText.setFillColor(sf::Color::White);
-
-		window.draw(menuText);
 	}
 
 	void Game::renderPlayer()
@@ -429,21 +201,28 @@ namespace fp
 		window.clear();
 		window.setView(camera);
 
-		switch (state)
+		fp::GameContext context;
+
+		context.window = &window;
+		context.font = &font;
+
+		context.tileMap = tileMap;
+		context.player = player;
+
+		context.selectedMenuIndex = &selectedMenuIndex;
+		context.levelFiles = &levelFiles;
+
+		context.currentLevel = &currentLevel;
+
+		context.state = &state;
+		context.camera = &camera;
+
+		context.keyboardMappings = &keyboardMappings;
+		context.mouseMappings = &mouseMappings;
+
+		if (state)
 		{
-		case GameState::Menu:
-			renderMenu();
-			break;
-
-		case GameState::Editor:
-			renderEditor();
-			break;
-
-		case GameState::Playing:
-			window.setView(camera);
-			renderTileMap();
-			renderPlayer();
-			break;
+			state->render(window, context);
 		}
 
 		if (typingFileName)

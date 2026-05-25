@@ -5,6 +5,7 @@
 #include <vector>
 #include "Player.h"
 #include "TileMap.h"
+#include "IState.h"
 
 namespace fp
 {
@@ -14,18 +15,9 @@ namespace fp
 		Game();
 		~Game();
 
-		void updateInput();
 		void updatePlayer();
-		void updateCollision();
-		void updateTileCollision();
-		void updateCamera();
-		void updateMenu();
-		void updateEditor();
-		void updateGameplay();
 		void update();
-
-		void renderEditor();
-		void renderMenu();
+		
 		void renderPlayer();
 		void renderTileMap();
 		void render();
@@ -41,14 +33,8 @@ namespace fp
 		void initPlayer();
 		void initTileMap();
 
-		enum class GameState
-		{
-			Menu,
-			Editor,
-			Playing
-		};
-
-		GameState state;
+		class IState;
+		fp::IState* state = nullptr;
 		std::string currentLevel;
 
 		sf::RenderWindow window;

@@ -136,9 +136,12 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="EditorState.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="SFMLplatformer.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -149,9 +152,14 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="EditorState.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameContext.h" />
+    <ClInclude Include="IState.h" />
+    <ClInclude Include="MenuState.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayState.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMap.h" />
   </ItemGroup>
