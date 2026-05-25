@@ -49,16 +49,14 @@ namespace fp
 
 	void Game::initInput()
 	{
-		//mouse
-		mouseMappings["BTN_ADD_TILE"] = sf::Mouse::Button::Left;
-		mouseMappings["BTN_REMOVE_TILE"] = sf::Mouse::Button::Right;
+		input = new fp::InputManager();
 
-		//keyboard
-		keyboardMappings["KEY_MOVE_LEFT"] = sf::Keyboard::Key::A;
-		keyboardMappings["KEY_MOVE_RIGHT"] = sf::Keyboard::Key::D;
-		keyboardMappings["KEY_MOVE_UP"] = sf::Keyboard::Key::W;
-		keyboardMappings["KEY_MOVE_DOWN"] = sf::Keyboard::Key::S;
-		keyboardMappings["KEY_JUMP"] = sf::Keyboard::Key::Space;
+		input->bindKey("MOVE_LEFT", sf::Keyboard::A);
+		input->bindKey("MOVE_RIGHT", sf::Keyboard::D);
+		input->bindKey("JUMP", sf::Keyboard::Space);
+
+		input->bindMouse("ADD_TILE", sf::Mouse::Left);
+		input->bindMouse("REMOVE_TILE", sf::Mouse::Right);
 	}
 
 	void Game::initTileSheet()
@@ -177,8 +175,7 @@ namespace fp
 		context.state = &state;
 		context.camera = &camera;
 
-		context.keyboardMappings = &keyboardMappings;
-		context.mouseMappings = &mouseMappings;
+		context.input = input;
 
 		if (state)
 		{
@@ -217,8 +214,7 @@ namespace fp
 		context.state = &state;
 		context.camera = &camera;
 
-		context.keyboardMappings = &keyboardMappings;
-		context.mouseMappings = &mouseMappings;
+		context.input = input;
 
 		if (state)
 		{

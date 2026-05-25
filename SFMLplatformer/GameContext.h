@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "InputManager.h"
 
 namespace fp
 {
@@ -24,8 +25,6 @@ namespace fp
         std::string* currentLevel = nullptr;
 
         IState** state = nullptr;
-
-        std::map<std::string, sf::Keyboard::Key>* keyboardMappings;
-        std::map<std::string, sf::Mouse::Button>* mouseMappings;
+        InputManager* input;
     };
 }

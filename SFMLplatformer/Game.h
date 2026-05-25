@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "TileMap.h"
 #include "IState.h"
+#include "InputManager.h"
 
 namespace fp
 {
@@ -46,8 +47,8 @@ namespace fp
 
 		Player* player = nullptr;
 		TileMap* tileMap = nullptr;
-		std::map<std::string, sf::Keyboard::Key> keyboardMappings;
-		std::map<std::string, sf::Mouse::Button> mouseMappings;
+
+		InputManager* input;
 		//file saving
 		bool typingFileName = false;
 		std::string fileNameInput;

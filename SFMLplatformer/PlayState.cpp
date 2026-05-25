@@ -34,19 +34,17 @@ namespace fp
 		Player* player = context.player;
 		TileMap* tileMap = context.tileMap;
 
-		auto& keys = *context.keyboardMappings;
-		auto& mouse = *context.mouseMappings;
 		//player movement
-		if (sf::Keyboard::isKeyPressed(keys["KEY_MOVE_LEFT"]))
+		if (context.input->isKeyDown("MOVE_LEFT"))
 		{
 			player->move(-1.f, 0.f, dt);
 		}
-		else if (sf::Keyboard::isKeyPressed(keys["KEY_MOVE_RIGHT"]))
+		else if (context.input->isKeyDown("MOVE_RIGHT"))
 		{
 			player->move(1.f, 0.f, dt);
 		}
 
-		if (sf::Keyboard::isKeyPressed(keys["KEY_JUMP"]) && player->getCanJump())
+		if (context.input->isKeyDown("JUMP") && player->getCanJump())
 		{
 			player->jump();
 		}
