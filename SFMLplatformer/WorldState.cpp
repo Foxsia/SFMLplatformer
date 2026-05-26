@@ -3,66 +3,38 @@
 #include "Player.h"
 #include "TileMap.h"
 #include "InputManager.h"
+#include "CollisionSystem.h"
 
 namespace fp
 {
+	void WorldState::update(float dt, GameContext& context)
+	{
+		handlePlayerInput(dt, context);
+
+		onWorldUpdate(dt, context);
+
+		updatePlayer(dt, context);
+
+		CollisionSystem::resolvePlayerTileCollision(
+			*context.player,
+			*context.tileMap
+		);
+
+		CollisionSystem::resolveWorldBounds(
+			*context.player,
+			*context.window
+		);
+
+		updateCamera(context);
+	}
+
+	void WorldState::onWorldUpdate(float dt, GameContext& context)
+	{
+	}
+
 	void fp::WorldState::updatePlayer(float dt, GameContext& context)
 	{
 		context.player->update(dt);
-	}
-	void WorldState::updateTileCollision(GameContext& context)
-	{
-		Player* player = context.player;
-		TileMap* tileMap = context.tileMap;
-
-		bool grounded = false;
-
-		sf::FloatRect playerBounds = player->getGlobalBounds();
-
-		for (int x = 0; x < tileMap->getWidth(); x++)
-		{
-			for (int y = 0; y < tileMap->getHeight(); y++)
-			{
-				Tile* tile = tileMap->getTile(x, y);
-
-				if (!tile) continue;
-
-				sf::FloatRect tileBounds = tile->getHitbox();
-
-				if (!playerBounds.intersects(tileBounds)) continue;
-
-				// collision only from top
-				float playerBottom = playerBounds.top + playerBounds.height;
-				float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
-
-				bool insideTileX =
-					playerCenterX > tileBounds.left &&
-					playerCenterX < tileBounds.left + tileBounds.width;
-
-				if (insideTileX && player->getVelocity().y >= 0.f && playerBottom <= tileBounds.top + 20.f)
-				{
-					player->setPosition(
-						playerBounds.left,
-						tileBounds.top - playerBounds.height
-					);
-
-					player->resetVelocityY();
-
-					grounded = true;
-				}
-			}
-		}
-
-		player->setCanJump(grounded);
-	}
-	void WorldState::updateWorldCollision(GameContext& context)
-	{
-		if (context.player->getPosition().y + context.player->getGlobalBounds().height > context.window->getSize().y)
-		{
-			context.player->setCanJump(true);
-			context.player->resetVelocityY();
-			context.player->setPosition(context.player->getPosition().x, context.window->getSize().y - context.player->getGlobalBounds().height);
-		}
 	}
 	void WorldState::updateCamera(GameContext& context)
 	{

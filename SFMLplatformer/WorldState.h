@@ -3,17 +3,21 @@
 
 namespace fp
 {
+	struct GameContext;
+
 	class WorldState : public IState
 	{
 	protected:
+		virtual void onWorldUpdate( float dt, GameContext& context);
+
 		void updatePlayer(float dt, GameContext& context);
-
-		void updateTileCollision(GameContext& context);
-
-		void updateWorldCollision(GameContext& context);
 
 		void updateCamera(GameContext& context);
 
 		void handlePlayerInput(float dt, GameContext& context);
+	public:
+		virtual ~WorldState() = default;
+
+		void update( float dt, GameContext& context) override;
 	};
 }

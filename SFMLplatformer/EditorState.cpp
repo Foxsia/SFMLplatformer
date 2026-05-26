@@ -5,19 +5,31 @@
 
 namespace fp
 {
-    void EditorState::update(float dt, GameContext& context)
+    void EditorState::onWorldUpdate(float dt, GameContext& context)
     {
-        handlePlayerInput(dt, context);
+        sf::RenderWindow& window = *context.window;
 
-        handleEditorInput(context);
+        sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 
-        updatePlayer(dt, context);
+        sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 
-        updateTileCollision(context);
+        int mouseX =
+            static_cast<int>(worldPos.x) /
+            context.tileMap->getTileSize();
 
-        updateWorldCollision(context);
+        int mouseY =
+            static_cast<int>(worldPos.y) /
+            context.tileMap->getTileSize();
 
-        updateCamera(context);
+        if (context.input->isMouseDown("ADD_TILE"))
+        {
+            context.tileMap->addTile(mouseX, mouseY);
+        }
+
+        if (context.input->isMouseDown("REMOVE_TILE"))
+        {
+            context.tileMap->removeTile(mouseX, mouseY);
+        }
     }
 
     void EditorState::render(sf::RenderWindow& window, GameContext& context)
