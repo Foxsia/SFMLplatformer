@@ -4,6 +4,7 @@
 #include "TileMap.h"
 #include "InputManager.h"
 #include "CollisionSystem.h"
+#include "CameraController.h"
 
 namespace fp
 {
@@ -25,7 +26,11 @@ namespace fp
 			*context.window
 		);
 
-		updateCamera(context);
+		CameraController::followPlayer(
+			*context.camera,
+			*context.player,
+			*context.tileMap
+		);
 	}
 
 	void WorldState::onWorldUpdate(float dt, GameContext& context)
@@ -35,45 +40,6 @@ namespace fp
 	void fp::WorldState::updatePlayer(float dt, GameContext& context)
 	{
 		context.player->update(dt);
-	}
-	void WorldState::updateCamera(GameContext& context)
-	{
-		sf::FloatRect playerBounds = context.player->getGlobalBounds();
-
-		float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
-
-		float cameraCenterX = context.camera->getCenter().x;
-
-		float halfWidth = context.camera->getSize().x / 2.f;
-
-		// deadzone
-		float rightBorder = cameraCenterX + (context.camera->getSize().x / 2.f);
-
-		float leftBorder = cameraCenterX - (context.camera->getSize().x / 2.f);
-
-		// move camera right
-		if (playerCenterX > rightBorder)
-		{
-			cameraCenterX = playerCenterX - (context.camera->getSize().x / 2.f);
-		}
-
-		// move camera left
-		if (playerCenterX < leftBorder)
-		{
-			cameraCenterX = playerCenterX + (context.camera->getSize().x / 2.f);
-		}
-
-		// map bounds
-		float mapWidth = context.tileMap->getWidth() * context.tileMap->getTileSize();
-
-		if (cameraCenterX < halfWidth) cameraCenterX = halfWidth;
-
-		if (cameraCenterX > mapWidth - halfWidth) cameraCenterX = mapWidth - halfWidth;
-
-		context.camera->setCenter(
-			cameraCenterX,
-			context.camera->getSize().y / 2.f
-		);
 	}
 	void WorldState::handlePlayerInput(float dt, GameContext& context)
 	{

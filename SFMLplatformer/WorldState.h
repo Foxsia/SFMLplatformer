@@ -12,8 +12,6 @@ namespace fp
 
 		void updatePlayer(float dt, GameContext& context);
 
-		void updateCamera(GameContext& context);
-
 		void handlePlayerInput(float dt, GameContext& context);
 	public:
 		virtual ~WorldState() = default;
