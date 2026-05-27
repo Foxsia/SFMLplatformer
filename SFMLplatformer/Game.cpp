@@ -55,9 +55,11 @@ namespace fp
 		input->bindKey("MOVE_LEFT", sf::Keyboard::A);
 		input->bindKey("MOVE_RIGHT", sf::Keyboard::D);
 		input->bindKey("JUMP", sf::Keyboard::Space);
+		input->bindKey("TILE_BRUSH", sf::Keyboard::Num1);
+		input->bindKey("ENEMY_BRUSH", sf::Keyboard::Num2);
 
-		input->bindMouse("ADD_TILE", sf::Mouse::Left);
-		input->bindMouse("REMOVE_TILE", sf::Mouse::Right);
+		input->bindMouse("ADD_ELEMENT", sf::Mouse::Left);
+		input->bindMouse("REMOVE_ELEMENT", sf::Mouse::Right);
 	}
 
 	void Game::initTileSheet()
@@ -81,15 +83,6 @@ namespace fp
 		tileMap = new TileMap(width, height, &tileSheet, Tile::getSize());
 	}
 
-	void Game::initEnemies()
-	{
-		Enemy* enemy = new Enemy();
-
-		enemy->setPosition(100.f, 100.f);
-
-		enemies.push_back(enemy);
-	}
-
 	Game::Game()
 		: deltaTime(0.f)
 	{
@@ -98,7 +91,6 @@ namespace fp
 		initTileSheet();
 		initPlayer();
 		initTileMap();
-		initEnemies();
 		state = new fp::MenuState();
 		loadLevelList();
 	}
@@ -190,6 +182,7 @@ namespace fp
 		context.currentLevel = &currentLevel;
 
 		context.state = &state;
+		context.isEditor = false;
 		context.camera = &camera;
 
 		context.input = input;
@@ -230,6 +223,7 @@ namespace fp
 		context.currentLevel = &currentLevel;
 
 		context.state = &state;
+		context.isEditor = false;
 		context.camera = &camera;
 
 		context.input = input;

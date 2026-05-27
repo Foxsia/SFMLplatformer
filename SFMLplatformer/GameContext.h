@@ -29,5 +29,6 @@ namespace fp
 
         IState** state = nullptr;
         InputManager* input;
+        bool isEditor = false;
     };
 }

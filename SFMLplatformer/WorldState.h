@@ -8,7 +8,6 @@ namespace fp
 	class WorldState : public IState
 	{
 	protected:
-		virtual void onWorldUpdate( float dt, GameContext& context);
 
 		void updatePlayer(float dt, GameContext& context);
 
@@ -17,6 +16,7 @@ namespace fp
 		virtual ~WorldState() = default;
 
 		void update( float dt, GameContext& context) override;
+		virtual void handleInput(float dt, GameContext& context);
 		void render(sf::RenderWindow& window, GameContext& context) override;
 	};
 }

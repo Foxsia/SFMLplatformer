@@ -11,9 +11,7 @@ namespace fp
 {
 	void WorldState::update(float dt, GameContext& context)
 	{
-		handlePlayerInput(dt, context);
-
-		onWorldUpdate(dt, context);
+		handleInput(dt, context);
 
 		updatePlayer(dt, context);
 
@@ -33,10 +31,18 @@ namespace fp
 			*context.tileMap
 		);
 
-		for (auto& enemy : *context.enemies)
+		if (!context.isEditor)
 		{
-			enemy->update(dt, *context.tileMap);
+			for (auto& enemy : *context.enemies)
+			{
+				enemy->update(dt, *context.tileMap);
+			}
 		}
+	}
+
+	void WorldState::handleInput(float dt, GameContext& context)
+	{
+		handlePlayerInput(dt, context);
 	}
 
 	void WorldState::render(sf::RenderWindow& window, GameContext& context)
@@ -48,10 +54,6 @@ namespace fp
 		{
 			enemy->render(window);
 		}
-	}
-
-	void WorldState::onWorldUpdate(float dt, GameContext& context)
-	{
 	}
 
 	void fp::WorldState::updatePlayer(float dt, GameContext& context)

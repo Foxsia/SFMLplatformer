@@ -34,7 +34,6 @@ namespace fp
 		void initTileSheet();
 		void initPlayer();
 		void initTileMap();
-		void initEnemies();
 
 		class IState;
 		fp::IState* state = nullptr;
