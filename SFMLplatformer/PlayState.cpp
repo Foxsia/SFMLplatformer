@@ -7,7 +7,6 @@ namespace fp
 {
     void PlayState::render(sf::RenderWindow& window, GameContext& context)
     {
-        context.tileMap->render(window);
-        context.player->render(window);
+        WorldState::render(window, context);
     }
 }

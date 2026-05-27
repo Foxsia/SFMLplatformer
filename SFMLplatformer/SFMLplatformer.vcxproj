@@ -139,8 +139,10 @@
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="EditorState.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -159,10 +161,12 @@
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="EditorState.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameContext.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="IState.h" />
+    <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="Player.h" />

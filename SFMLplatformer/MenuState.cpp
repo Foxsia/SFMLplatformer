@@ -2,6 +2,7 @@
 #include "PlayState.h"
 #include "EditorState.h"
 #include "GameContext.h"
+#include "LevelLoader.h"
 #include "TileMap.h"
 #include <filesystem>
 
@@ -34,7 +35,11 @@ namespace fp
 			{
 				*context.currentLevel = (*context.levelFiles)[*context.selectedMenuIndex];
 
-				context.tileMap->loadFromFile(*context.currentLevel);
+				LevelLoader::load(
+					*context.currentLevel,
+					*context.tileMap,
+					*context.enemies
+				);
 
 				delete* context.state;
 				*context.state = new PlayState();

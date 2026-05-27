@@ -2,6 +2,7 @@
 #include "GameContext.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Enemy.h"
 
 namespace fp
 {
@@ -9,6 +10,7 @@ namespace fp
 	{
 	public:
 		static void resolvePlayerTileCollision(Player& player, TileMap& map);
+		static void resolveEnemyTileCollision(Enemy& enemy, TileMap& map);
 		static void resolveWorldBounds(Player& player, sf::RenderWindow& window);
 	};
 }

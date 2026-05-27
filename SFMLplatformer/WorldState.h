@@ -17,5 +17,6 @@ namespace fp
 		virtual ~WorldState() = default;
 
 		void update( float dt, GameContext& context) override;
+		void render(sf::RenderWindow& window, GameContext& context) override;
 	};
 }

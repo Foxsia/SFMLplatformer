@@ -7,6 +7,7 @@
 #include "TileMap.h"
 #include "IState.h"
 #include "InputManager.h"
+#include "Enemy.h"
 
 namespace fp
 {
@@ -33,6 +34,7 @@ namespace fp
 		void initTileSheet();
 		void initPlayer();
 		void initTileMap();
+		void initEnemies();
 
 		class IState;
 		fp::IState* state = nullptr;
@@ -47,6 +49,8 @@ namespace fp
 
 		Player* player = nullptr;
 		TileMap* tileMap = nullptr;
+
+		std::vector<Enemy*> enemies;
 
 		InputManager* input;
 		//file saving

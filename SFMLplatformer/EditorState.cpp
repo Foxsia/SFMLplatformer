@@ -35,8 +35,7 @@ namespace fp
     void EditorState::render(sf::RenderWindow& window, GameContext& context)
     {
         window.setView(*context.camera);
-        context.tileMap->render(window);
-        context.player->render(window);
+        WorldState::render(window, context);
 
         sf::Text editorHelp;
         editorHelp.setFont(*context.font);

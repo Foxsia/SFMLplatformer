@@ -7,6 +7,7 @@ namespace fp
     class TileMap;
     class Player;
     class IState;
+    class Enemy;
 
     struct GameContext
     {
@@ -17,6 +18,8 @@ namespace fp
 
         fp::TileMap* tileMap = nullptr;
         fp::Player* player = nullptr;
+
+        std::vector<Enemy*>* enemies = nullptr;
 
         // menu state
         size_t* selectedMenuIndex = nullptr;

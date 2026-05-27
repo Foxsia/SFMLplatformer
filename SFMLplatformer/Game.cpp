@@ -2,6 +2,7 @@
 #include "MenuState.h"
 #include "EditorState.h"
 #include "GameContext.h"
+#include "LevelLoader.h"
 #include <iostream>
 #include <filesystem>
 
@@ -80,6 +81,15 @@ namespace fp
 		tileMap = new TileMap(width, height, &tileSheet, Tile::getSize());
 	}
 
+	void Game::initEnemies()
+	{
+		Enemy* enemy = new Enemy();
+
+		enemy->setPosition(100.f, 100.f);
+
+		enemies.push_back(enemy);
+	}
+
 	Game::Game()
 		: deltaTime(0.f)
 	{
@@ -88,6 +98,7 @@ namespace fp
 		initTileSheet();
 		initPlayer();
 		initTileMap();
+		initEnemies();
 		state = new fp::MenuState();
 		loadLevelList();
 	}
@@ -97,6 +108,11 @@ namespace fp
 		delete player;
 		delete tileMap;
 		delete state;
+
+		for (auto enemy : enemies)
+		{
+			delete enemy;
+		}
 	}
 
 	void Game::updatePlayer()
@@ -132,7 +148,7 @@ namespace fp
 				}
 				if (typingFileName && event.key.code == sf::Keyboard::Enter)
 				{
-					tileMap->saveToFile("levels/" + fileNameInput + ".txt");
+					tileMap->saveToFile("levels/" + fileNameInput + ".txt", enemies);
 					typingFileName = false;
 				}
 				if (typingFileName && event.key.code == sf::Keyboard::BackSpace)
@@ -166,6 +182,7 @@ namespace fp
 
 		context.tileMap = tileMap;
 		context.player = player;
+		context.enemies = &enemies;
 
 		context.selectedMenuIndex = &selectedMenuIndex;
 		context.levelFiles = &levelFiles;
@@ -176,7 +193,7 @@ namespace fp
 		context.camera = &camera;
 
 		context.input = input;
-
+		
 		if (state)
 		{
 			state->update(deltaTime, context);
@@ -205,6 +222,7 @@ namespace fp
 
 		context.tileMap = tileMap;
 		context.player = player;
+		context.enemies = &enemies;
 
 		context.selectedMenuIndex = &selectedMenuIndex;
 		context.levelFiles = &levelFiles;

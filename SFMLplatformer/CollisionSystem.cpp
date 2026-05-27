@@ -43,6 +43,31 @@ void fp::CollisionSystem::resolvePlayerTileCollision(Player& player, TileMap& ma
 	player.setCanJump(grounded);
 }
 
+void fp::CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
+{
+	sf::FloatRect bounds = enemy.getShape().getGlobalBounds();
+
+	for (int x = 0; x < map.getWidth(); x++)
+	{
+		for (int y = 0; y < map.getHeight(); y++)
+		{
+			Tile* tile = map.getTile(x, y);
+			if (!tile) continue;
+
+			sf::FloatRect tileBounds = tile->getHitbox();
+
+			if (!bounds.intersects(tileBounds)) continue;
+
+			// simple ground collision
+			if (enemy.getVelocity().y > 0.f)
+			{
+				enemy.getShape().setPosition(bounds.left, tileBounds.top - bounds.height);
+				enemy.setVelocityY(0.f);
+			}
+		}
+	}
+}
+
 void fp::CollisionSystem::resolveWorldBounds(Player& player, sf::RenderWindow& window)
 {
 	if (player.getPosition().y + player.getGlobalBounds().height > window.getSize().y)

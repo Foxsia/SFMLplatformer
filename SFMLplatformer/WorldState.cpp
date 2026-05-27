@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "CollisionSystem.h"
 #include "CameraController.h"
+#include "Enemy.h"
 
 namespace fp
 {
@@ -31,6 +32,22 @@ namespace fp
 			*context.player,
 			*context.tileMap
 		);
+
+		for (auto& enemy : *context.enemies)
+		{
+			enemy->update(dt, *context.tileMap);
+		}
+	}
+
+	void WorldState::render(sf::RenderWindow& window, GameContext& context)
+	{
+		context.tileMap->render(window);
+		context.player->render(window);
+
+		for (auto& enemy : *context.enemies)
+		{
+			enemy->render(window);
+		}
 	}
 
 	void WorldState::onWorldUpdate(float dt, GameContext& context)

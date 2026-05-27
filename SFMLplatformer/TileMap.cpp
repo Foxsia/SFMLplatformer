@@ -92,7 +92,7 @@ namespace fp
 		}
 	}
 
-	void TileMap::saveToFile(const std::string& filename)
+	void TileMap::saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies)
 	{
 		std::ofstream file(filename);
 		if (!file.is_open()) return;
@@ -101,31 +101,35 @@ namespace fp
 		{
 			for (size_t x = 0; x < tiles.size(); x++)
 			{
-				file << (tiles[x][y] ? 1 : 0) << " ";
+				int value = 0;
+
+				// tile
+				if (tiles[x][y] != nullptr)
+				{
+					value = 1;
+				}
+
+				// enemy
+				for (auto enemy : enemies)
+				{
+					sf::Vector2f pos = enemy->getPosition();
+
+					unsigned enemyX =
+						static_cast<unsigned>(pos.x) / tileSize;
+
+					unsigned enemyY =
+						static_cast<unsigned>(pos.y) / tileSize;
+
+					if (enemyX == x && enemyY == y)
+					{
+						value = 2;
+					}
+				}
+
+				file << value << " ";
 			}
+
 			file << "\n";
-		}
-	}
-
-	void TileMap::loadFromFile(const std::string& filename)
-	{
-		std::ifstream file(filename);
-		if (!file.is_open()) return;
-
-		// clear map first
-		for (size_t x = 0; x < tiles.size(); x++)
-			for (size_t y = 0; y < tiles[x].size(); y++)
-				removeTile(x, y);
-
-		for (size_t y = 0; y < tiles[0].size(); y++)
-		{
-			for (size_t x = 0; x < tiles.size(); x++)
-			{
-				int value;
-				file >> value;
-
-				if (value == 1) addTile(x, y);
-			}
 		}
 	}
 }
