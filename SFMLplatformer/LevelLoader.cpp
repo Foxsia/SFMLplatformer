@@ -7,12 +7,11 @@
 
 namespace fp
 {
-    void LevelLoader::load(  const std::string& filename,  TileMap& tileMap, std::vector<Enemy*>& enemies)
+    void LevelLoader::load(const std::string& filename, TileMap& tileMap, std::vector<Enemy*>& enemies)
     {
         std::ifstream file(filename);
 
-        if (!file.is_open())
-            return;
+        if (!file.is_open()) return;
 
         for (auto enemy : enemies)
         {

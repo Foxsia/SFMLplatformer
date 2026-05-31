@@ -42,13 +42,13 @@ namespace fp
 
     void Enemy::checkDirectionChange(TileMap& map)
     {
-        sf::FloatRect bounds = shape.getGlobalBounds();
+        const sf::FloatRect bounds = shape.getGlobalBounds();
 
-        float footX = bounds.left + bounds.width / 2.f;
-        float footY = bounds.top + bounds.height + 5.f;
+        const float footX = bounds.left + bounds.width / 2.f;
+        const float footY = bounds.top + bounds.height + 5.f;
 
-        int tileX = static_cast<int>(footX) / map.getTileSize();
-        int tileY = static_cast<int>(footY) / map.getTileSize();
+        const int tileX = static_cast<int>(footX) / map.getTileSize();
+        const int tileY = static_cast<int>(footY) / map.getTileSize();
 
         Tile* tile = map.getTile(tileX, tileY);
 

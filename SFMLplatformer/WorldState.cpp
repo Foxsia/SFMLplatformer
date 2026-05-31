@@ -64,9 +64,9 @@ namespace fp
 	{
 		sf::RenderWindow& window = *context.window;
 
-		sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+		const sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 
-		sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+		const sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 
 		const int mouseX = static_cast<int>(worldPos.x) / context.tileMap->getTileSize();
 

@@ -10,7 +10,7 @@ namespace fp
 {
 	void MenuState::update(float dt, GameContext& context)
 	{
-		int totalOptions = context.levelFiles->size() + 1;
+		const int totalOptions = context.levelFiles->size() + 1;
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{

@@ -10,17 +10,17 @@ namespace fp
         const TileMap& map
     )
     {
-		sf::FloatRect playerBounds = player.getGlobalBounds();
+		const sf::FloatRect playerBounds = player.getGlobalBounds();
 
-		float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
+		const float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
 
 		float cameraCenterX = camera.getCenter().x;
 
-		float halfWidth = camera.getSize().x / 2.f;
+		const float halfWidth = camera.getSize().x / 2.f;
 
-		float rightBorder = cameraCenterX + (camera.getSize().x / 2.f);
+		const float rightBorder = cameraCenterX + (camera.getSize().x / 2.f);
 
-		float leftBorder = cameraCenterX - (camera.getSize().x / 2.f);
+		const float leftBorder = cameraCenterX - (camera.getSize().x / 2.f);
 
 		if (playerCenterX > rightBorder)
 		{
@@ -32,7 +32,7 @@ namespace fp
 			cameraCenterX = playerCenterX + (camera.getSize().x / 2.f);
 		}
 
-		float mapWidth = map.getWidth() * map.getTileSize();
+		const float mapWidth = map.getWidth() * map.getTileSize();
 
 		if (cameraCenterX < halfWidth) cameraCenterX = halfWidth;
 

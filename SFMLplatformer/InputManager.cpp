@@ -30,7 +30,7 @@ namespace fp
 
     sf::Vector2f InputManager::getMouseWorldPosition(const sf::RenderWindow& window) const
     {
-        sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+       const sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
         return window.mapPixelToCoords(pixelPos);
     }
 }

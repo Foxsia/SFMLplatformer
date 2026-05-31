@@ -14,7 +14,7 @@ void fp::CollisionSystem::resolvePlayerTileCollision(Player& player, TileMap& ma
 
 			if (!tile) continue;
 
-			sf::FloatRect tileBounds = tile->getHitbox();
+			const sf::FloatRect tileBounds = tile->getHitbox();
 
 			if (!playerBounds.intersects(tileBounds)) continue;
 
@@ -45,7 +45,7 @@ void fp::CollisionSystem::resolvePlayerTileCollision(Player& player, TileMap& ma
 
 void fp::CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
 {
-	sf::FloatRect bounds = enemy.getShape().getGlobalBounds();
+	const sf::FloatRect bounds = enemy.getShape().getGlobalBounds();
 
 	for (int x = 0; x < map.getWidth(); x++)
 	{
@@ -54,7 +54,7 @@ void fp::CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
 			Tile* tile = map.getTile(x, y);
 			if (!tile) continue;
 
-			sf::FloatRect tileBounds = tile->getHitbox();
+			const sf::FloatRect tileBounds = tile->getHitbox();
 
 			if (!bounds.intersects(tileBounds)) continue;
 
