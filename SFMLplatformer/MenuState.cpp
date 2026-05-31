@@ -8,6 +8,16 @@
 
 namespace fp
 {
+	namespace
+	{
+		const int MENU_INPUT_DELAY_MS = 150;
+
+		const float MENU_X = 250.f;
+		const float TITLE_Y = 80.f;
+		const float MENU_START_Y = 180.f;
+		const float MENU_SPACING = 50.f;
+	}
+
 	void MenuState::update(float dt, GameContext& context)
 	{
 		const int totalOptions = context.levelFiles->size() + 1;
@@ -18,14 +28,14 @@ namespace fp
 
 			if (*context.selectedMenuIndex >= totalOptions) *context.selectedMenuIndex = 0;
 
-			sf::sleep(sf::milliseconds(150));
+			sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
 			*context.selectedMenuIndex == 0 ? *context.selectedMenuIndex = totalOptions - 1 : (*context.selectedMenuIndex)--;
 
-			sf::sleep(sf::milliseconds(150));
+			sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
@@ -48,7 +58,7 @@ namespace fp
 				delete* context.state;
 				*context.state = new EditorState();
 			}
-			sf::sleep(sf::milliseconds(150));
+			sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
 		}
 	}
 
@@ -62,7 +72,7 @@ namespace fp
 		title.setString("LEVEL SELECT");
 		title.setCharacterSize(40);
 		title.setFillColor(sf::Color::White);
-		title.setPosition(250.f, 80.f);
+		title.setPosition(MENU_X, TITLE_Y);
 		window.draw(title);
 
 		for (int i = 0; i < context.levelFiles->size(); i++)
@@ -73,7 +83,7 @@ namespace fp
 			text.setFont(*context.font);
 			text.setString(path.stem().string());
 			text.setCharacterSize(28);
-			text.setPosition(250.f, 180.f + i * 50.f);
+			text.setPosition(MENU_X, MENU_START_Y + i * MENU_SPACING);
 
 			i == *context.selectedMenuIndex ? text.setFillColor(sf::Color::Yellow) : text.setFillColor(sf::Color::White);
 
@@ -84,7 +94,7 @@ namespace fp
 		editor.setFont(*context.font);
 		editor.setString("EDITOR");
 		editor.setCharacterSize(28);
-		editor.setPosition(250.f, 180.f + context.levelFiles->size() * 50.f);
+		editor.setPosition(MENU_X, MENU_START_Y + context.levelFiles->size() * MENU_SPACING);
 
 		if (*context.selectedMenuIndex == context.levelFiles->size())
 			editor.setFillColor(sf::Color::Cyan);

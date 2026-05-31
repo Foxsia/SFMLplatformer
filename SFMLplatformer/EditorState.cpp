@@ -5,6 +5,12 @@
 
 namespace fp
 {
+    namespace
+    {
+        const unsigned HELP_TEXT_SIZE = 15;
+        const float HELP_TEXT_X = 10.f;
+        const float HELP_TEXT_Y = 10.f;
+    }
 
     void EditorState::render(sf::RenderWindow& window, GameContext& context)
     {
@@ -13,11 +19,11 @@ namespace fp
 
         sf::Text editorHelp;
         editorHelp.setFont(*context.font);
-        editorHelp.setCharacterSize(15);
+        editorHelp.setCharacterSize(HELP_TEXT_SIZE);
         editorHelp.setFillColor(sf::Color::White);
-        editorHelp.setPosition(10.f, 10.f);
+        editorHelp.setPosition(HELP_TEXT_X, HELP_TEXT_Y);
 
-        editorHelp.setString("Press F2 to save and enter C to proceed or cancel\nPress M to open menu");
+        editorHelp.setString("Press F2 to save and Enter to proceed or C to cancel\nPress M to open menu");
         window.draw(editorHelp);
     }
 	void EditorState::handleInput(float dt, GameContext& context)

@@ -44,7 +44,6 @@ namespace fp
 		velocity.x += dir_x * acceleration * dt;
 		velocity.y += dir_y * acceleration * dt;
 
-		// limit velocity X
 		if (std::abs(velocity.x) > velocityMax)
 		{
 			velocity.x = velocityMax * (
