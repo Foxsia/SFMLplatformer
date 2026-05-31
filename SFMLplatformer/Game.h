@@ -52,15 +52,15 @@ namespace fp
 		std::vector<Enemy*> enemies;
 
 		InputManager* input;
-		//file saving
+
 		bool typingFileName = false;
 		std::string fileNameInput;
 
 		sf::Font font;
 		sf::Text fileNameText;
-		//editor help
+
 		sf::Text editorHelp;
-		//menu
+
 		std::vector<std::string> levelFiles;
 		std::size_t selectedMenuIndex = 0;
 		sf::Text menuText;

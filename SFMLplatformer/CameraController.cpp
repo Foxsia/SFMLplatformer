@@ -18,24 +18,20 @@ namespace fp
 
 		float halfWidth = camera.getSize().x / 2.f;
 
-		// deadzone
 		float rightBorder = cameraCenterX + (camera.getSize().x / 2.f);
 
 		float leftBorder = cameraCenterX - (camera.getSize().x / 2.f);
 
-		// move camera right
 		if (playerCenterX > rightBorder)
 		{
 			cameraCenterX = playerCenterX - (camera.getSize().x / 2.f);
 		}
 
-		// move camera left
 		if (playerCenterX < leftBorder)
 		{
 			cameraCenterX = playerCenterX + (camera.getSize().x / 2.f);
 		}
 
-		// map bounds
 		float mapWidth = map.getWidth() * map.getTileSize();
 
 		if (cameraCenterX < halfWidth) cameraCenterX = halfWidth;

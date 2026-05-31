@@ -38,11 +38,11 @@ namespace fp
 	void MovementComponent::move(
 		float dir_x,
 		float dir_y,
-		float delta_time
+		float dt
 	)
 	{
-		velocity.x += dir_x * acceleration * delta_time;
-		velocity.y += dir_y * acceleration * delta_time;
+		velocity.x += dir_x * acceleration * dt;
+		velocity.y += dir_y * acceleration * dt;
 
 		// limit velocity X
 		if (std::abs(velocity.x) > velocityMax)
@@ -68,9 +68,9 @@ namespace fp
 		velocity.x = 0.f;
 	}
 
-	void MovementComponent::update(float delta_time)
+	void MovementComponent::update(float dt)
 	{
-		velocity.y += gravity * delta_time;
+		velocity.y += gravity * dt;
 
 		if (std::abs(velocity.y) > velocityMaxY)
 		{
@@ -94,6 +94,6 @@ namespace fp
 			velocity.x = 0.f;
 		}
 
-		sprite.move(velocity * delta_time);
+		sprite.move(velocity * dt);
 	}
 }

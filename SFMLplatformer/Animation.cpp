@@ -14,11 +14,11 @@ namespace fp
 		sprite.setTextureRect(currentRect);
 	}
 
-	void Animation::play(float delta_time)
+	void Animation::play(float dt)
 	{
 		const float ANIMATION_SPEED = 200.f;
 
-		timer += ANIMATION_SPEED * delta_time;
+		timer += ANIMATION_SPEED * dt;
 
 		if (timer >= delay)
 		{

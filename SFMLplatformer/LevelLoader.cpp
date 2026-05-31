@@ -14,7 +14,6 @@ namespace fp
         if (!file.is_open())
             return;
 
-        // clear old enemies
         for (auto enemy : enemies)
         {
             delete enemy;
@@ -22,7 +21,6 @@ namespace fp
 
         enemies.clear();
 
-        // clear map
         for (unsigned x = 0; x < tileMap.getWidth(); x++)
         {
             for (unsigned y = 0; y < tileMap.getHeight(); y++)

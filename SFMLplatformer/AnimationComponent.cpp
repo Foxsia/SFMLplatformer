@@ -47,8 +47,8 @@ namespace fp
         animations[key] = animation;
     }
 
-    void AnimationComponent::play(const std::string& key, float delta_time)
+    void AnimationComponent::play(const std::string& key, float dt)
     {
-        animations[key]->play(delta_time);
+        animations[key]->play(dt);
     }
 }

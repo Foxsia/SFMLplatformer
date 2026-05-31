@@ -25,13 +25,13 @@ namespace fp
 		void resetVelocityY();
 		void resetVelocityX();
 
-		void move(float dir_x, float dir_y, float delta_time);
+		void move(float dir_x, float dir_y, float dt);
 		void jump();
 
-		void updatePhysics(float delta_time);
+		void updatePhysics(float dt);
 		void updateMovement();
-		void updateAnimation(float delta_time);
-		void update(float delta_time);
+		void updateAnimation(float dt);
+		void update(float dt);
 
 		void render(sf::RenderTarget& target);
 

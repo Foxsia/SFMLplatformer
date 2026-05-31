@@ -21,14 +21,13 @@ namespace fp
 
         std::vector<Enemy*>* enemies = nullptr;
 
-        // menu state
         size_t* selectedMenuIndex = nullptr;
         std::vector<std::string>* levelFiles = nullptr;
 
         std::string* currentLevel = nullptr;
 
         IState** state = nullptr;
-        InputManager* input;
+        InputManager* input = nullptr;
         bool isEditor = false;
     };
 }

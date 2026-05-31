@@ -96,7 +96,7 @@ namespace fp
 
 	const sf::Vector2f& Player::getVelocity() const
 	{
-		return sf::Vector2f();
+		return movementComponent->getVelocity();
 	}
 
 	void Player::setPosition(const float x, const float y)
@@ -114,9 +114,9 @@ namespace fp
 		movementComponent->stopVelocityX();
 	}
 
-	void Player::move(float dir_x, float dir_y, float delta_time)
+	void Player::move(float dir_x, float dir_y, float dt)
 	{
-		movementComponent->move(dir_x, dir_y, delta_time);
+		movementComponent->move(dir_x, dir_y, dt);
 	}
 
 	void Player::jump()
@@ -125,9 +125,9 @@ namespace fp
 		canJump = false;
 	}
 
-	void Player::updatePhysics(float delta_time)
+	void Player::updatePhysics(float dt)
 	{
-		movementComponent->update(delta_time);
+		movementComponent->update(dt);
 	}
 
 	void Player::updateMovement()
@@ -150,19 +150,19 @@ namespace fp
 		}
 	}
 
-	void Player::updateAnimation(float delta_time)
+	void Player::updateAnimation(float dt)
 	{
 		if (animState == IDLE)
-			animationComponent->play("IDLE", delta_time);
+			animationComponent->play("IDLE", dt);
 		else
-			animationComponent->play("RUN", delta_time);
+			animationComponent->play("RUN", dt);
 	}
 
-	void Player::update(float delta_time)
+	void Player::update(float dt)
 	{
-		updatePhysics(delta_time);
+		updatePhysics(dt);
 		updateMovement();
-		updateAnimation(delta_time);
+		updateAnimation(dt);
 	}
 
 	void Player::render(sf::RenderTarget& target)

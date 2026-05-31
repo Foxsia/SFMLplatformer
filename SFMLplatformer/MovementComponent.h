@@ -19,13 +19,13 @@ namespace fp
 
 		const sf::Vector2f& getVelocity() const;
 
-		void move(float dir_x, float dir_y, float delta_time);
+		void move(float dir_x, float dir_y, float dt);
 		void jump(float force);
 
 		void stopVelocityY();
 		void stopVelocityX();
 
-		void update(float delta_time);
+		void update(float dt);
 
 	private:
 		sf::Sprite& sprite;
