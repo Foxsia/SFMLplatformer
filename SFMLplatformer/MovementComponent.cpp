@@ -70,7 +70,6 @@ namespace fp
 
 	void MovementComponent::update(float delta_time)
 	{
-		// gravity
 		velocity.y += gravity * delta_time;
 
 		if (std::abs(velocity.y) > velocityMaxY)
@@ -78,10 +77,8 @@ namespace fp
 			velocity.y = velocityMaxY;
 		}
 
-		// drag
 		velocity.x *= drag;
 
-		// min velocity
 		if (std::abs(velocity.x) < velocityMin)
 		{
 			velocity.x = 0.f;

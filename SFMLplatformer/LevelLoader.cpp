@@ -39,13 +39,11 @@ namespace fp
 
                 file >> value;
 
-                // tile
                 if (value == 1)
                 {
                     tileMap.addTile(x, y);
                 }
 
-                // enemy
                 if (value == 2)
                 {
                     Enemy* enemy = new Enemy();

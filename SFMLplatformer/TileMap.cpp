@@ -103,13 +103,11 @@ namespace fp
 			{
 				int value = 0;
 
-				// tile
 				if (tiles[x][y] != nullptr)
 				{
 					value = 1;
 				}
 
-				// enemy
 				for (auto enemy : enemies)
 				{
 					sf::Vector2f pos = enemy->getPosition();

@@ -30,7 +30,6 @@ namespace fp
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
-			// levels
 			if (*context.selectedMenuIndex < context.levelFiles->size())
 			{
 				*context.currentLevel = (*context.levelFiles)[*context.selectedMenuIndex];
@@ -44,7 +43,6 @@ namespace fp
 				delete* context.state;
 				*context.state = new PlayState();
 			}
-			// editor
 			else
 			{
 				delete* context.state;

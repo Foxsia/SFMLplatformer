@@ -75,7 +75,6 @@ namespace fp
 		Player* player = context.player;
 		TileMap* tileMap = context.tileMap;
 
-		//player movement
 		if (context.input->isKeyDown("MOVE_LEFT"))
 		{
 			player->move(-1.f, 0.f, dt);

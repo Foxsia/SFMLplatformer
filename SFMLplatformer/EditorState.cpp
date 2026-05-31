@@ -39,7 +39,6 @@ namespace fp
 
         if (context.input->isKeyDown("ENEMY_BRUSH")) brush = BrushType::Enemy;
 
-		//tile func
 		if (context.input->isMouseDown("ADD_ELEMENT"))
 		{
             if (brush == BrushType::Tile)
