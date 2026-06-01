@@ -28,6 +28,8 @@ namespace fp
 		void addTile(unsigned x, unsigned y);
 		void removeTile(unsigned x, unsigned y);
 
+		void clear();
+
 		void render(sf::RenderTarget& target);
 		void saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies);
 

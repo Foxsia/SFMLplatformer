@@ -148,6 +148,8 @@ namespace fp
 
 				if (event.key.code == sf::Keyboard::M)
 				{
+					tileMap->clear();
+					enemies.clear();
 					delete state;
 					state = new fp::MenuState();
 				}

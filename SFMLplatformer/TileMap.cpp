@@ -81,6 +81,18 @@ namespace fp
 		}
 	}
 
+	void TileMap::clear()
+	{
+		for (size_t x = 0; x < tiles.size(); ++x)
+		{
+			for (size_t y = 0; y < tiles[x].size(); ++y)
+			{
+				delete tiles[x][y];
+				tiles[x][y] = nullptr;
+			}
+		}
+	}
+
 	void TileMap::render(sf::RenderTarget& target)
 	{
 		for (int i = 0; i < tiles.size(); i++)
