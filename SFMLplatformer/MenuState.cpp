@@ -20,45 +20,11 @@ namespace fp
 
 	void MenuState::update(float dt, GameContext& context)
 	{
-		const int totalOptions = context.levelFiles->size() + 1;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			(*context.selectedMenuIndex)++;
-
-			if (*context.selectedMenuIndex >= totalOptions) *context.selectedMenuIndex = 0;
-
-			sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			*context.selectedMenuIndex == 0 ? *context.selectedMenuIndex = totalOptions - 1 : (*context.selectedMenuIndex)--;
-
-			sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
-		}
+		handleNavigation(context);
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
-			if (*context.selectedMenuIndex < context.levelFiles->size())
-			{
-				*context.currentLevel = (*context.levelFiles)[*context.selectedMenuIndex];
-
-				LevelLoader::load(
-					*context.currentLevel,
-					*context.tileMap,
-					*context.enemies
-				);
-
-				delete* context.state;
-				*context.state = new PlayState();
-			}
-			else
-			{
-				delete* context.state;
-				*context.state = new EditorState();
-			}
-			sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
+			selectCurrentOption(context);
 		}
 	}
 
@@ -102,5 +68,55 @@ namespace fp
 			editor.setFillColor(sf::Color::White);
 
 		window.draw(editor);
+	}
+	void MenuState::handleNavigation(GameContext& context)
+	{
+		const int totalOptions = context.levelFiles->size() + 1;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			(*context.selectedMenuIndex)++;
+
+			if (*context.selectedMenuIndex >= totalOptions) *context.selectedMenuIndex = 0;
+
+			sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			*context.selectedMenuIndex == 0 ? *context.selectedMenuIndex = totalOptions - 1 : (*context.selectedMenuIndex)--;
+
+			sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
+		}
+	}
+	void MenuState::selectCurrentOption(GameContext& context)
+	{
+		if (*context.selectedMenuIndex < context.levelFiles->size())
+		{
+			loadLevel(context);
+		}
+		else
+		{
+			openEditor(context);
+		}
+		sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
+	}
+	void MenuState::loadLevel(GameContext& context)
+	{
+		*context.currentLevel = (*context.levelFiles)[*context.selectedMenuIndex];
+
+		LevelLoader::load(
+			*context.currentLevel,
+			*context.tileMap,
+			*context.enemies
+		);
+
+		delete* context.state;
+		*context.state = new PlayState();
+	}
+	void MenuState::openEditor(GameContext& context)
+	{
+		delete* context.state;
+		*context.state = new EditorState();
 	}
 }

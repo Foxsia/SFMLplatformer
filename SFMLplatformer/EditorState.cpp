@@ -26,6 +26,57 @@ namespace fp
         editorHelp.setString("Press F2 to save and Enter to proceed or C to cancel\nPress M to open menu");
         window.draw(editorHelp);
     }
+    void EditorState::updateBrush(GameContext& context)
+    {
+        if (context.input->isKeyDown("TILE_BRUSH")) brush = BrushType::Tile;
+
+        if (context.input->isKeyDown("ENEMY_BRUSH")) brush = BrushType::Enemy;
+    }
+    void EditorState::addElement(GameContext& context, int mouseX, int mouseY)
+    {
+        if (brush == BrushType::Tile)
+        {
+            context.tileMap->addTile(mouseX, mouseY);
+        }
+        else if (brush == BrushType::Enemy)
+        {
+            Enemy* enemy = new Enemy();
+            enemy->setPosition(
+                mouseX * context.tileMap->getTileSize(),
+                mouseY * context.tileMap->getTileSize()
+            );
+
+            context.enemies->push_back(enemy);
+        }
+    }
+    void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
+    {
+        sf::RenderWindow& window = *context.window;
+
+        if (brush == BrushType::Tile)
+        {
+            context.tileMap->removeTile(mouseX, mouseY);
+        }
+        else
+        {
+            removeEnemyAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+        }
+    }
+    void EditorState::removeEnemyAtPosition(GameContext& context, const sf::Vector2f& pos)
+    {
+        for (auto it = context.enemies->begin(); it != context.enemies->end(); )
+        {
+            if ((*it)->getGlobalBounds().contains(pos))
+            {
+                delete* it;
+                it = context.enemies->erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
 	void EditorState::handleInput(float dt, GameContext& context)
 	{
         context.isEditor = true;
@@ -40,51 +91,15 @@ namespace fp
 
 		const int mouseY = static_cast<int>(worldPos.y) / context.tileMap->getTileSize();
 
-		TileMap* tileMap = context.tileMap;
-        if (context.input->isKeyDown("TILE_BRUSH")) brush = BrushType::Tile;
-
-        if (context.input->isKeyDown("ENEMY_BRUSH")) brush = BrushType::Enemy;
+        updateBrush(context);
 
 		if (context.input->isMouseDown("ADD_ELEMENT"))
 		{
-            if (brush == BrushType::Tile)
-            {
-                context.tileMap->addTile(mouseX, mouseY);
-            }
-            else if (brush == BrushType::Enemy)
-            {
-                Enemy* enemy = new Enemy();
-                enemy->setPosition(
-                    mouseX * context.tileMap->getTileSize(),
-                    mouseY * context.tileMap->getTileSize()
-                );
-
-                context.enemies->push_back(enemy);
-            }
+            addElement(context, mouseX, mouseY);
 		}
 		if (context.input->isMouseDown("REMOVE_ELEMENT"))
 		{
-            if (brush == BrushType::Tile)
-            {
-                context.tileMap->removeTile(mouseX, mouseY);
-            }
-            else
-            {
-                sf::Vector2f pos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
-                for (auto it = context.enemies->begin(); it != context.enemies->end(); )
-                {
-                    if ((*it)->getGlobalBounds().contains(pos))
-                    {
-                        delete* it;
-                        it = context.enemies->erase(it);
-                    }
-                    else
-                    {
-                        ++it;
-                    }
-                }
-            }
+            removeElement(context, mouseX, mouseY);
 		}
 	}
 }
