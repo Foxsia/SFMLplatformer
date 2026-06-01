@@ -139,6 +139,9 @@ namespace fp
 				if (typingFileName && event.key.code == sf::Keyboard::Enter)
 				{
 					tileMap->saveToFile("levels/" + fileNameInput + ".txt", enemies);
+
+					loadLevelList();
+
 					typingFileName = false;
 				}
 				if (typingFileName && event.key.code == sf::Keyboard::BackSpace)
@@ -149,7 +152,13 @@ namespace fp
 				if (event.key.code == sf::Keyboard::M)
 				{
 					tileMap->clear();
+
+					for (auto enemy : enemies)
+					{
+						delete enemy;
+					}
 					enemies.clear();
+
 					delete state;
 					state = new fp::MenuState();
 				}
