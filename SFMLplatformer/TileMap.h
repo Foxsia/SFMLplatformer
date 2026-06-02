@@ -24,6 +24,7 @@ namespace fp
 		}
 
 		Tile* getTile(unsigned x, unsigned y);
+		sf::Vector2f getWorldSize() const;
 
 		void addTile(unsigned x, unsigned y);
 		void removeTile(unsigned x, unsigned y);
@@ -33,10 +34,14 @@ namespace fp
 		void render(sf::RenderTarget& target);
 		void saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies);
 
+		void loadBackground(const std::string& path);
 	private:
 		std::vector< std::vector<Tile*> > tiles;
 		sf::Texture* tileSheet;
 		unsigned tileSize;
+
+		sf::Texture backgroundTexture;
+		sf::Sprite backgroundSprite;
 	};
 }
 

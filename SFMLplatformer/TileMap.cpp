@@ -52,6 +52,14 @@ namespace fp
 		return nullptr;
 	}
 
+	sf::Vector2f TileMap::getWorldSize() const
+	{
+		return {
+			static_cast<float>(tiles.size()) * tileSize,
+			static_cast<float>(tiles[0].size()) * tileSize
+		};
+	}
+
 	void TileMap::addTile(unsigned x, unsigned y)
 	{
 		if (x < tiles.size() && x >= 0)
@@ -95,6 +103,17 @@ namespace fp
 
 	void TileMap::render(sf::RenderTarget& target)
 	{
+		sf::Vector2f worldSize = getWorldSize();
+
+		backgroundSprite.setTextureRect(
+			sf::IntRect(0, 0,
+				static_cast<int>(worldSize.x),
+				static_cast<int>(backgroundTexture.getSize().y)
+			)
+		);
+
+		target.draw(backgroundSprite);
+
 		for (int i = 0; i < tiles.size(); i++)
 		{
 			for (int k = 0; k < tiles[i].size(); k++)
@@ -141,5 +160,15 @@ namespace fp
 
 			file << "\n";
 		}
+	}
+	void TileMap::loadBackground(const std::string& path)
+	{
+		backgroundTexture.loadFromFile(path);
+
+		backgroundTexture.setRepeated(true);
+
+		backgroundSprite.setTexture(backgroundTexture);
+
+		backgroundSprite.setPosition(0.f, 0.f);
 	}
 }

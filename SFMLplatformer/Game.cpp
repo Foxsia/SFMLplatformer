@@ -80,6 +80,7 @@ namespace fp
 		const unsigned height = window.getSize().y / Tile::getSize();
 
 		tileMap = new TileMap(width, height, &tileSheet, Tile::getSize());
+		tileMap->loadBackground("assets/background.png");
 	}
 
 	Game::Game()
