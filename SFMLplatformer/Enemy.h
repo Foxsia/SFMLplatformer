@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "AnimationComponent.h"
 
 namespace fp
 {
@@ -17,7 +18,6 @@ namespace fp
         sf::FloatRect getGlobalBounds() const;
 
         sf::Vector2f getPosition() const;
-        sf::RectangleShape& getShape();
         sf::Vector2f getVelocity() const { return this->velocity; };
         void setVelocityY(float vel);
         void setPosition(float x, float y);
@@ -27,8 +27,8 @@ namespace fp
         void move(float dt);
         void checkDirectionChange(TileMap& map);
 
-    private:
-        sf::RectangleShape shape;
+        sf::Sprite sprite;
+        sf::Texture textureSheet;
 
         sf::Vector2f velocity;
 

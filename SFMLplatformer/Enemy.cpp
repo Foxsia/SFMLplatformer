@@ -7,8 +7,12 @@ namespace fp
 {
     Enemy::Enemy()
     {
-        shape.setSize({ 32.f, 32.f });
-        shape.setFillColor(sf::Color::Red);
+        textureSheet.loadFromFile("assets/slime_green.png");
+
+        sprite.setTexture(textureSheet);
+        sprite.setTextureRect(sf::IntRect(0, 24, 24, 24));
+        sprite.setScale(3.f, 3.f);
+
         velocity = { 0.f, 0.f };
     }
 
@@ -25,7 +29,7 @@ namespace fp
 
     void Enemy::render(sf::RenderWindow& window)
     {
-        window.draw(shape);
+        window.draw(sprite);
     }
 
     void Enemy::applyGravity(float dt)
@@ -37,12 +41,12 @@ namespace fp
     {
         velocity.x = speed * direction;
 
-        shape.move(velocity * dt);
+        sprite.move(velocity * dt);
     }
 
     void Enemy::checkDirectionChange(TileMap& map)
     {
-        const sf::FloatRect bounds = shape.getGlobalBounds();
+        const sf::FloatRect bounds = sprite.getGlobalBounds();
 
         const float footX = bounds.left + bounds.width / 2.f;
         const float footY = bounds.top + bounds.height + 5.f;
@@ -56,21 +60,27 @@ namespace fp
         {
             direction *= -1;
         }
+
+        if (direction > 0)
+        {
+            sprite.setScale(3.f, 3.f);
+            sprite.setOrigin(0.f, 0.f);
+        }
+        else
+        {
+            sprite.setScale(-3.f, 3.f);
+            sprite.setOrigin(sprite.getLocalBounds().width, 0.f);
+        }
     }
 
     sf::FloatRect Enemy::getGlobalBounds() const
     {
-        return shape.getGlobalBounds();
+        return sprite.getGlobalBounds();
     }
 
     sf::Vector2f Enemy::getPosition() const
     {
-        return shape.getPosition();
-    }
-
-    sf::RectangleShape& Enemy::getShape()
-    {
-        return shape;
+        return sprite.getPosition();
     }
 
     void Enemy::setVelocityY(float vel)
@@ -80,6 +90,6 @@ namespace fp
 
     void Enemy::setPosition(float x, float y)
     {
-        shape.setPosition({ x, y });
+        sprite.setPosition({ x, y });
     }
 }

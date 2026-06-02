@@ -41,9 +41,15 @@ namespace fp
         else if (brush == BrushType::Enemy)
         {
             Enemy* enemy = new Enemy();
+
+            const float tileSize = static_cast<float>(context.tileMap->getTileSize());
+
+            const float enemyWidth = enemy->getGlobalBounds().width;
+            const float enemyHeight = enemy->getGlobalBounds().height;
+
             enemy->setPosition(
-                mouseX * context.tileMap->getTileSize(),
-                mouseY * context.tileMap->getTileSize()
+                mouseX * tileSize + (tileSize - enemyWidth) / 2.f,
+                mouseY * tileSize + (tileSize - enemyHeight)
             );
 
             context.enemies->push_back(enemy);

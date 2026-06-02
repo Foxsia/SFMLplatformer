@@ -45,7 +45,7 @@ void fp::CollisionSystem::resolvePlayerTileCollision(Player& player, TileMap& ma
 
 void fp::CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
 {
-	const sf::FloatRect bounds = enemy.getShape().getGlobalBounds();
+	const sf::FloatRect bounds = enemy.getGlobalBounds();
 
 	for (int x = 0; x < map.getWidth(); x++)
 	{
@@ -61,7 +61,7 @@ void fp::CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
 			// simple ground collision
 			if (enemy.getVelocity().y > 0.f)
 			{
-				enemy.getShape().setPosition(bounds.left, tileBounds.top - bounds.height);
+				enemy.setPosition(bounds.left, tileBounds.top - bounds.height);
 				enemy.setVelocityY(0.f);
 			}
 		}
