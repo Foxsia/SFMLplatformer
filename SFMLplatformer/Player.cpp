@@ -28,6 +28,12 @@ namespace fp
 
 		const float RIGHT_MOVEMENT_THRESHOLD = 0.f;
 		const float LEFT_MOVEMENT_THRESHOLD = 0.f;
+
+		const float PLAYER_HITBOX_PADDING_LEFT = 10.f;
+		const float PLAYER_HITBOX_PADDING_RIGHT = 10.f;
+
+		const float PLAYER_HITBOX_PADDING_TOP = 5.f;
+		const float PLAYER_HITBOX_PADDING_BOTTOM = 0.f;
 	}
 
 	void Player::initVariables()
@@ -67,9 +73,11 @@ namespace fp
 		);
 
 		canJump = false;
+
+		damageCooldown = 0.f;
 	}
 
-	Player::Player()
+	Player::Player() : Entity(3)
 	{
 		initVariables();
 		initTexture();
@@ -92,6 +100,19 @@ namespace fp
 	const sf::FloatRect Player::getGlobalBounds() const
 	{
 		return sprite.getGlobalBounds();
+	}
+
+	const sf::FloatRect Player::getHitbox() const
+	{
+		auto hitBox = sprite.getGlobalBounds();
+
+		hitBox.left += PLAYER_HITBOX_PADDING_LEFT;
+		hitBox.width -= PLAYER_HITBOX_PADDING_LEFT + PLAYER_HITBOX_PADDING_RIGHT;
+
+		hitBox.top += PLAYER_HITBOX_PADDING_TOP;
+		hitBox.height -= PLAYER_HITBOX_PADDING_TOP + PLAYER_HITBOX_PADDING_BOTTOM;
+
+		return hitBox;
 	}
 
 	const sf::Vector2f& Player::getVelocity() const
@@ -163,6 +184,8 @@ namespace fp
 		updatePhysics(dt);
 		updateMovement();
 		updateAnimation(dt);
+
+		if (damageCooldown > 0.f) damageCooldown -= dt;
 	}
 
 	void Player::render(sf::RenderTarget& target)

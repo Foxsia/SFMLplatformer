@@ -1,79 +1,125 @@
 #include "CollisionSystem.h"
 
-void fp::CollisionSystem::resolvePlayerTileCollision(Player& player, TileMap& map)
+namespace fp
 {
-	bool grounded = false;
-
-	sf::FloatRect playerBounds = player.getGlobalBounds();
-
-	for (int x = 0; x < map.getWidth(); x++)
+	namespace
 	{
-		for (int y = 0; y < map.getHeight(); y++)
+		const float COLLISION_TOLERANCE = 10.f;
+	}
+	void CollisionSystem::resolvePlayerTileCollision(Player& player, TileMap& map)
+	{
+		bool grounded = false;
+
+		sf::FloatRect playerBounds = player.getGlobalBounds();
+
+		for (int x = 0; x < map.getWidth(); x++)
 		{
-			Tile* tile = map.getTile(x, y);
+			for (int y = 0; y < map.getHeight(); y++)
+			{
+				Tile* tile = map.getTile(x, y);
 
-			if (!tile) continue;
+				if (!tile) continue;
 
-			const sf::FloatRect tileBounds = tile->getHitbox();
+				const sf::FloatRect tileBounds = tile->getHitbox();
 
-			if (!playerBounds.intersects(tileBounds)) continue;
+				if (!playerBounds.intersects(tileBounds)) continue;
 
-			// collision only from top
+				// collision only from top
+				float playerBottom = playerBounds.top + playerBounds.height;
+				float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
+
+				bool insideTileX =
+					playerCenterX > tileBounds.left &&
+					playerCenterX < tileBounds.left + tileBounds.width;
+
+				if (insideTileX && player.getVelocity().y >= 0.f && playerBottom <= tileBounds.top + 20.f)
+				{
+					player.setPosition(
+						playerBounds.left,
+						tileBounds.top - playerBounds.height
+					);
+
+					player.resetVelocityY();
+
+					grounded = true;
+				}
+			}
+		}
+
+		player.setCanJump(grounded);
+	}
+
+	void CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
+	{
+		const sf::FloatRect bounds = enemy.getGlobalBounds();
+
+		for (int x = 0; x < map.getWidth(); x++)
+		{
+			for (int y = 0; y < map.getHeight(); y++)
+			{
+				Tile* tile = map.getTile(x, y);
+				if (!tile) continue;
+
+				const sf::FloatRect tileBounds = tile->getHitbox();
+
+				if (!bounds.intersects(tileBounds)) continue;
+
+				// simple ground collision
+				if (enemy.getVelocity().y > 0.f)
+				{
+					enemy.setPosition(bounds.left, tileBounds.top - bounds.height);
+					enemy.setVelocityY(0.f);
+				}
+			}
+		}
+	}
+
+	void CollisionSystem::resolvePlayerEnemyCollision(Player& player, std::vector<Enemy*>& enemies)
+	{
+		sf::FloatRect playerBounds = player.getHitbox();
+
+		for (auto* enemy : enemies)
+		{
+			if (!enemy->isAlive()) continue;
+
+			sf::FloatRect enemyBounds = enemy->getHitbox();
+
+			if (!playerBounds.intersects(enemyBounds)) continue;
+
 			float playerBottom = playerBounds.top + playerBounds.height;
-			float playerCenterX = playerBounds.left + playerBounds.width / 2.f;
+			float enemyTop = enemyBounds.top;
 
-			bool insideTileX =
-				playerCenterX > tileBounds.left &&
-				playerCenterX < tileBounds.left + tileBounds.width;
+			bool stomp = player.getVelocity().y > 0.f && playerBottom <= enemyTop + COLLISION_TOLERANCE;
 
-			if (insideTileX && player.getVelocity().y >= 0.f && playerBottom <= tileBounds.top + 20.f)
+			if (stomp)
 			{
-				player.setPosition(
-					playerBounds.left,
-					tileBounds.top - playerBounds.height
-				);
-
+				enemy->takeDamage(1);
 				player.resetVelocityY();
-
-				grounded = true;
+				continue;
 			}
-		}
-	}
 
-	player.setCanJump(grounded);
-}
+			float playerCenterY = playerBounds.top + playerBounds.height * 0.5f;
 
-void fp::CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
-{
-	const sf::FloatRect bounds = enemy.getGlobalBounds();
+			float enemyCenterY = enemyBounds.top + enemyBounds.height * 0.5f;
 
-	for (int x = 0; x < map.getWidth(); x++)
-	{
-		for (int y = 0; y < map.getHeight(); y++)
-		{
-			Tile* tile = map.getTile(x, y);
-			if (!tile) continue;
+			bool fromBelow = playerCenterY > enemyCenterY;
 
-			const sf::FloatRect tileBounds = tile->getHitbox();
-
-			if (!bounds.intersects(tileBounds)) continue;
-
-			// simple ground collision
-			if (enemy.getVelocity().y > 0.f)
+			if (fromBelow)
 			{
-				enemy.setPosition(bounds.left, tileBounds.top - bounds.height);
-				enemy.setVelocityY(0.f);
+				continue;
 			}
+
+			player.takeDamage(1);
 		}
 	}
-}
 
-void fp::CollisionSystem::resolveWorldBounds(Player& player, sf::RenderWindow& window)
-{
-	if (player.getPosition().y + player.getGlobalBounds().height > window.getSize().y)
+	void CollisionSystem::resolveWorldBounds(Player& player, sf::RenderWindow& window)
 	{
-		player.setCanJump(true);
-		player.resetVelocityY();
-		player.setPosition(player.getPosition().x, window.getSize().y - player.getGlobalBounds().height);
+		if (player.getPosition().y + player.getGlobalBounds().height > window.getSize().y)
+		{
+			player.setCanJump(true);
+			player.resetVelocityY();
+			player.setPosition(player.getPosition().x, window.getSize().y - player.getGlobalBounds().height);
+		}
 	}
 }

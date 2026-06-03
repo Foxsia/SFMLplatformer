@@ -3,12 +3,13 @@
 #include <SFML/System.hpp>
 #include "AnimationComponent.h"
 #include "MovementComponent.h"
+#include "Entity.h"
 
 namespace fp
 {
 	enum PLAYER_ANIMATION_STATES { IDLE = 0, MOVING_LEFT, MOVING_RIGHT };
 
-	class Player
+	class Player : public Entity
 	{
 	public:
 		Player();
@@ -16,6 +17,7 @@ namespace fp
 		
 		const sf::Vector2f getPosition() const;
 		const sf::FloatRect getGlobalBounds() const;
+		const sf::FloatRect getHitbox() const;
 		const sf::Vector2f& getVelocity() const;
 
 		inline const bool& getCanJump() const { return canJump; }

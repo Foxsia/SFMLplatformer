@@ -2,12 +2,13 @@
 
 #include <SFML/Graphics.hpp>
 #include "AnimationComponent.h"
+#include "Entity.h"
 
 namespace fp
 {
     class TileMap;
 
-    class Enemy
+    class Enemy : public Entity
     {
     public:
         Enemy();
@@ -16,6 +17,7 @@ namespace fp
         void render(sf::RenderWindow& window);
 
         sf::FloatRect getGlobalBounds() const;
+        sf::FloatRect getHitbox() const;
 
         sf::Vector2f getPosition() const;
         sf::Vector2f getVelocity() const { return this->velocity; };

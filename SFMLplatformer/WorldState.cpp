@@ -38,6 +38,8 @@ namespace fp
 				enemy->update(dt, *context.tileMap);
 			}
 		}
+
+		CollisionSystem::resolvePlayerEnemyCollision(*context.player, *context.enemies);
 	}
 
 	void WorldState::handleInput(float dt, GameContext& context)
