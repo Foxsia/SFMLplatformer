@@ -22,7 +22,8 @@ namespace fp
 
 		CollisionSystem::resolveWorldBounds(
 			*context.player,
-			*context.window
+			*context.window,
+			context
 		);
 
 		CameraController::followPlayer(

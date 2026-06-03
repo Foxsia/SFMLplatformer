@@ -85,7 +85,6 @@ namespace fp
     }
 	void EditorState::handleInput(float dt, GameContext& context)
 	{
-        context.isEditor = true;
 		handlePlayerInput(dt, context);
 		sf::RenderWindow& window = *context.window;
 

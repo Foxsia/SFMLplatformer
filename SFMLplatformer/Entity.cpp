@@ -11,13 +11,11 @@ namespace fp
 		if (damageCooldown > 0.f) return;
 
 		health -= dmg;
-		std::cout << "HP: " << health << '\n';
 
 		if (health <= 0)
 		{
 			health = 0;
 			alive = false;
-			std::cout << "Entity died\n";
 		}
 
 		damageCooldown = 0.5f;

@@ -1,4 +1,5 @@
 #include "CollisionSystem.h"
+#include "EditorState.h"
 
 namespace fp
 {
@@ -113,13 +114,27 @@ namespace fp
 		}
 	}
 
-	void CollisionSystem::resolveWorldBounds(Player& player, sf::RenderWindow& window)
+	void CollisionSystem::resolveWorldBounds(Player& player, sf::RenderWindow& window, const GameContext& context)
 	{
-		if (player.getPosition().y + player.getGlobalBounds().height > window.getSize().y)
+		if (dynamic_cast<EditorState*>(*context.state))
 		{
-			player.setCanJump(true);
-			player.resetVelocityY();
-			player.setPosition(player.getPosition().x, window.getSize().y - player.getGlobalBounds().height);
+			if (player.getPosition().y + player.getGlobalBounds().height > window.getSize().y)
+			{
+				player.setCanJump(true);
+				player.resetVelocityY();
+				player.setPosition(player.getPosition().x, window.getSize().y - player.getGlobalBounds().height);
+			}
+			return;
+		}
+
+		float playerBottom = player.getPosition().y + player.getGlobalBounds().height;
+
+		float windowBottom = static_cast<float>(window.getSize().y);
+
+		if (playerBottom > windowBottom)
+		{
+			player.takeDamage(player.getHealth());
+			return;
 		}
 	}
 }

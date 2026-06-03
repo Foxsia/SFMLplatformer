@@ -122,11 +122,6 @@ namespace fp
 
 			if (event.type == sf::Event::KeyPressed)
 			{
-				if (event.key.code == sf::Keyboard::E)
-				{
-					delete state;
-					state = new fp::EditorState();
-				}
 				if (event.key.code == sf::Keyboard::F2)
 				{
 					typingFileName = true;
