@@ -128,6 +128,8 @@ namespace fp
 		std::ofstream file(filename);
 		if (!file.is_open()) return;
 
+		file << playerSpawn.x << " " << playerSpawn.y << "\n";
+
 		for (size_t y = 0; y < tiles[0].size(); y++)
 		{
 			for (size_t x = 0; x < tiles.size(); x++)
@@ -170,5 +172,22 @@ namespace fp
 		backgroundSprite.setTexture(backgroundTexture);
 
 		backgroundSprite.setPosition(0.f, 0.f);
+	}
+	void TileMap::setPlayerSpawn(float x, float y)
+	{
+		playerSpawn = { x, y };
+		hasPlayerSpawn = true;
+	}
+	void TileMap::removePlayerSpawn()
+	{
+		hasPlayerSpawn = false;
+	}
+	bool TileMap::hasSpawn() const
+	{
+		return hasPlayerSpawn;
+	}
+	const sf::Vector2f& TileMap::getPlayerSpawn() const
+	{
+		return playerSpawn;
 	}
 }

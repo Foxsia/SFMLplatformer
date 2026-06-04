@@ -56,6 +56,7 @@ namespace fp
 		input->bindKey("JUMP", sf::Keyboard::Space);
 		input->bindKey("TILE_BRUSH", sf::Keyboard::Num1);
 		input->bindKey("ENEMY_BRUSH", sf::Keyboard::Num2);
+		input->bindKey("PLAYER_BRUSH", sf::Keyboard::Num3);
 
 		input->bindMouse("ADD_ELEMENT", sf::Mouse::Left);
 		input->bindMouse("REMOVE_ELEMENT", sf::Mouse::Right);
@@ -124,6 +125,11 @@ namespace fp
 			{
 				if (event.key.code == sf::Keyboard::F2)
 				{
+					if (!tileMap->hasSpawn())
+					{
+						typingFileName = false;
+						return;
+					}
 					typingFileName = true;
 					fileNameInput.clear();
 				}
@@ -187,7 +193,7 @@ namespace fp
 		context.currentLevel = &currentLevel;
 
 		context.state = &state;
-		context.isEditor = false;
+		context.isEditor = dynamic_cast<EditorState*>(state) != nullptr;
 		context.camera = &camera;
 
 		context.input = input;
@@ -228,7 +234,7 @@ namespace fp
 		context.currentLevel = &currentLevel;
 
 		context.state = &state;
-		context.isEditor = false;
+		context.isEditor = dynamic_cast<EditorState*>(state) != nullptr;
 		context.camera = &camera;
 
 		context.input = input;

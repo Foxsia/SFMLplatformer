@@ -35,6 +35,12 @@ namespace fp
 		void saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies);
 
 		void loadBackground(const std::string& path);
+
+		void setPlayerSpawn(float x, float y);
+		void removePlayerSpawn();
+		bool hasSpawn() const;
+		const sf::Vector2f& getPlayerSpawn() const;
+
 	private:
 		std::vector< std::vector<Tile*> > tiles;
 		sf::Texture* tileSheet;
@@ -42,6 +48,9 @@ namespace fp
 
 		sf::Texture backgroundTexture;
 		sf::Sprite backgroundSprite;
+
+		bool hasPlayerSpawn = false;
+		sf::Vector2f playerSpawn;
 	};
 }
 

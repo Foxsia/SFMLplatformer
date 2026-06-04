@@ -11,7 +11,8 @@ namespace fp
 		enum class BrushType
 		{
 			Tile,
-			Enemy
+			Enemy,
+			Player
 		};
 		BrushType brush = BrushType::Tile;
 		void updateBrush(GameContext& context);

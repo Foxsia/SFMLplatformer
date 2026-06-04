@@ -108,6 +108,7 @@ namespace fp
 		LevelLoader::load(
 			*context.currentLevel,
 			*context.tileMap,
+			*context.player,
 			*context.enemies
 		);
 

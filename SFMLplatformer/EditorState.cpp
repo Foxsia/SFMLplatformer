@@ -23,14 +23,31 @@ namespace fp
         editorHelp.setFillColor(sf::Color::White);
         editorHelp.setPosition(HELP_TEXT_X, HELP_TEXT_Y);
 
-        editorHelp.setString("Press F2 to save and Enter to proceed or C to cancel\nPress M to open menu");
+        editorHelp.setString("Press F2 to save and Enter to proceed or C to cancel\nPress M to open menu\nPLAYER SPAWN POINT IS REQUIRED!");
         window.draw(editorHelp);
+
+        if (context.tileMap->hasSpawn())
+        {
+            sf::RectangleShape marker;
+
+            const float size = static_cast<float>(context.tileMap->getTileSize());
+
+            marker.setSize({ size, size });
+
+            marker.setPosition(context.tileMap->getPlayerSpawn());
+
+            marker.setFillColor(sf::Color(0, 255, 0, 150));
+
+            window.draw(marker);
+        }
     }
     void EditorState::updateBrush(GameContext& context)
     {
         if (context.input->isKeyDown("TILE_BRUSH")) brush = BrushType::Tile;
 
         if (context.input->isKeyDown("ENEMY_BRUSH")) brush = BrushType::Enemy;
+
+        if (context.input->isKeyDown("PLAYER_BRUSH")) brush = BrushType::Player;
     }
     void EditorState::addElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -54,6 +71,12 @@ namespace fp
 
             context.enemies->push_back(enemy);
         }
+        else if (brush == BrushType::Player)
+        {
+            const float tileSize = static_cast<float>(context.tileMap->getTileSize());
+
+            context.tileMap->setPlayerSpawn(mouseX * tileSize, mouseY * tileSize);
+        }
     }
     void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -63,9 +86,21 @@ namespace fp
         {
             context.tileMap->removeTile(mouseX, mouseY);
         }
-        else
+        else if (brush == BrushType::Enemy)
         {
             removeEnemyAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+        }
+        else if (brush == BrushType::Player)
+        {
+            if (context.tileMap->hasSpawn())
+            {
+                sf::FloatRect spawnRect(context.tileMap->getPlayerSpawn().x, context.tileMap->getPlayerSpawn().y, context.tileMap->getTileSize(), context.tileMap->getTileSize());
+
+                if (spawnRect.contains(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
+                {
+                    context.tileMap->removePlayerSpawn();
+                }
+            }
         }
     }
     void EditorState::removeEnemyAtPosition(GameContext& context, const sf::Vector2f& pos)

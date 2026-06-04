@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Player.h" 
 #include <string>
 #include <vector>
 
@@ -14,6 +15,7 @@ namespace fp
         static void load(
             const std::string& filename,
             TileMap& tileMap,
+            Player& player,
             std::vector<Enemy*>& enemies
         );
     };

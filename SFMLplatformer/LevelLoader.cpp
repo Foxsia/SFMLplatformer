@@ -7,11 +7,28 @@
 
 namespace fp
 {
-    void LevelLoader::load(const std::string& filename, TileMap& tileMap, std::vector<Enemy*>& enemies)
+    void LevelLoader::load(const std::string& filename, TileMap& tileMap, Player& player, std::vector<Enemy*>& enemies)
     {
         std::ifstream file(filename);
 
         if (!file.is_open()) return;
+
+        float spawnX;
+        float spawnY;
+
+        file >> spawnX >> spawnY;
+
+        tileMap.setPlayerSpawn(spawnX, spawnY);
+
+        float tileSize = static_cast<float>(tileMap.getTileSize());
+
+        float playerWidth = player.getGlobalBounds().width;
+        float playerHeight = player.getGlobalBounds().height;
+
+        player.setPosition(spawnX + (tileSize - playerWidth) / 2.f, spawnY - playerHeight);
+
+        player.resetVelocityX();
+        player.resetVelocityY();
 
         for (auto enemy : enemies)
         {
