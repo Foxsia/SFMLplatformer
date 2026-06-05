@@ -114,6 +114,21 @@ namespace fp
 		}
 	}
 
+	void CollisionSystem::resolvePlayerCollectibleCollision(Player& player, std::vector<Collectible*>& collectibles)
+	{
+		for (auto collectible : collectibles)
+		{
+			if (collectible->isCollected()) continue;
+
+			if (player.getHitbox().intersects(collectible->getGlobalBounds()))
+			{
+				collectible->collect();
+
+				player.heal(1);
+			}
+		}
+	}
+
 	void CollisionSystem::resolveWorldBounds(Player& player, sf::RenderWindow& window, const GameContext& context)
 	{
 		if (dynamic_cast<EditorState*>(*context.state))

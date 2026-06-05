@@ -109,7 +109,8 @@ namespace fp
 			*context.currentLevel,
 			*context.tileMap,
 			*context.player,
-			*context.enemies
+			*context.enemies,
+			*context.collectibles
 		);
 
 		delete* context.state;

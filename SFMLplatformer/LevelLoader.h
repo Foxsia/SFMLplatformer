@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Player.h" 
+#include "Player.h"
+#include "Collectible.h"
 #include <string>
 #include <vector>
 
@@ -16,7 +17,8 @@ namespace fp
             const std::string& filename,
             TileMap& tileMap,
             Player& player,
-            std::vector<Enemy*>& enemies
+            std::vector<Enemy*>& enemies,
+            std::vector<Collectible*>& collectibles
         );
     };
 }

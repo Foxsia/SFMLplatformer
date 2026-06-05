@@ -2,6 +2,7 @@
 #include "GameContext.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Collectible.h"
 
 namespace fp
 {
@@ -48,6 +49,8 @@ namespace fp
         if (context.input->isKeyDown("ENEMY_BRUSH")) brush = BrushType::Enemy;
 
         if (context.input->isKeyDown("PLAYER_BRUSH")) brush = BrushType::Player;
+
+        if (context.input->isKeyDown("COLLECTIBLE_BRUSH")) brush = BrushType::Collectible;
     }
     void EditorState::addElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -77,6 +80,22 @@ namespace fp
 
             context.tileMap->setPlayerSpawn(mouseX * tileSize, mouseY * tileSize);
         }
+        else if (brush == BrushType::Collectible)
+        {
+            Collectible* collectible = new Collectible();
+
+            const float tileSize = static_cast<float>(context.tileMap->getTileSize());
+
+            const float collectibleWidth = collectible->getGlobalBounds().width;
+            const float collectibleHeight = collectible->getGlobalBounds().height;
+
+            collectible->setPosition(
+                mouseX * tileSize + (tileSize - collectibleWidth) / 2.f,
+                mouseY * tileSize + (tileSize - collectibleHeight)
+            );
+
+            context.collectibles->push_back(collectible);
+        }
     }
     void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -89,6 +108,10 @@ namespace fp
         else if (brush == BrushType::Enemy)
         {
             removeEnemyAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+        }
+        else if (brush == BrushType::Collectible)
+        {
+            removeCollectibleAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
         }
         else if (brush == BrushType::Player)
         {
@@ -111,6 +134,21 @@ namespace fp
             {
                 delete* it;
                 it = context.enemies->erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+    void EditorState::removeCollectibleAtPosition(GameContext& context, const sf::Vector2f& pos)
+    {
+        for (auto it = context.collectibles->begin(); it != context.collectibles->end(); )
+        {
+            if ((*it)->getGlobalBounds().contains(pos))
+            {
+                delete* it;
+                it = context.collectibles->erase(it);
             }
             else
             {

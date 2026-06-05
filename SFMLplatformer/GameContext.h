@@ -8,6 +8,7 @@ namespace fp
     class Player;
     class IState;
     class Enemy;
+    class Collectible;
 
     struct GameContext
     {
@@ -20,6 +21,7 @@ namespace fp
         fp::Player* player = nullptr;
 
         std::vector<Enemy*>* enemies = nullptr;
+        std::vector<Collectible*>* collectibles = nullptr;
 
         size_t* selectedMenuIndex = nullptr;
         std::vector<std::string>* levelFiles = nullptr;

@@ -123,7 +123,7 @@ namespace fp
 		}
 	}
 
-	void TileMap::saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies)
+	void TileMap::saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies, const std::vector<Collectible*>& collectibles)
 	{
 		std::ofstream file(filename);
 		if (!file.is_open()) return;
@@ -154,6 +154,22 @@ namespace fp
 					if (enemyX == x && enemyY == y)
 					{
 						value = 2;
+					}
+				}
+
+				for (auto collectible : collectibles)
+				{
+					sf::Vector2f pos = collectible->getPosition();
+
+					unsigned collectibleX =
+						static_cast<unsigned>(pos.x) / tileSize;
+
+					unsigned collectibleY =
+						static_cast<unsigned>(pos.y) / tileSize;
+
+					if (collectibleX == x && collectibleY == y)
+					{
+						value = 3;
 					}
 				}
 

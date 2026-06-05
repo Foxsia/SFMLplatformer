@@ -8,6 +8,7 @@
 #include "IState.h"
 #include "InputManager.h"
 #include "Enemy.h"
+#include "Collectible.h"
 
 namespace fp
 {
@@ -50,6 +51,7 @@ namespace fp
 		TileMap* tileMap = nullptr;
 
 		std::vector<Enemy*> enemies;
+		std::vector<Collectible*> collectibles;
 
 		InputManager* input;
 

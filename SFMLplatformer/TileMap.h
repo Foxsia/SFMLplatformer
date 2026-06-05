@@ -1,6 +1,7 @@
 #pragma once
 #include "Tile.h"
 #include "Enemy.h"
+#include "Collectible.h"
 #include <vector>
 
 namespace fp
@@ -32,7 +33,7 @@ namespace fp
 		void clear();
 
 		void render(sf::RenderTarget& target);
-		void saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies);
+		void saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies, const std::vector<Collectible*>& collectibles);
 
 		void loadBackground(const std::string& path);
 

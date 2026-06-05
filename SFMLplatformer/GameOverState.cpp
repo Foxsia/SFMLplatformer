@@ -11,10 +11,13 @@ namespace fp
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
 			context.player->hardReset();
-			LevelLoader::load(*context.currentLevel,
+			LevelLoader::load(
+				*context.currentLevel,
 				*context.tileMap,
 				*context.player,
-				*context.enemies);
+				*context.enemies,
+				*context.collectibles
+			);
 
 			delete* context.state;
 			*context.state = new PlayState();

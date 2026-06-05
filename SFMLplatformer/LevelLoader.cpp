@@ -2,12 +2,13 @@
 
 #include "TileMap.h"
 #include "Enemy.h"
+#include "Collectible.h"
 
 #include <fstream>
 
 namespace fp
 {
-    void LevelLoader::load(const std::string& filename, TileMap& tileMap, Player& player, std::vector<Enemy*>& enemies)
+    void LevelLoader::load(const std::string& filename, TileMap& tileMap, Player& player, std::vector<Enemy*>& enemies, std::vector<Collectible*>& collectibles)
     {
         std::ifstream file(filename);
 
@@ -34,6 +35,13 @@ namespace fp
         }
 
         enemies.clear();
+
+        for (auto collectible : collectibles)
+        {
+            delete collectible;
+        }
+
+        collectibles.clear();
 
         for (unsigned x = 0; x < tileMap.getWidth(); x++)
         {
@@ -66,6 +74,18 @@ namespace fp
                     );
 
                     enemies.push_back(enemy);
+                }
+
+                if (value == 3)
+                {
+                    Collectible* collectible = new Collectible();
+
+                    collectible->setPosition(
+                        x * tileMap.getTileSize(),
+                        y * tileMap.getTileSize()
+                    );
+
+                    collectibles.push_back(collectible);
                 }
             }
         }

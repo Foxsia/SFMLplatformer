@@ -3,6 +3,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Collectible.h"
 
 namespace fp
 {
@@ -12,6 +13,7 @@ namespace fp
 		static void resolvePlayerTileCollision(Player& player, TileMap& map);
 		static void resolveEnemyTileCollision(Enemy& enemy, TileMap& map);
 		static void resolvePlayerEnemyCollision(Player& player, std::vector<Enemy*>& enemies);
+		static void resolvePlayerCollectibleCollision(Player& player, std::vector<Collectible*>& collectibles);
 		static void resolveWorldBounds(Player& player, sf::RenderWindow& window, const GameContext& context);
 	};
 }

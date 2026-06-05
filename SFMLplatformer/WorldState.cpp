@@ -41,6 +41,7 @@ namespace fp
 		}
 
 		CollisionSystem::resolvePlayerEnemyCollision(*context.player, *context.enemies);
+		CollisionSystem::resolvePlayerCollectibleCollision(*context.player, *context.collectibles);
 	}
 
 	void WorldState::handleInput(float dt, GameContext& context)
@@ -51,6 +52,12 @@ namespace fp
 	void WorldState::render(sf::RenderWindow& window, GameContext& context)
 	{
 		context.tileMap->render(window);
+
+		for (auto& collectible : *context.collectibles)
+		{
+			collectible->render(window);
+		}
+
 		context.player->render(window);
 
 		for (auto& enemy : *context.enemies)

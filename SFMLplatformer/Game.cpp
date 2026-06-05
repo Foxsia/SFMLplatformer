@@ -54,9 +54,11 @@ namespace fp
 		input->bindKey("MOVE_LEFT", sf::Keyboard::A);
 		input->bindKey("MOVE_RIGHT", sf::Keyboard::D);
 		input->bindKey("JUMP", sf::Keyboard::Space);
-		input->bindKey("TILE_BRUSH", sf::Keyboard::Num1);
-		input->bindKey("ENEMY_BRUSH", sf::Keyboard::Num2);
-		input->bindKey("PLAYER_BRUSH", sf::Keyboard::Num3);
+
+		input->bindKey("PLAYER_BRUSH", sf::Keyboard::Num1);
+		input->bindKey("TILE_BRUSH", sf::Keyboard::Num2);
+		input->bindKey("ENEMY_BRUSH", sf::Keyboard::Num3);
+		input->bindKey("COLLECTIBLE_BRUSH", sf::Keyboard::Num4);
 
 		input->bindMouse("ADD_ELEMENT", sf::Mouse::Left);
 		input->bindMouse("REMOVE_ELEMENT", sf::Mouse::Right);
@@ -140,7 +142,7 @@ namespace fp
 				}
 				if (typingFileName && event.key.code == sf::Keyboard::Enter)
 				{
-					tileMap->saveToFile("levels/" + fileNameInput + ".txt", enemies);
+					tileMap->saveToFile("levels/" + fileNameInput + ".txt", enemies, collectibles);
 
 					loadLevelList();
 
@@ -186,6 +188,7 @@ namespace fp
 		context.tileMap = tileMap;
 		context.player = player;
 		context.enemies = &enemies;
+		context.collectibles = &collectibles;
 
 		context.selectedMenuIndex = &selectedMenuIndex;
 		context.levelFiles = &levelFiles;
@@ -227,6 +230,7 @@ namespace fp
 		context.tileMap = tileMap;
 		context.player = player;
 		context.enemies = &enemies;
+		context.collectibles = &collectibles;
 
 		context.selectedMenuIndex = &selectedMenuIndex;
 		context.levelFiles = &levelFiles;

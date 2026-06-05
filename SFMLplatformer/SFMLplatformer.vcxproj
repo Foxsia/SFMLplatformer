@@ -137,6 +137,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="Collectible.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="EditorState.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="CameraController.h" />
+    <ClInclude Include="Collectible.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="EditorState.h" />
     <ClInclude Include="Enemy.h" />

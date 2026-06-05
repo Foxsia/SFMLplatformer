@@ -20,6 +20,9 @@ namespace fp
         bool isAlive() const { return alive; }
 
         int getHealth() const { return health; }
+        int getMaxHealth() const { return maxHealth; }
+
+        void heal(int amount);
 	};
 }
 

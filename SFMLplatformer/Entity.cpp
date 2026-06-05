@@ -18,6 +18,11 @@ namespace fp
 			alive = false;
 		}
 
-		damageCooldown = 0.5f;
+		damageCooldown = 1.f;
+	}
+	void Entity::heal(int amount)
+	{
+		health += amount;
+		if (health > maxHealth) health = maxHealth;
 	}
 }
