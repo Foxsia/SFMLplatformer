@@ -27,6 +27,8 @@ namespace fp
 		void resetVelocityY();
 		void resetVelocityX();
 
+		void hardReset();
+
 		void move(float dir_x, float dir_y, float dt);
 		void jump();
 

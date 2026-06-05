@@ -197,7 +197,7 @@ namespace fp
 		context.camera = &camera;
 
 		context.input = input;
-		
+
 		if (state)
 		{
 			state->update(deltaTime, context);

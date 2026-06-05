@@ -135,6 +135,19 @@ namespace fp
 		movementComponent->stopVelocityX();
 	}
 
+	void Player::hardReset()
+	{
+		movementComponent->stopVelocityX();
+		movementComponent->stopVelocityY();
+
+		canJump = false;
+		damageCooldown = 0.f;
+
+		animState = IDLE;
+		health = maxHealth;
+		alive = true;
+	}
+
 	void Player::move(float dir_x, float dir_y, float dt)
 	{
 		movementComponent->move(dir_x, dir_y, dt);

@@ -25,10 +25,8 @@ namespace fp
         float playerWidth = player.getGlobalBounds().width;
         float playerHeight = player.getGlobalBounds().height;
 
+        player.hardReset();
         player.setPosition(spawnX + (tileSize - playerWidth) / 2.f, spawnY - playerHeight);
-
-        player.resetVelocityX();
-        player.resetVelocityY();
 
         for (auto enemy : enemies)
         {
