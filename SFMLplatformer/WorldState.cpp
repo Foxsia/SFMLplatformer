@@ -51,6 +51,11 @@ namespace fp
 
 	void WorldState::render(sf::RenderWindow& window, GameContext& context)
 	{
+		if (!hud)
+		{
+			hud = new HUD(*context.font);
+		}
+
 		context.tileMap->render(window);
 
 		for (auto& collectible : *context.collectibles)
@@ -64,6 +69,9 @@ namespace fp
 		{
 			enemy->render(window);
 		}
+
+		hud->update(*context.player);
+		hud->render(window);
 	}
 
 	void fp::WorldState::updatePlayer(float dt, GameContext& context)
@@ -98,5 +106,9 @@ namespace fp
 		{
 			player->jump();
 		}
+	}
+	WorldState::~WorldState()
+	{
+		delete hud;
 	}
 }

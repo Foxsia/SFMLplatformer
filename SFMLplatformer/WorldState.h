@@ -1,5 +1,6 @@
 #pragma once
 #include "IState.h"
+#include "HUD.h"
 
 namespace fp
 {
@@ -8,12 +9,13 @@ namespace fp
 	class WorldState : public IState
 	{
 	protected:
+		HUD* hud = nullptr;
 
 		void updatePlayer(float dt, GameContext& context);
 
 		void handlePlayerInput(float dt, GameContext& context);
 	public:
-		virtual ~WorldState() = default;
+		~WorldState();
 
 		void update( float dt, GameContext& context) override;
 		virtual void handleInput(float dt, GameContext& context);

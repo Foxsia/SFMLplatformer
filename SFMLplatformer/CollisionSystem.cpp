@@ -5,6 +5,11 @@ namespace fp
 {
 	namespace
 	{
+		const int SCORE_ENEMY = 100;
+		const int SCORE_COLLECTIBLE = 50;
+	}
+	namespace
+	{
 		const float COLLISION_TOLERANCE = 10.f;
 	}
 	void CollisionSystem::resolvePlayerTileCollision(Player& player, TileMap& map)
@@ -95,6 +100,9 @@ namespace fp
 			if (stomp)
 			{
 				enemy->takeDamage(1);
+
+				if (!enemy->isAlive()) player.addScore(SCORE_ENEMY);
+
 				player.resetVelocityY();
 				continue;
 			}
@@ -125,6 +133,8 @@ namespace fp
 				collectible->collect();
 
 				player.heal(1);
+
+				player.addScore(SCORE_COLLECTIBLE);
 			}
 		}
 	}

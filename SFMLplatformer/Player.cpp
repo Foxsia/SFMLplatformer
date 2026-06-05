@@ -122,6 +122,11 @@ namespace fp
 		return movementComponent->getVelocity();
 	}
 
+	void Player::addScore(int points)
+	{
+		score += points;
+	}
+
 	void Player::setPosition(const float x, const float y)
 	{
 		sprite.setPosition(x, y);
@@ -148,6 +153,7 @@ namespace fp
 		animState = IDLE;
 		health = 1;
 		alive = true;
+		score = 0;
 	}
 
 	void Player::move(float dir_x, float dir_y, float dt)

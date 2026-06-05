@@ -23,6 +23,9 @@ namespace fp
 		inline const bool& getCanJump() const { return canJump; }
 		inline void setCanJump(const bool canJump) { this->canJump = canJump; }
 
+		void addScore(int points);
+		int getScore() const { return score; };
+
 		void setPosition(const float x, const float y);
 		void resetVelocityY();
 		void resetVelocityX();
@@ -55,6 +58,8 @@ namespace fp
 		MovementComponent* movementComponent = nullptr;
 
 		bool canJump;
+
+		int score = 0;
 	};
 }
 

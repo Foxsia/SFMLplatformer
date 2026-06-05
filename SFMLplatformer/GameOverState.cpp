@@ -37,7 +37,8 @@ namespace fp
 		text.setFont(*context.font);
 		text.setString(
 			"GAME OVER\n\n"
-			"ENTER - Restart\n"
+			"Score: " + std::to_string(context.player->getScore()) +
+			"\nENTER - Restart\n"
 			"M - Menu"
 		);
 
