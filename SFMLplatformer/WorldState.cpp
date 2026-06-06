@@ -51,9 +51,12 @@ namespace fp
 
 	void WorldState::render(sf::RenderWindow& window, GameContext& context)
 	{
-		if (!hud)
+		if (!context.isEditor)
 		{
-			hud = new HUD(*context.font);
+			if (!hud)
+			{
+				hud = new HUD(*context.font);
+			}
 		}
 
 		context.tileMap->render(window);
@@ -70,8 +73,11 @@ namespace fp
 			enemy->render(window);
 		}
 
-		hud->update(*context.player);
-		hud->render(window);
+		if (!context.isEditor)
+		{
+			hud->update(*context.player);
+			hud->render(window);
+		}
 	}
 
 	void fp::WorldState::updatePlayer(float dt, GameContext& context)
