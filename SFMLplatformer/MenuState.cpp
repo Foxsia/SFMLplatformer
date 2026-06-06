@@ -4,6 +4,7 @@
 #include "GameContext.h"
 #include "LevelLoader.h"
 #include "TileMap.h"
+#include "Game.h"
 #include <filesystem>
 
 namespace fp
@@ -112,6 +113,8 @@ namespace fp
 			*context.enemies,
 			*context.collectibles
 		);
+
+		context.game->buildMovingPlatforms();
 
 		delete* context.state;
 		*context.state = new PlayState();

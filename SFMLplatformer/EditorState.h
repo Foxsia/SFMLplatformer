@@ -11,6 +11,7 @@ namespace fp
 		enum class BrushType
 		{
 			Tile,
+			MovingTile,
 			Enemy,
 			Player,
 			Collectible

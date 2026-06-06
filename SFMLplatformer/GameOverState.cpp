@@ -3,6 +3,7 @@
 #include "GameContext.h"
 #include "PlayState.h"
 #include "MenuState.h"
+#include "Game.h"
 
 namespace fp
 {
@@ -18,6 +19,8 @@ namespace fp
 				*context.enemies,
 				*context.collectibles
 			);
+
+			context.game->buildMovingPlatforms();
 
 			delete* context.state;
 			*context.state = new PlayState();

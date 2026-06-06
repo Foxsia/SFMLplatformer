@@ -59,6 +59,7 @@ namespace fp
 		input->bindKey("TILE_BRUSH", sf::Keyboard::Num2);
 		input->bindKey("ENEMY_BRUSH", sf::Keyboard::Num3);
 		input->bindKey("COLLECTIBLE_BRUSH", sf::Keyboard::Num4);
+		input->bindKey("MOVING_TILE_BRUSH", sf::Keyboard::Num5);
 
 		input->bindMouse("ADD_ELEMENT", sf::Mouse::Left);
 		input->bindMouse("REMOVE_ELEMENT", sf::Mouse::Right);
@@ -66,7 +67,7 @@ namespace fp
 
 	void Game::initTileSheet()
 	{
-		if (!tileSheet.loadFromFile("assets/tile_sheet.png"))
+		if (!tileSheet.loadFromFile("assets/world_tileset.png"))
 		{
 			std::cout << "Error::Game::Couldn't load the tile sheet!\n";
 		}
@@ -84,6 +85,40 @@ namespace fp
 
 		tileMap = new TileMap(width, height, &tileSheet, Tile::getSize());
 		tileMap->loadBackground("assets/background.png");
+	}
+
+	void Game::buildMovingPlatforms()
+	{
+		for (auto platform : movingPlatforms)
+		{
+			delete platform;
+		}
+
+		movingPlatforms.clear();
+
+		MovingPlatform* platform = new MovingPlatform();
+
+		for (unsigned x = 0; x < tileMap->getWidth(); x++)
+		{
+			for (unsigned y = 0; y < tileMap->getHeight(); y++)
+			{
+				Tile* tile = tileMap->getTile(x, y);
+
+				if (tile && tile->getType() == TileType::Moving)
+				{
+					platform->addTile(tile);
+				}
+			}
+		}
+
+		if (!platform->getTiles().empty())
+		{
+			movingPlatforms.push_back(platform);
+		}
+		else
+		{
+			delete platform;
+		}
 	}
 
 	Game::Game()
@@ -107,6 +142,14 @@ namespace fp
 		for (auto enemy : enemies)
 		{
 			delete enemy;
+		}
+		for (auto collectible : collectibles)
+		{
+			delete collectible;
+		}
+		for (auto platform : movingPlatforms)
+		{
+			delete platform;
 		}
 	}
 
@@ -182,6 +225,7 @@ namespace fp
 
 		fp::GameContext context;
 
+		context.game = this;
 		context.window = &window;
 		context.font = &font;
 
@@ -204,6 +248,14 @@ namespace fp
 		if (state)
 		{
 			state->update(deltaTime, context);
+		}
+		
+		if (!context.isEditor)
+		{
+			for (auto platform : movingPlatforms)
+			{
+				platform->update(deltaTime);
+			}
 		}
 	}
 

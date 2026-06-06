@@ -9,6 +9,7 @@
 #include "InputManager.h"
 #include "Enemy.h"
 #include "Collectible.h"
+#include "MovingPlatform.h"
 
 namespace fp
 {
@@ -26,6 +27,7 @@ namespace fp
 		void render();
 
 		void loadLevelList();
+		void buildMovingPlatforms();
 
 		const sf::RenderWindow& getWindow() const;
 
@@ -52,6 +54,7 @@ namespace fp
 
 		std::vector<Enemy*> enemies;
 		std::vector<Collectible*> collectibles;
+		std::vector<MovingPlatform*> movingPlatforms;
 
 		InputManager* input;
 

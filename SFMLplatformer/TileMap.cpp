@@ -7,6 +7,10 @@ namespace fp
 	{
 		const unsigned TILE_TEXTURE_X = 0;
 		const unsigned TILE_TEXTURE_Y = 0;
+
+
+		const unsigned MOVING_TILE_TEXTURE_X = 128;
+		const unsigned MOVING_TILE_TEXTURE_Y = 0;
 	}
 
 	TileMap::TileMap()
@@ -68,7 +72,7 @@ namespace fp
 			{
 				if (tiles[x][y] == nullptr)
 				{
-					tiles[x][y] = new Tile(x, y, tileSheet, sf::IntRect(TILE_TEXTURE_X, TILE_TEXTURE_Y, tileSize, tileSize));
+					tiles[x][y] = new Tile(x, y, tileSheet, sf::IntRect(TILE_TEXTURE_X, TILE_TEXTURE_Y, tileSize, tileSize), TileType::Static);
 				}
 			}
 		}
@@ -84,6 +88,20 @@ namespace fp
 				{
 					delete tiles[x][y];
 					tiles[x][y] = nullptr;
+				}
+			}
+		}
+	}
+
+	void TileMap::addMovingTile(unsigned x, unsigned y)
+	{
+		if (x < tiles.size() && x >= 0)
+		{
+			if (y < tiles[x].size() && y >= 0)
+			{
+				if (tiles[x][y] == nullptr)
+				{
+					tiles[x][y] = new Tile(x, y, tileSheet, sf::IntRect(MOVING_TILE_TEXTURE_X, MOVING_TILE_TEXTURE_Y, tileSize, tileSize), TileType::Moving);
 				}
 			}
 		}
@@ -138,7 +156,14 @@ namespace fp
 
 				if (tiles[x][y] != nullptr)
 				{
-					value = 1;
+					if (tiles[x][y]->getType() == TileType::Moving)
+					{
+						value = 4;
+					}
+					else
+					{
+						value = 1;
+					}
 				}
 
 				for (auto enemy : enemies)

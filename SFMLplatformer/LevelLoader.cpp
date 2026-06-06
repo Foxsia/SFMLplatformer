@@ -3,6 +3,7 @@
 #include "TileMap.h"
 #include "Enemy.h"
 #include "Collectible.h"
+#include "Game.h"
 
 #include <fstream>
 
@@ -86,6 +87,11 @@ namespace fp
                     );
 
                     collectibles.push_back(collectible);
+                }
+
+                if (value == 4)
+                {
+                    tileMap.addMovingTile(x, y);
                 }
             }
         }

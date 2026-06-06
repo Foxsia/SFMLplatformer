@@ -3,6 +3,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Collectible.h"
+#include "Game.h"
 
 namespace fp
 {
@@ -51,6 +52,8 @@ namespace fp
         if (context.input->isKeyDown("PLAYER_BRUSH")) brush = BrushType::Player;
 
         if (context.input->isKeyDown("COLLECTIBLE_BRUSH")) brush = BrushType::Collectible;
+
+        if (context.input->isKeyDown("MOVING_TILE_BRUSH")) brush = BrushType::MovingTile;
     }
     void EditorState::addElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -96,12 +99,16 @@ namespace fp
 
             context.collectibles->push_back(collectible);
         }
+        else if (brush == BrushType::MovingTile)
+        {
+            context.tileMap->addMovingTile(mouseX, mouseY);
+        }
     }
     void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
     {
         sf::RenderWindow& window = *context.window;
 
-        if (brush == BrushType::Tile)
+        if (brush == BrushType::Tile || brush == BrushType::MovingTile)
         {
             context.tileMap->removeTile(mouseX, mouseY);
         }

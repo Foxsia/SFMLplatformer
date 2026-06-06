@@ -9,9 +9,11 @@ namespace fp
     class IState;
     class Enemy;
     class Collectible;
+    class Game;
 
     struct GameContext
     {
+        Game* game = nullptr;
         sf::RenderWindow* window = nullptr;
         sf::Font* font = nullptr;
 
@@ -31,5 +33,7 @@ namespace fp
         IState** state = nullptr;
         InputManager* input = nullptr;
         bool isEditor = false;
+
+        bool rebuildPlatforms = false;
     };
 }

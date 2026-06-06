@@ -30,6 +30,8 @@ namespace fp
 		void addTile(unsigned x, unsigned y);
 		void removeTile(unsigned x, unsigned y);
 
+		void addMovingTile(unsigned x, unsigned y);
+
 		void clear();
 
 		void render(sf::RenderTarget& target);
