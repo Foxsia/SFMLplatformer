@@ -23,6 +23,9 @@ namespace fp
 		const float PLAYER_MOVE_Y = 0.f;
 
 		const float TILE_TOP_COLLISION_OFFSET = 20.f;
+
+		const float JOYSTICK_THRESHOLD_LEFT = -50.f;
+		const float JOYSTICK_THRESHOLD_RIGHT = 50.f;
 	}
 
 	void Game::initWindow()
@@ -63,6 +66,34 @@ namespace fp
 
 		input->bindMouse("ADD_ELEMENT", sf::Mouse::Left);
 		input->bindMouse("REMOVE_ELEMENT", sf::Mouse::Right);
+
+		input->bindGamepadButton("JUMP", 0);
+		input->bindGamepadButton("PLAYER_BRUSH", 1);
+		input->bindGamepadButton("TILE_BRUSH", 2);
+		input->bindGamepadButton("ENEMY_BRUSH", 3);
+		input->bindGamepadButton("COLLECTIBLE_BRUSH", 4);
+		input->bindGamepadButton("MOVING_TILE_BRUSH", 5);
+
+		input->bindGamepadButton("ADD_ELEMENT", 7); 
+		input->bindGamepadButton("REMOVE_ELEMENT", 6);
+
+		input->bindJoystickAxis("MOVE_RIGHT",sf::Joystick::X, JOYSTICK_THRESHOLD_RIGHT);
+		input->bindJoystickAxis("MOVE_LEFT",sf::Joystick::X, JOYSTICK_THRESHOLD_LEFT);
+
+		input->bindKey("MENU_UP", sf::Keyboard::Up);
+		input->bindKey("MENU_DOWN", sf::Keyboard::Down);
+		input->bindKey("MENU_SELECT", sf::Keyboard::Enter);
+		input->bindKey("MENU_BACK", sf::Keyboard::M);
+
+		input->bindJoystickAxis("MENU_UP", sf::Joystick::PovY, JOYSTICK_THRESHOLD_RIGHT);
+		input->bindJoystickAxis("MENU_DOWN", sf::Joystick::PovY, JOYSTICK_THRESHOLD_LEFT);
+
+		input->bindJoystickAxis("MENU_UP", sf::Joystick::Y, JOYSTICK_THRESHOLD_LEFT);
+		input->bindJoystickAxis("MENU_DOWN", sf::Joystick::Y, JOYSTICK_THRESHOLD_RIGHT);
+
+		input->bindGamepadButton("MENU_SELECT", 0);
+
+		input->bindGamepadButton("MENU_BACK", 1);
 	}
 
 	void Game::initTileSheet()
@@ -195,20 +226,24 @@ namespace fp
 				{
 					if (!fileNameInput.empty()) fileNameInput.pop_back();
 				}
+			}
+			if (input->isActionPressed("MENU_BACK"))
+			{
+				tileMap->clear();
 
-				if (event.key.code == sf::Keyboard::M)
+				for (auto enemy : enemies)
 				{
-					tileMap->clear();
-
-					for (auto enemy : enemies)
-					{
-						delete enemy;
-					}
-					enemies.clear();
-
-					delete state;
-					state = new fp::MenuState();
+					delete enemy;
 				}
+				enemies.clear();
+				for (auto collectible : collectibles)
+				{
+					delete collectible;
+				}
+				collectibles.clear();
+
+				delete state;
+				state = new fp::MenuState();
 			}
 			if (typingFileName && event.type == sf::Event::TextEntered)
 			{

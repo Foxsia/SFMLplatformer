@@ -9,7 +9,7 @@ namespace fp
 {
 	void GameOverState::update(float dt, GameContext& context)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		if (context.input->isActionPressed("MENU_SELECT"))
 		{
 			context.player->hardReset();
 			LevelLoader::load(
@@ -26,7 +26,7 @@ namespace fp
 			*context.state = new PlayState();
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+		if (context.input->isActionPressed("MENU_BACK"))
 		{
 			delete* context.state;
 			*context.state = new MenuState();

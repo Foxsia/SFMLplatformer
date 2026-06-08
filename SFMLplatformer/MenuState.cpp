@@ -23,7 +23,7 @@ namespace fp
 	{
 		handleNavigation(context);
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		if (context.input->isActionPressed("MENU_SELECT"))
 		{
 			selectCurrentOption(context);
 		}
@@ -74,7 +74,7 @@ namespace fp
 	{
 		const int totalOptions = context.levelFiles->size() + 1;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		if (context.input->isActionPressed("MENU_DOWN"))
 		{
 			(*context.selectedMenuIndex)++;
 
@@ -83,7 +83,7 @@ namespace fp
 			sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		if (context.input->isActionPressed("MENU_UP"))
 		{
 			*context.selectedMenuIndex == 0 ? *context.selectedMenuIndex = totalOptions - 1 : (*context.selectedMenuIndex)--;
 
@@ -121,6 +121,17 @@ namespace fp
 	}
 	void MenuState::openEditor(GameContext& context)
 	{
+		context.tileMap->clear();
+		for (auto enemy : *context.enemies)
+		{
+			delete enemy;
+		}
+		context.enemies->clear();
+		for (auto collectible : *context.collectibles)
+		{
+			delete collectible;
+		}
+		context.collectibles->clear();
 		delete* context.state;
 		*context.state = new EditorState();
 	}

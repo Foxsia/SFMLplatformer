@@ -45,15 +45,15 @@ namespace fp
     }
     void EditorState::updateBrush(GameContext& context)
     {
-        if (context.input->isKeyDown("TILE_BRUSH")) brush = BrushType::Tile;
+        if (context.input->isActionPressed("TILE_BRUSH")) brush = BrushType::Tile;
 
-        if (context.input->isKeyDown("ENEMY_BRUSH")) brush = BrushType::Enemy;
+        if (context.input->isActionPressed("ENEMY_BRUSH")) brush = BrushType::Enemy;
 
-        if (context.input->isKeyDown("PLAYER_BRUSH")) brush = BrushType::Player;
+        if (context.input->isActionPressed("PLAYER_BRUSH")) brush = BrushType::Player;
 
-        if (context.input->isKeyDown("COLLECTIBLE_BRUSH")) brush = BrushType::Collectible;
+        if (context.input->isActionPressed("COLLECTIBLE_BRUSH")) brush = BrushType::Collectible;
 
-        if (context.input->isKeyDown("MOVING_TILE_BRUSH")) brush = BrushType::MovingTile;
+        if (context.input->isActionPressed("MOVING_TILE_BRUSH")) brush = BrushType::MovingTile;
     }
     void EditorState::addElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -178,11 +178,11 @@ namespace fp
 
         updateBrush(context);
 
-		if (context.input->isMouseDown("ADD_ELEMENT"))
+		if (context.input->isActionPressed("ADD_ELEMENT"))
 		{
             addElement(context, mouseX, mouseY);
 		}
-		if (context.input->isMouseDown("REMOVE_ELEMENT"))
+		if (context.input->isActionPressed("REMOVE_ELEMENT"))
 		{
             removeElement(context, mouseX, mouseY);
 		}

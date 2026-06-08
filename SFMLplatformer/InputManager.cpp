@@ -4,30 +4,75 @@ namespace fp
 {
     void InputManager::bindKey(const std::string& name, sf::Keyboard::Key key)
     {
-        keys[name] = key;
+        actions[name].keys.push_back(key);
     }
 
     void InputManager::bindMouse(const std::string& name, sf::Mouse::Button button)
     {
-        mouseButtons[name] = button;
+        actions[name].mouseButtons.push_back(button);
     }
 
-    bool InputManager::isKeyDown(const std::string& name) const
+    void InputManager::bindGamepadButton(const std::string& name, unsigned button)
     {
-        auto it = keys.find(name);
-        if (it == keys.end()) return false;
-
-        return sf::Keyboard::isKeyPressed(it->second);
+        actions[name].gamepadButtons.push_back(button);
     }
 
-    bool InputManager::isMouseDown(const std::string& name) const
+    void InputManager::bindJoystickAxis(const std::string& name, sf::Joystick::Axis axis, float threshold)
     {
-        auto it = mouseButtons.find(name);
-        if (it == mouseButtons.end()) return false;
-
-        return sf::Mouse::isButtonPressed(it->second);
+        actions[name].joystickAxes.push_back({axis, threshold});
     }
 
+    bool InputManager::isActionPressed(const std::string& action) const
+    {
+        auto it = actions.find(action);
+
+        if (it == actions.end())
+            return false;
+
+        const auto& binding = it->second;
+
+        for (auto key : binding.keys)
+        {
+            if (sf::Keyboard::isKeyPressed(key))
+                return true;
+        }
+
+        for (auto button : binding.mouseButtons)
+        {
+            if (sf::Mouse::isButtonPressed(button))
+                return true;
+        }
+
+        if (sf::Joystick::isConnected(0))
+        {
+            for (auto button : binding.gamepadButtons)
+            {
+                if (sf::Joystick::isButtonPressed(0, button))
+                    return true;
+            }
+
+            for (const auto& axisBinding : binding.joystickAxes)
+            {
+                float value = sf::Joystick::getAxisPosition(
+                    0,
+                    axisBinding.axis
+                );
+
+                if (axisBinding.threshold > 0.f)
+                {
+                    if (value > axisBinding.threshold)
+                        return true;
+                }
+                else
+                {
+                    if (value < axisBinding.threshold)
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
     sf::Vector2f InputManager::getMouseWorldPosition(const sf::RenderWindow& window) const
     {
        const sf::Vector2i pixelPos = sf::Mouse::getPosition(window);

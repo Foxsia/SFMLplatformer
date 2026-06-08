@@ -99,16 +99,16 @@ namespace fp
 		Player* player = context.player;
 		TileMap* tileMap = context.tileMap;
 
-		if (context.input->isKeyDown("MOVE_LEFT"))
+		if (context.input->isActionPressed("MOVE_LEFT"))
 		{
 			player->move(-1.f, 0.f, dt);
 		}
-		else if (context.input->isKeyDown("MOVE_RIGHT"))
+		else if (context.input->isActionPressed("MOVE_RIGHT"))
 		{
 			player->move(1.f, 0.f, dt);
 		}
 
-		if (context.input->isKeyDown("JUMP") && player->getCanJump())
+		if (context.input->isActionPressed("JUMP") && player->getCanJump())
 		{
 			player->jump();
 		}
