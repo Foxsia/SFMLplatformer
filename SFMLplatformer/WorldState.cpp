@@ -13,7 +13,7 @@ namespace fp
 	{
 		handleInput(dt, context);
 
-		updatePlayer(dt, context);
+		if (!context.isEditor) updatePlayer(dt, context);
 
 		CollisionSystem::resolvePlayerTileCollision(
 			*context.player,
@@ -66,7 +66,7 @@ namespace fp
 			collectible->render(window);
 		}
 
-		context.player->render(window);
+		if (!context.isEditor)context.player->render(window);
 
 		for (auto& enemy : *context.enemies)
 		{

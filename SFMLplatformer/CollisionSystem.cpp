@@ -141,17 +141,6 @@ namespace fp
 
 	void CollisionSystem::resolveWorldBounds(Player& player, sf::RenderWindow& window, const GameContext& context)
 	{
-		if (dynamic_cast<EditorState*>(context.state))
-		{
-			if (player.getPosition().y + player.getGlobalBounds().height > window.getSize().y)
-			{
-				player.setCanJump(true);
-				player.resetVelocityY();
-				player.setPosition(player.getPosition().x, window.getSize().y - player.getGlobalBounds().height);
-			}
-			return;
-		}
-
 		float playerBottom = player.getPosition().y + player.getGlobalBounds().height;
 
 		float windowBottom = static_cast<float>(window.getSize().y);
