@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Collectible.h"
 #include "Game.h"
+#include <memory>
 
 namespace fp
 {
@@ -63,7 +64,7 @@ namespace fp
         }
         else if (brush == BrushType::Enemy)
         {
-            Enemy* enemy = new Enemy();
+            auto enemy = std::make_unique<Enemy>();
 
             const float tileSize = static_cast<float>(context.tileMap->getTileSize());
 
@@ -75,7 +76,7 @@ namespace fp
                 mouseY * tileSize + (tileSize - enemyHeight)
             );
 
-            context.enemies->push_back(enemy);
+            context.enemies->push_back(std::move(enemy));
         }
         else if (brush == BrushType::Player)
         {
@@ -85,7 +86,7 @@ namespace fp
         }
         else if (brush == BrushType::Collectible)
         {
-            Collectible* collectible = new Collectible();
+            auto collectible = std::make_unique<Collectible>();
 
             const float tileSize = static_cast<float>(context.tileMap->getTileSize());
 
@@ -97,7 +98,7 @@ namespace fp
                 mouseY * tileSize + (tileSize - collectibleHeight)
             );
 
-            context.collectibles->push_back(collectible);
+            context.collectibles->push_back(std::move(collectible));
         }
         else if (brush == BrushType::MovingTile)
         {
@@ -139,7 +140,6 @@ namespace fp
         {
             if ((*it)->getGlobalBounds().contains(pos))
             {
-                delete* it;
                 it = context.enemies->erase(it);
             }
             else
@@ -154,7 +154,6 @@ namespace fp
         {
             if ((*it)->getGlobalBounds().contains(pos))
             {
-                delete* it;
                 it = context.collectibles->erase(it);
             }
             else

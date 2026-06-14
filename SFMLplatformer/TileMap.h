@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Collectible.h"
 #include <vector>
+#include <memory>
 
 namespace fp
 {
@@ -11,7 +12,6 @@ namespace fp
 	public:
 		TileMap();
 		TileMap(unsigned width, unsigned height, sf::Texture* tile_sheet, unsigned tile_size);
-		virtual ~TileMap();
 
 		inline const unsigned& getTileSize() const { return tileSize; }
 
@@ -45,7 +45,7 @@ namespace fp
 		const sf::Vector2f& getPlayerSpawn() const;
 
 	private:
-		std::vector< std::vector<Tile*> > tiles;
+		std::vector<std::vector<std::unique_ptr<Tile>>> tiles;
 		sf::Texture* tileSheet;
 		unsigned tileSize;
 

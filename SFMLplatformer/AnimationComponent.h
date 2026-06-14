@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <memory>
 #include "Animation.h"
 
 namespace fp
@@ -8,16 +9,15 @@ namespace fp
 	{
 	public:
 		AnimationComponent(sf::Sprite& sprite, sf::Texture& textureSheet);
-		~AnimationComponent();
 
-		void add(const std::string& key, Animation* animation);
+		void add(const std::string& key, std::unique_ptr<Animation> animation);
 		void play(const std::string& key, float dt);
 
 	private:
 		sf::Sprite& sprite;
 		sf::Texture& textureSheet;
 
-		std::map<std::string, Animation*> animations;
+		std::map<std::string, std::unique_ptr<Animation>> animations;
 	};
 }
 

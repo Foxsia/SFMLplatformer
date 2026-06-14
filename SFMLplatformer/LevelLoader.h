@@ -17,8 +17,8 @@ namespace fp
             const std::string& filename,
             TileMap& tileMap,
             Player& player,
-            std::vector<Enemy*>& enemies,
-            std::vector<Collectible*>& collectibles
+            std::vector<std::unique_ptr<Enemy>>& enemies,
+            std::vector<std::unique_ptr<Collectible>>& collectibles
         );
     };
 }

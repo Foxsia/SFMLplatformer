@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include <memory>
 #include "AnimationComponent.h"
 #include "MovementComponent.h"
 #include "Entity.h"
@@ -13,7 +14,6 @@ namespace fp
 	{
 	public:
 		Player();
-		~Player();
 		
 		const sf::Vector2f getPosition() const;
 		const sf::FloatRect getGlobalBounds() const;
@@ -53,9 +53,9 @@ namespace fp
 		sf::Texture textureSheet;
 
 		short animState;
-		AnimationComponent* animationComponent = nullptr;
+		std::unique_ptr<AnimationComponent> animationComponent = nullptr;
 
-		MovementComponent* movementComponent = nullptr;
+		std::unique_ptr<MovementComponent> movementComponent = nullptr;
 
 		bool canJump;
 

@@ -22,29 +22,23 @@ namespace fp
         : sprite(sprite), textureSheet(textureSheet)
     {
         add("IDLE",
-            new Animation(sprite,
+            std::make_unique<Animation>(sprite,
                 IDLE_START_X, IDLE_START_Y,
                 FRAME_WIDTH, FRAME_HEIGHT,
                 IDLE_FRAME_COUNT,
                 IDLE_DELAY));
 
         add("RUN",
-            new Animation(sprite,
+            std::make_unique<Animation>(sprite,
                 RUN_START_X, RUN_START_Y,
                 FRAME_WIDTH, FRAME_HEIGHT,
                 RUN_FRAME_COUNT,
                 RUN_DELAY));
     }
 
-    AnimationComponent::~AnimationComponent()
+    void AnimationComponent::add(const std::string& key, std::unique_ptr<Animation> animation)
     {
-        for (auto& a : animations)
-            delete a.second;
-    }
-
-    void AnimationComponent::add(const std::string& key, Animation* animation)
-    {
-        animations[key] = animation;
+        animations[key] = std::move(animation);
     }
 
     void AnimationComponent::play(const std::string& key, float dt)

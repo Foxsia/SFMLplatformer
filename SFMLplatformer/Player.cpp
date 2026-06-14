@@ -57,12 +57,12 @@ namespace fp
 
 	void Player::initAnimations()
 	{
-		animationComponent = new AnimationComponent(sprite, textureSheet);
+		animationComponent = std::make_unique<AnimationComponent>(sprite, textureSheet);
 	}
 
 	void Player::initPhysics()
 	{
-		movementComponent = new MovementComponent(
+		movementComponent = std::make_unique<MovementComponent>(
 			sprite,
 			VELOCITY_MAX,
 			VELOCITY_MIN,
@@ -86,12 +86,6 @@ namespace fp
 		initPhysics();
 
 		health = 1;
-	}
-
-	Player::~Player()
-	{
-		delete animationComponent;
-		delete movementComponent;
 	}
 
 	const sf::Vector2f Player::getPosition() const

@@ -27,19 +27,7 @@ namespace fp
 		tiles.resize(width);
 		for (int i = 0; i < tiles.size(); i++)
 		{
-			tiles[i].resize(height, nullptr);
-		}
-	}
-
-	TileMap::~TileMap()
-	{
-		for (int i = 0; i < tiles.size(); i++)
-		{
-			for (int k = 0; k < tiles[i].size(); k++)
-			{
-				delete tiles[i][k];
-				tiles[i][k] = nullptr;
-			}
+			tiles[i].resize(height);
 		}
 	}
 
@@ -49,7 +37,7 @@ namespace fp
 		{
 			if (y < tiles[x].size())
 			{
-				return tiles[x][y];
+				return tiles[x][y].get();
 			}
 		}
 
@@ -72,7 +60,7 @@ namespace fp
 			{
 				if (tiles[x][y] == nullptr)
 				{
-					tiles[x][y] = new Tile(x, y, tileSheet, sf::IntRect(TILE_TEXTURE_X, TILE_TEXTURE_Y, tileSize, tileSize), TileType::Static);
+					tiles[x][y] = std::make_unique<Tile>(x, y, tileSheet, sf::IntRect(TILE_TEXTURE_X, TILE_TEXTURE_Y, tileSize, tileSize), TileType::Static);
 				}
 			}
 		}
@@ -86,8 +74,7 @@ namespace fp
 			{
 				if (tiles[x][y] != nullptr)
 				{
-					delete tiles[x][y];
-					tiles[x][y] = nullptr;
+					tiles[x][y].reset();
 				}
 			}
 		}
@@ -101,7 +88,7 @@ namespace fp
 			{
 				if (tiles[x][y] == nullptr)
 				{
-					tiles[x][y] = new Tile(x, y, tileSheet, sf::IntRect(MOVING_TILE_TEXTURE_X, MOVING_TILE_TEXTURE_Y, tileSize, tileSize), TileType::Moving);
+					tiles[x][y] = std::make_unique<Tile>(x, y, tileSheet, sf::IntRect(MOVING_TILE_TEXTURE_X, MOVING_TILE_TEXTURE_Y, tileSize, tileSize), TileType::Moving);
 				}
 			}
 		}
@@ -109,12 +96,11 @@ namespace fp
 
 	void TileMap::clear()
 	{
-		for (size_t x = 0; x < tiles.size(); ++x)
+		for (auto& col : tiles)
 		{
-			for (size_t y = 0; y < tiles[x].size(); ++y)
+			for (auto& tile : col)
 			{
-				delete tiles[x][y];
-				tiles[x][y] = nullptr;
+				tile.reset();
 			}
 		}
 	}

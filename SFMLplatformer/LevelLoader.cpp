@@ -9,7 +9,7 @@
 
 namespace fp
 {
-    void LevelLoader::load(const std::string& filename, TileMap& tileMap, Player& player, std::vector<Enemy*>& enemies, std::vector<Collectible*>& collectibles)
+    void LevelLoader::load(const std::string& filename, TileMap& tileMap, Player& player, std::vector<std::unique_ptr<Enemy>>& enemies, std::vector<std::unique_ptr<Collectible>>& collectibles)
     {
         std::ifstream file(filename);
 
@@ -30,17 +30,7 @@ namespace fp
         player.hardReset();
         player.setPosition(spawnX + (tileSize - playerWidth) / 2.f, spawnY - playerHeight);
 
-        for (auto enemy : enemies)
-        {
-            delete enemy;
-        }
-
         enemies.clear();
-
-        for (auto collectible : collectibles)
-        {
-            delete collectible;
-        }
 
         collectibles.clear();
 
@@ -67,26 +57,26 @@ namespace fp
 
                 if (value == 2)
                 {
-                    Enemy* enemy = new Enemy();
+                    auto enemy = std::make_unique<Enemy>();
 
                     enemy->setPosition(
                         x * tileMap.getTileSize(),
                         y * tileMap.getTileSize()
                     );
 
-                    enemies.push_back(enemy);
+                    enemies.push_back(std::move(enemy));
                 }
 
                 if (value == 3)
                 {
-                    Collectible* collectible = new Collectible();
+                    auto collectible = std::make_unique<Collectible>();
 
                     collectible->setPosition(
                         x * tileMap.getTileSize(),
                         y * tileMap.getTileSize()
                     );
 
-                    collectibles.push_back(collectible);
+                    collectibles.push_back(std::move(collectible));
                 }
 
                 if (value == 4)

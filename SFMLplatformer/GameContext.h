@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "InputManager.h"
+#include <memory>
 
 namespace fp
 {
@@ -22,15 +23,15 @@ namespace fp
         fp::TileMap* tileMap = nullptr;
         fp::Player* player = nullptr;
 
-        std::vector<Enemy*>* enemies = nullptr;
-        std::vector<Collectible*>* collectibles = nullptr;
+        std::vector<std::unique_ptr<Enemy>>* enemies = nullptr;
+        std::vector< std::unique_ptr<Collectible>>* collectibles = nullptr;
 
         size_t* selectedMenuIndex = nullptr;
         std::vector<std::string>* levelFiles = nullptr;
 
         std::string* currentLevel = nullptr;
 
-        IState** state = nullptr;
+        IState* state = nullptr;
         InputManager* input = nullptr;
         bool isEditor = false;
 

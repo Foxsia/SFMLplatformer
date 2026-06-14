@@ -80,11 +80,11 @@ namespace fp
 		}
 	}
 
-	void CollisionSystem::resolvePlayerEnemyCollision(Player& player, std::vector<Enemy*>& enemies)
+	void CollisionSystem::resolvePlayerEnemyCollision(Player& player, std::vector < std::unique_ptr<Enemy>>& enemies)
 	{
 		sf::FloatRect playerBounds = player.getHitbox();
 
-		for (auto* enemy : enemies)
+		for (const auto& enemy : enemies)
 		{
 			if (!enemy->isAlive()) continue;
 
@@ -122,9 +122,9 @@ namespace fp
 		}
 	}
 
-	void CollisionSystem::resolvePlayerCollectibleCollision(Player& player, std::vector<Collectible*>& collectibles)
+	void CollisionSystem::resolvePlayerCollectibleCollision(Player& player, std::vector < std::unique_ptr<Collectible>>& collectibles)
 	{
-		for (auto collectible : collectibles)
+		for (auto& collectible : collectibles)
 		{
 			if (collectible->isCollected()) continue;
 
@@ -141,7 +141,7 @@ namespace fp
 
 	void CollisionSystem::resolveWorldBounds(Player& player, sf::RenderWindow& window, const GameContext& context)
 	{
-		if (dynamic_cast<EditorState*>(*context.state))
+		if (dynamic_cast<EditorState*>(context.state))
 		{
 			if (player.getPosition().y + player.getGlobalBounds().height > window.getSize().y)
 			{

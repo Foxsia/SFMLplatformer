@@ -4,6 +4,7 @@
 #include "PlayState.h"
 #include "MenuState.h"
 #include "Game.h"
+#include "Utils.h"
 
 namespace fp
 {
@@ -12,6 +13,7 @@ namespace fp
 		if (context.input->isActionPressed("MENU_SELECT"))
 		{
 			context.player->hardReset();
+
 			LevelLoader::load(
 				*context.currentLevel,
 				*context.tileMap,
@@ -22,14 +24,12 @@ namespace fp
 
 			context.game->buildMovingPlatforms();
 
-			delete* context.state;
-			*context.state = new PlayState();
+			context.game->changeState(std::make_unique<PlayState>());
 		}
 
 		if (context.input->isActionPressed("MENU_BACK"))
 		{
-			delete* context.state;
-			*context.state = new MenuState();
+			context.game->changeState(std::make_unique<MenuState>());
 		}
 	}
 	void GameOverState::render(sf::RenderWindow& window, GameContext& context)

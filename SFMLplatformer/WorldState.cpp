@@ -55,7 +55,7 @@ namespace fp
 		{
 			if (!hud)
 			{
-				hud = new HUD(*context.font);
+				hud = std::make_unique<HUD>(*context.font);
 			}
 		}
 
@@ -112,9 +112,5 @@ namespace fp
 		{
 			player->jump();
 		}
-	}
-	WorldState::~WorldState()
-	{
-		delete hud;
 	}
 }

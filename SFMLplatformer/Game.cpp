@@ -3,6 +3,7 @@
 #include "EditorState.h"
 #include "GameContext.h"
 #include "LevelLoader.h"
+#include "Utils.h"
 #include <iostream>
 #include <filesystem>
 
@@ -52,7 +53,7 @@ namespace fp
 
 	void Game::initInput()
 	{
-		input = new fp::InputManager();
+		input = std::make_unique<InputManager>();
 
 		input->bindKey("MOVE_LEFT", sf::Keyboard::A);
 		input->bindKey("MOVE_RIGHT", sf::Keyboard::D);
@@ -106,7 +107,7 @@ namespace fp
 
 	void Game::initPlayer()
 	{
-		player = new Player();
+		player = std::make_unique<Player>();
 	}
 
 	void Game::initTileMap()
@@ -114,20 +115,15 @@ namespace fp
 		const unsigned width = 224;
 		const unsigned height = window.getSize().y / Tile::getSize();
 
-		tileMap = new TileMap(width, height, &tileSheet, Tile::getSize());
+		tileMap = std::make_unique<TileMap>(width, height, &tileSheet, Tile::getSize());
 		tileMap->loadBackground("assets/background.png");
 	}
 
 	void Game::buildMovingPlatforms()
 	{
-		for (auto platform : movingPlatforms)
-		{
-			delete platform;
-		}
-
 		movingPlatforms.clear();
 
-		MovingPlatform* platform = new MovingPlatform();
+		auto platform = std::make_unique<MovingPlatform>();
 
 		for (unsigned x = 0; x < tileMap->getWidth(); x++)
 		{
@@ -144,12 +140,13 @@ namespace fp
 
 		if (!platform->getTiles().empty())
 		{
-			movingPlatforms.push_back(platform);
+			movingPlatforms.push_back(std::move(platform));
 		}
-		else
-		{
-			delete platform;
-		}
+	}
+
+	void Game::changeState(std::unique_ptr<IState> newState)
+	{
+		state = std::move(newState);
 	}
 
 	Game::Game()
@@ -160,28 +157,8 @@ namespace fp
 		initTileSheet();
 		initPlayer();
 		initTileMap();
-		state = new fp::MenuState();
+		state = std::make_unique<MenuState>();
 		loadLevelList();
-	}
-
-	Game::~Game()
-	{
-		delete player;
-		delete tileMap;
-		delete state;
-
-		for (auto enemy : enemies)
-		{
-			delete enemy;
-		}
-		for (auto collectible : collectibles)
-		{
-			delete collectible;
-		}
-		for (auto platform : movingPlatforms)
-		{
-			delete platform;
-		}
 	}
 
 	void Game::updatePlayer()
@@ -216,7 +193,7 @@ namespace fp
 				}
 				if (typingFileName && event.key.code == sf::Keyboard::Enter)
 				{
-					tileMap->saveToFile("levels/" + fileNameInput + ".txt", enemies, collectibles);
+					tileMap->saveToFile("levels/" + fileNameInput + ".txt", toRaw(enemies), toRaw(collectibles));
 
 					loadLevelList();
 
@@ -231,19 +208,11 @@ namespace fp
 			{
 				tileMap->clear();
 
-				for (auto enemy : enemies)
-				{
-					delete enemy;
-				}
 				enemies.clear();
-				for (auto collectible : collectibles)
-				{
-					delete collectible;
-				}
+
 				collectibles.clear();
 
-				delete state;
-				state = new fp::MenuState();
+				state = std::make_unique<fp::MenuState>();
 			}
 			if (typingFileName && event.type == sf::Event::TextEntered)
 			{
@@ -264,8 +233,8 @@ namespace fp
 		context.window = &window;
 		context.font = &font;
 
-		context.tileMap = tileMap;
-		context.player = player;
+		context.tileMap = tileMap.get();
+		context.player = player.get();
 		context.enemies = &enemies;
 		context.collectibles = &collectibles;
 
@@ -274,11 +243,11 @@ namespace fp
 
 		context.currentLevel = &currentLevel;
 
-		context.state = &state;
-		context.isEditor = dynamic_cast<EditorState*>(state) != nullptr;
+		context.state = state.get();
+		context.isEditor = dynamic_cast<EditorState*>(state.get()) != nullptr;
 		context.camera = &camera;
 
-		context.input = input;
+		context.input = input.get();
 
 		if (state)
 		{
@@ -287,7 +256,7 @@ namespace fp
 		
 		if (!context.isEditor)
 		{
-			for (auto platform : movingPlatforms)
+			for (auto& platform : movingPlatforms)
 			{
 				platform->update(deltaTime);
 			}
@@ -314,8 +283,8 @@ namespace fp
 		context.window = &window;
 		context.font = &font;
 
-		context.tileMap = tileMap;
-		context.player = player;
+		context.tileMap = tileMap.get();
+		context.player = player.get();
 		context.enemies = &enemies;
 		context.collectibles = &collectibles;
 
@@ -324,11 +293,11 @@ namespace fp
 
 		context.currentLevel = &currentLevel;
 
-		context.state = &state;
-		context.isEditor = dynamic_cast<EditorState*>(state) != nullptr;
+		context.state = state.get();
+		context.isEditor = dynamic_cast<EditorState*>(state.get()) != nullptr;
 		context.camera = &camera;
 
-		context.input = input;
+		context.input = input.get();
 
 		if (state)
 		{

@@ -3,6 +3,7 @@
 #include <SFML/System.hpp>
 #include <map>
 #include <vector>
+#include <memory>
 #include "Player.h"
 #include "TileMap.h"
 #include "IState.h"
@@ -17,7 +18,6 @@ namespace fp
 	{
 	public:
 		Game();
-		~Game();
 
 		void updatePlayer();
 		void update();
@@ -29,6 +29,8 @@ namespace fp
 		void loadLevelList();
 		void buildMovingPlatforms();
 
+		void changeState(std::unique_ptr<IState> newState);
+
 		const sf::RenderWindow& getWindow() const;
 
 	private:
@@ -38,8 +40,7 @@ namespace fp
 		void initPlayer();
 		void initTileMap();
 
-		class IState;
-		fp::IState* state = nullptr;
+		std::unique_ptr<IState> state;
 		std::string currentLevel;
 
 		sf::RenderWindow window;
@@ -49,14 +50,14 @@ namespace fp
 		sf::Clock dtClock;
 		float deltaTime;
 
-		Player* player = nullptr;
-		TileMap* tileMap = nullptr;
+		std::unique_ptr<Player> player;
+		std::unique_ptr<TileMap> tileMap;
 
-		std::vector<Enemy*> enemies;
-		std::vector<Collectible*> collectibles;
-		std::vector<MovingPlatform*> movingPlatforms;
+		std::vector<std::unique_ptr<Enemy>> enemies;
+		std::vector<std::unique_ptr<Collectible>> collectibles;
+		std::vector<std::unique_ptr<MovingPlatform>> movingPlatforms;
 
-		InputManager* input;
+		std::unique_ptr<InputManager> input;
 
 		bool typingFileName = false;
 		std::string fileNameInput;
