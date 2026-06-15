@@ -1,5 +1,6 @@
 #include "CollisionSystem.h"
 #include "EditorState.h"
+#include <algorithm>
 
 namespace fp
 {
@@ -18,9 +19,26 @@ namespace fp
 
 		sf::FloatRect playerBounds = player.getGlobalBounds();
 
-		for (int x = 0; x < map.getWidth(); x++)
+		const int TILE_SIZE = map.getTileSize();
+
+		int leftTile = static_cast<int>(playerBounds.left / TILE_SIZE);
+		int rightTile = static_cast<int>(playerBounds.left + playerBounds.width / TILE_SIZE);
+		int topTile = static_cast<int>(playerBounds.top / TILE_SIZE);
+		int bottomTile = static_cast<int>(playerBounds.top + playerBounds.height / TILE_SIZE);
+
+		leftTile--;
+		rightTile++;
+		topTile--;
+		bottomTile++;
+
+		leftTile = std::max(0, leftTile);
+		rightTile = std::max((int)map.getWidth() - 1, rightTile);
+		topTile = std::max(0, topTile);
+		bottomTile = std::max((int)map.getHeight() - 1, bottomTile);
+
+		for (int x = leftTile; x <= rightTile; x++)
 		{
-			for (int y = 0; y < map.getHeight(); y++)
+			for (int y = topTile; y <= bottomTile; y++)
 			{
 				Tile* tile = map.getTile(x, y);
 
@@ -87,9 +105,26 @@ namespace fp
 	{
 		const sf::FloatRect bounds = enemy.getGlobalBounds();
 
-		for (int x = 0; x < map.getWidth(); x++)
+		const int TILE_SIZE = map.getTileSize();
+
+		int leftTile = static_cast<int>(bounds.left / TILE_SIZE);
+		int rightTile = static_cast<int>(bounds.left + bounds.width / TILE_SIZE);
+		int topTile = static_cast<int>(bounds.top / TILE_SIZE);
+		int bottomTile = static_cast<int>(bounds.top + bounds.height / TILE_SIZE);
+
+		leftTile--;
+		rightTile++;
+		topTile--;
+		bottomTile++;
+
+		leftTile = std::max(0, leftTile);
+		rightTile = std::max((int)map.getWidth() - 1, rightTile);
+		topTile = std::max(0, topTile);
+		bottomTile = std::max((int)map.getHeight() - 1, bottomTile);
+
+		for (int x = leftTile; x <= rightTile; x++)
 		{
-			for (int y = 0; y < map.getHeight(); y++)
+			for (int y = topTile; y <= bottomTile; y++)
 			{
 				Tile* tile = map.getTile(x, y);
 				if (!tile) continue;
