@@ -77,7 +77,7 @@ namespace fp
 		damageCooldown = 0.f;
 	}
 
-	Player::Player() : Entity(2)
+	Player::Player() : Entity(2, 1)
 	{
 		initVariables();
 		initTexture();
@@ -145,7 +145,7 @@ namespace fp
 		damageCooldown = 0.f;
 
 		animState = IDLE;
-		health = 1;
+		heal();
 		alive = true;
 		score = 0;
 	}

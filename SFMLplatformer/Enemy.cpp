@@ -14,7 +14,7 @@ namespace fp
         const float ENEMY_HITBOX_PADDING_BOTTOM = 0.f;
     }
 
-    Enemy::Enemy() : Entity(1)
+    Enemy::Enemy() : Entity(1, 1)
     {
         textureSheet.loadFromFile("assets/slime_green.png");
 

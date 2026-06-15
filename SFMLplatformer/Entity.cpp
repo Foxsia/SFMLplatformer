@@ -3,7 +3,7 @@
 
 namespace fp
 {
-	Entity::Entity(int hp) : health(hp), maxHealth(hp), alive(true), damageCooldown(0.f)
+	Entity::Entity(int hp, int lives) : health(hp), maxHealth(hp), alive(true), damageCooldown(0.f), lives(lives), startLives(lives)
 	{
 	}
 	void Entity::takeDamage(int dmg)
@@ -14,15 +14,27 @@ namespace fp
 
 		if (health <= 0)
 		{
-			health = 0;
-			alive = false;
+			lives--;
+			health = maxHealth;
 		}
+
+		lives <= 0 ? alive = false : alive = true;
 
 		damageCooldown = 1.f;
 	}
-	void Entity::heal(int amount)
+	void Entity::heal()
 	{
-		health += amount;
-		if (health > maxHealth) health = maxHealth;
+		health = maxHealth;
+		lives = startLives;
+	}
+	void Entity::addLife(int amount)
+	{
+		lives += amount;
+	}
+	void Entity::loseLife(int amount)
+	{
+		lives -= amount;
+		health = maxHealth;
+		lives <= 0 ? alive = false : alive = true;
 	}
 }

@@ -147,6 +147,11 @@ namespace fp
 			}
 
 			player.takeDamage(1);
+
+			if (player.getHealth() <= 0)
+			{
+				player.loseLife(1);
+			}
 		}
 	}
 
@@ -160,7 +165,7 @@ namespace fp
 			{
 				collectible->collect();
 
-				player.heal(1);
+				player.addLife(1);
 
 				player.addScore(SCORE_COLLECTIBLE);
 			}
@@ -175,7 +180,7 @@ namespace fp
 
 		if (playerBottom > windowBottom)
 		{
-			player.takeDamage(player.getHealth());
+			player.loseLife(player.getLives());
 			return;
 		}
 	}

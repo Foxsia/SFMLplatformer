@@ -10,6 +10,7 @@ namespace fp
 	{
 	private:
 		sf::Text scoreText;
+		sf::Text healthLivesText;
 
 	public:
 		HUD(sf::Font& font);
