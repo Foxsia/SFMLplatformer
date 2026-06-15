@@ -13,7 +13,7 @@ namespace fp
 
         if (!context.player->isAlive())
         {
-            context.game->changeState(std::make_unique<GameOverState>());
+            context.stateManager->changeState(StateType::GameOver);
         }
     }
     void PlayState::render(sf::RenderWindow& window, GameContext& context)

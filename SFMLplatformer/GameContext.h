@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "InputManager.h"
+#include "StateManager.h"
 #include <memory>
 
 namespace fp
@@ -32,7 +33,7 @@ namespace fp
 
         std::string* currentLevel = nullptr;
 
-        IState* state = nullptr;
+        StateManager* stateManager = nullptr;
         InputManager* input = nullptr;
         bool isEditor = false;
 

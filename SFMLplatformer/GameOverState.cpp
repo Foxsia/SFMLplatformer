@@ -24,12 +24,12 @@ namespace fp
 
 			context.game->buildMovingPlatforms();
 
-			context.game->changeState(std::make_unique<PlayState>());
+			context.stateManager->changeState(StateType::Play);
 		}
 
 		if (context.input->isActionPressed("MENU_BACK"))
 		{
-			context.game->changeState(std::make_unique<MenuState>());
+			context.stateManager->changeState(StateType::Menu);
 		}
 	}
 	void GameOverState::render(sf::RenderWindow& window, GameContext& context)

@@ -116,13 +116,13 @@ namespace fp
 
 		context.game->buildMovingPlatforms();
 
-		context.game->changeState(std::make_unique<PlayState>());
+		context.stateManager->changeState(StateType::Play);
 	}
 	void MenuState::openEditor(GameContext& context)
 	{
 		context.tileMap->clear();
 		context.enemies->clear();
 		context.collectibles->clear();
-		context.game->changeState(std::make_unique<EditorState>());
+		context.stateManager->changeState(StateType::Editor);
 	}
 }

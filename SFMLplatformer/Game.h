@@ -11,6 +11,7 @@
 #include "Enemy.h"
 #include "Collectible.h"
 #include "MovingPlatform.h"
+#include "StateManager.h"
 
 namespace fp
 {
@@ -29,8 +30,6 @@ namespace fp
 		void loadLevelList();
 		void buildMovingPlatforms();
 
-		void changeState(std::unique_ptr<IState> newState);
-
 		const sf::RenderWindow& getWindow() const;
 
 	private:
@@ -40,7 +39,7 @@ namespace fp
 		void initPlayer();
 		void initTileMap();
 
-		std::unique_ptr<IState> state;
+		StateManager stateManager;
 		std::string currentLevel;
 
 		sf::RenderWindow window;

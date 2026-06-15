@@ -144,11 +144,6 @@ namespace fp
 		}
 	}
 
-	void Game::changeState(std::unique_ptr<IState> newState)
-	{
-		state = std::move(newState);
-	}
-
 	Game::Game()
 		: deltaTime(0.f)
 	{
@@ -157,7 +152,7 @@ namespace fp
 		initTileSheet();
 		initPlayer();
 		initTileMap();
-		state = std::make_unique<MenuState>();
+		stateManager.changeState(StateType::Menu);
 		loadLevelList();
 	}
 
@@ -212,7 +207,7 @@ namespace fp
 
 				collectibles.clear();
 
-				state = std::make_unique<fp::MenuState>();
+				stateManager.changeState(StateType::Menu);
 			}
 			if (typingFileName && event.type == sf::Event::TextEntered)
 			{
@@ -243,14 +238,13 @@ namespace fp
 		context.levelFiles = &levelFiles;
 
 		context.currentLevel = &currentLevel;
-
-		context.state = state.get();
-		context.isEditor = dynamic_cast<EditorState*>(state.get()) != nullptr;
+		context.stateManager = &stateManager;
+		context.isEditor = dynamic_cast<EditorState*>(stateManager.getCurrentState()) != nullptr;
 		context.camera = &camera;
 
 		context.input = input.get();
 
-		if (state)
+		if (auto* state = stateManager.getCurrentState())
 		{
 			state->update(deltaTime, context);
 		}
@@ -285,14 +279,13 @@ namespace fp
 		context.levelFiles = &levelFiles;
 
 		context.currentLevel = &currentLevel;
-
-		context.state = state.get();
-		context.isEditor = dynamic_cast<EditorState*>(state.get()) != nullptr;
+		context.stateManager = &stateManager;
+		context.isEditor = dynamic_cast<EditorState*>(stateManager.getCurrentState()) != nullptr;
 		context.camera = &camera;
 
 		context.input = input.get();
 
-		if (state)
+		if (auto* state = stateManager.getCurrentState())
 		{
 			state->render(window, context);
 		}
