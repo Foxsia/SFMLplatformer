@@ -17,14 +17,18 @@ namespace fp
 		void addTile(Tile* tile);
 		void update(float dt);
 
+		const sf::Vector2f& getDelta() const;
+
 		const std::vector<Tile*>& getTiles() const;
 	private:
 		std::vector<Tile*> tiles;
 
-		sf::Vector2f startPos;
-		sf::Vector2f endPos;
-
 		sf::Vector2f velocity = { VELOCITY_X, VELOCITY_Y };
-		bool forward = true;
+		bool forward = false;
+
+		sf::Vector2f delta;
+
+		float startX = 0.f;
+		bool initialized = false;
 	};
 }

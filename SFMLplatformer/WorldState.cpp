@@ -13,7 +13,20 @@ namespace fp
 	{
 		handleInput(dt, context);
 
+		if (!context.isEditor)
+		{
+			for (auto& platform : *context.platforms)
+			{
+				platform->update(dt);
+			}
+		}
+
 		if (!context.isEditor) updatePlayer(dt, context);
+
+		CollisionSystem::resolvePlayerMovingPlatform(
+			*context.player, 
+			*context.platforms
+		);
 
 		CollisionSystem::resolvePlayerTileCollision(
 			*context.player,

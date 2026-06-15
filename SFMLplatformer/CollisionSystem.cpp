@@ -55,6 +55,34 @@ namespace fp
 		player.setCanJump(grounded);
 	}
 
+	void CollisionSystem::resolvePlayerMovingPlatform(Player& player, std::vector<std::unique_ptr<MovingPlatform>>& platforms)
+	{
+		for (auto& platform : platforms)
+		{
+			sf::FloatRect playerBounds = player.getGlobalBounds();
+
+			for (auto tile : platform->getTiles())
+			{
+				sf::FloatRect tileBounds = tile->getHitbox();
+
+				if (!playerBounds.intersects(tileBounds)) continue;
+
+				float playerBottom = playerBounds.top + playerBounds.height;
+
+				bool standing = player.getVelocity().y >= 0.f && playerBottom <= tileBounds.top + COLLISION_TOLERANCE;
+
+				if (standing)
+				{
+					player.setPosition(
+						player.getPosition().x + platform->getDelta().x,
+						player.getPosition().y
+					);
+					break;
+				}
+			}
+		}
+	}
+
 	void CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
 	{
 		const sf::FloatRect bounds = enemy.getGlobalBounds();

@@ -234,6 +234,7 @@ namespace fp
 		context.font = &font;
 
 		context.tileMap = tileMap.get();
+		context.platforms = &movingPlatforms;
 		context.player = player.get();
 		context.enemies = &enemies;
 		context.collectibles = &collectibles;
@@ -252,14 +253,6 @@ namespace fp
 		if (state)
 		{
 			state->update(deltaTime, context);
-		}
-		
-		if (!context.isEditor)
-		{
-			for (auto& platform : movingPlatforms)
-			{
-				platform->update(deltaTime);
-			}
 		}
 	}
 

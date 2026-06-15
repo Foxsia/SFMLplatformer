@@ -11,6 +11,7 @@ namespace fp
     class Enemy;
     class Collectible;
     class Game;
+    class MovingPlatform;
 
     struct GameContext
     {
@@ -36,5 +37,6 @@ namespace fp
         bool isEditor = false;
 
         bool rebuildPlatforms = false;
+        std::vector<std::unique_ptr<MovingPlatform>>* platforms;
     };
 }

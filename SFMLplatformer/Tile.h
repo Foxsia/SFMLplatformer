@@ -44,6 +44,7 @@ namespace fp
 
 		static constexpr float hitboxWidth = 28.f;
 		static constexpr float hitboxHeight = 32.f;
+
 	};
 }
 
