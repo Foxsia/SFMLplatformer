@@ -39,11 +39,7 @@ namespace fp
 			context
 		);
 
-		CameraController::followPlayer(
-			*context.camera,
-			*context.player,
-			*context.tileMap
-		);
+		context.isEditor ? CameraController::moveEditor(*context.camera, *context.input, *context.tileMap) : CameraController::followPlayer(*context.camera, *context.player, *context.tileMap);
 
 		if (!context.isEditor)
 		{

@@ -116,6 +116,8 @@ namespace fp
 
 		context.game->buildMovingPlatforms();
 
+
+		context.camera->setCenter(context.camera->getSize().x / 2.f, context.camera->getSize().y / 2.f);
 		context.stateManager->changeState(StateType::Play);
 	}
 	void MenuState::openEditor(GameContext& context)
@@ -123,6 +125,7 @@ namespace fp
 		context.tileMap->clear();
 		context.enemies->clear();
 		context.collectibles->clear();
+		context.camera->setCenter(context.camera->getSize().x / 2.f, context.camera->getSize().y / 2.f);
 		context.stateManager->changeState(StateType::Editor);
 	}
 }

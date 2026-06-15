@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include "TileMap.h"
+#include "InputManager.h"
 
 namespace fp
 {
@@ -38,9 +39,37 @@ namespace fp
 
 		if (cameraCenterX > mapWidth - halfWidth) cameraCenterX = mapWidth - halfWidth;
 
-		camera.setCenter(
-			cameraCenterX,
-			camera.getSize().y / 2.f
-		);
+		camera.setCenter(cameraCenterX, camera.getSize().y / 2.f);
     }
+	void CameraController::moveEditor(sf::View& camera, const InputManager& input, const TileMap& map)
+	{
+		const float cameraSpeed = 5.f;
+
+		float cameraCenterX = camera.getCenter().x;
+
+		if (input.isActionPressed("MOVE_LEFT"))
+		{
+			cameraCenterX -= cameraSpeed;
+		}
+
+		if (input.isActionPressed("MOVE_RIGHT"))
+		{
+			cameraCenterX += cameraSpeed;
+		}
+
+		const float mapWidth = map.getWidth() * map.getTileSize();
+		const float halfWidth = camera.getSize().x / 2.f;
+
+		if (cameraCenterX < halfWidth)
+		{
+			cameraCenterX = halfWidth;
+		}
+
+		if (cameraCenterX > mapWidth - halfWidth)
+		{
+			cameraCenterX = mapWidth - halfWidth;
+		}
+
+		camera.setCenter(cameraCenterX, camera.getCenter().y);
+	}
 }
