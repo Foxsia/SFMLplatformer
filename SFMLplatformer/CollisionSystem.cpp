@@ -32,9 +32,9 @@ namespace fp
 		bottomTile++;
 
 		leftTile = std::max(0, leftTile);
-		rightTile = std::max((int)map.getWidth() - 1, rightTile);
+		rightTile = std::min((int)map.getWidth() - 1, rightTile);
 		topTile = std::max(0, topTile);
-		bottomTile = std::max((int)map.getHeight() - 1, bottomTile);
+		bottomTile = std::min((int)map.getHeight() - 1, bottomTile);
 
 		for (int x = leftTile; x <= rightTile; x++)
 		{
@@ -118,9 +118,9 @@ namespace fp
 		bottomTile++;
 
 		leftTile = std::max(0, leftTile);
-		rightTile = std::max((int)map.getWidth() - 1, rightTile);
+		rightTile = std::min((int)map.getWidth() - 1, rightTile);
 		topTile = std::max(0, topTile);
-		bottomTile = std::max((int)map.getHeight() - 1, bottomTile);
+		bottomTile = std::min((int)map.getHeight() - 1, bottomTile);
 
 		for (int x = leftTile; x <= rightTile; x++)
 		{
