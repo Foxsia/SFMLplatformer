@@ -1,14 +1,16 @@
 #pragma once
 #include <memory>
-#include "IState.h"
 #include "StateType.h"
-#include "MenuState.h"
-#include "PlayState.h"
-#include "EditorState.h"
-#include "GameOverState.h"
 
 namespace fp
 {
+	class IState;
+	class MenuState;
+	class PlayState;
+	class EditorState;
+	class GameOverState;
+	class WinState;
+
 	class StateManager
 	{
 	public:

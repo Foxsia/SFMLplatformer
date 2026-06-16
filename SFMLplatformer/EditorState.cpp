@@ -52,7 +52,7 @@ namespace fp
 
         if (context.input->isActionPressed("PLAYER_BRUSH")) brush = BrushType::Player;
 
-        if (context.input->isActionPressed("COLLECTIBLE_BRUSH")) brush = BrushType::Collectible;
+        if (context.input->isActionPressed("COLLECTIBLE_BRUSH")) brush = BrushType::LifeFruit;
 
         if (context.input->isActionPressed("MOVING_TILE_BRUSH")) brush = BrushType::MovingTile;
     }
@@ -84,21 +84,21 @@ namespace fp
 
             context.tileMap->setPlayerSpawn(mouseX * tileSize, mouseY * tileSize);
         }
-        else if (brush == BrushType::Collectible)
+        else if (brush == BrushType::LifeFruit)
         {
-            auto collectible = std::make_unique<Collectible>();
+            auto lifeFruit = std::make_unique<LifeFruit>();
 
             const float tileSize = static_cast<float>(context.tileMap->getTileSize());
 
-            const float collectibleWidth = collectible->getGlobalBounds().width;
-            const float collectibleHeight = collectible->getGlobalBounds().height;
+            const float collectibleWidth = lifeFruit->getGlobalBounds().width;
+            const float collectibleHeight = lifeFruit->getGlobalBounds().height;
 
-            collectible->setPosition(
+            lifeFruit->setPosition(
                 mouseX * tileSize + (tileSize - collectibleWidth) / 2.f,
                 mouseY * tileSize + (tileSize - collectibleHeight)
             );
 
-            context.collectibles->push_back(std::move(collectible));
+            context.collectibles->push_back(std::move(lifeFruit));
         }
         else if (brush == BrushType::MovingTile)
         {
@@ -117,7 +117,7 @@ namespace fp
         {
             removeEnemyAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
         }
-        else if (brush == BrushType::Collectible)
+        else if (brush == BrushType::LifeFruit)
         {
             removeCollectibleAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
         }

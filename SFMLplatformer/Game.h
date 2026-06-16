@@ -9,7 +9,8 @@
 #include "IState.h"
 #include "InputManager.h"
 #include "Enemy.h"
-#include "Collectible.h"
+#include "LifeFruit.h"
+#include "Goal.h"
 #include "MovingPlatform.h"
 #include "StateManager.h"
 

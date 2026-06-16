@@ -2,7 +2,7 @@
 
 #include "TileMap.h"
 #include "Enemy.h"
-#include "Collectible.h"
+#include "LifeFruit.h"
 #include "Game.h"
 
 #include <fstream>
@@ -69,14 +69,14 @@ namespace fp
 
                 if (value == 3)
                 {
-                    auto collectible = std::make_unique<Collectible>();
+                    auto lifeFruit = std::make_unique<LifeFruit>();
 
-                    collectible->setPosition(
+                    lifeFruit->setPosition(
                         x * tileMap.getTileSize(),
                         y * tileMap.getTileSize()
                     );
 
-                    collectibles.push_back(std::move(collectible));
+                    collectibles.push_back(std::move(lifeFruit));
                 }
 
                 if (value == 4)

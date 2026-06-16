@@ -198,11 +198,7 @@ namespace fp
 
 			if (player.getHitbox().intersects(collectible->getGlobalBounds()))
 			{
-				collectible->collect();
-
-				player.addLife(1);
-
-				player.addScore(SCORE_COLLECTIBLE);
+				collectible->onCollect(player);
 			}
 		}
 	}

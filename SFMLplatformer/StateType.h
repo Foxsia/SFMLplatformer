@@ -7,6 +7,7 @@ namespace fp
         Menu,
         Play,
         Editor,
-        GameOver
+        GameOver,
+        Win
     };
 }

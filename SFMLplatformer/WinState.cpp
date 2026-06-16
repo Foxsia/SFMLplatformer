@@ -1,13 +1,8 @@
-#include "GameOverState.h"
-#include "LevelLoader.h"
-#include "GameContext.h"
-#include "PlayState.h"
-#include "MenuState.h"
-#include "Game.h"
+#include "WinState.h"
 
 namespace fp
 {
-	void GameOverState::update(float dt, GameContext& context)
+	void WinState::update(float dt, GameContext& context)
 	{
 		if (context.input->isActionPressed("MENU_SELECT"))
 		{
@@ -31,14 +26,14 @@ namespace fp
 			context.stateManager->changeState(StateType::Menu);
 		}
 	}
-	void GameOverState::render(sf::RenderWindow& window, GameContext& context)
+	void WinState::render(sf::RenderWindow& window, GameContext& context)
 	{
 		window.setView(window.getDefaultView());
 
 		sf::Text text;
 		text.setFont(*context.font);
 		text.setString(
-			"GAME OVER\n\n"
+			"YOU WIN\n\n"
 			"Score: " + std::to_string(context.player->getScore()) +
 			"\nENTER - Restart\n"
 			"M - Menu"

@@ -1,4 +1,10 @@
 #include "StateManager.h"
+#include "IState.h"
+#include "MenuState.h"
+#include "PlayState.h"
+#include "EditorState.h"
+#include "GameOverState.h"
+#include "WinState.h"
 
 namespace fp
 {
@@ -17,6 +23,9 @@ namespace fp
 				break;
 			case StateType::GameOver:
 				currentState = std::make_unique<GameOverState>();
+				break;
+			case StateType::Win:
+				currentState = std::make_unique<WinState>();
 				break;
 		}
 	}

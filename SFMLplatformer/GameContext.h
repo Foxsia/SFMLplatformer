@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "InputManager.h"
-#include "StateManager.h"
 #include <memory>
 
 namespace fp
@@ -13,6 +12,7 @@ namespace fp
     class Collectible;
     class Game;
     class MovingPlatform;
+    class StateManager;
 
     struct GameContext
     {

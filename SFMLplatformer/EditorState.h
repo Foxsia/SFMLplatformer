@@ -14,7 +14,8 @@ namespace fp
 			MovingTile,
 			Enemy,
 			Player,
-			Collectible
+			LifeFruit,
+			Goal
 		};
 		BrushType brush = BrushType::Tile;
 		void updateBrush(GameContext& context);
