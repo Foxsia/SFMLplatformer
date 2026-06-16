@@ -1,7 +1,8 @@
 #pragma once
 #include "Tile.h"
 #include "Enemy.h"
-#include "Collectible.h"
+#include "LifeFruit.h"
+#include "Goal.h"
 #include <vector>
 #include <memory>
 

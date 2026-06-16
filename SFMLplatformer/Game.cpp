@@ -64,6 +64,7 @@ namespace fp
 		input->bindKey("ENEMY_BRUSH", sf::Keyboard::Num3);
 		input->bindKey("COLLECTIBLE_BRUSH", sf::Keyboard::Num4);
 		input->bindKey("MOVING_TILE_BRUSH", sf::Keyboard::Num5);
+		input->bindKey("GOAL_BRUSH", sf::Keyboard::Num6);
 
 		input->bindMouse("ADD_ELEMENT", sf::Mouse::Left);
 		input->bindMouse("REMOVE_ELEMENT", sf::Mouse::Right);
@@ -74,6 +75,7 @@ namespace fp
 		input->bindGamepadButton("ENEMY_BRUSH", 3);
 		input->bindGamepadButton("COLLECTIBLE_BRUSH", 4);
 		input->bindGamepadButton("MOVING_TILE_BRUSH", 5);
+		input->bindGamepadButton("GOAL_BRUSH", 8);
 
 		input->bindGamepadButton("ADD_ELEMENT", 7); 
 		input->bindGamepadButton("REMOVE_ELEMENT", 6);

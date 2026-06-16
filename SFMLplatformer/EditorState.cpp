@@ -54,6 +54,8 @@ namespace fp
 
         if (context.input->isActionPressed("COLLECTIBLE_BRUSH")) brush = BrushType::LifeFruit;
 
+        if (context.input->isActionPressed("GOAL_BRUSH")) brush = BrushType::Goal;
+
         if (context.input->isActionPressed("MOVING_TILE_BRUSH")) brush = BrushType::MovingTile;
     }
     void EditorState::addElement(GameContext& context, int mouseX, int mouseY)
@@ -104,6 +106,22 @@ namespace fp
         {
             context.tileMap->addMovingTile(mouseX, mouseY);
         }
+        else if (brush == BrushType::Goal)
+        {
+            auto goal = std::make_unique<Goal>();
+
+            const float tileSize = static_cast<float>(context.tileMap->getTileSize());
+
+            const float collectibleWidth = goal->getGlobalBounds().width;
+            const float collectibleHeight = goal->getGlobalBounds().height;
+
+            goal->setPosition(
+                mouseX * tileSize + (tileSize - collectibleWidth) / 2.f,
+                mouseY * tileSize + (tileSize - collectibleHeight)
+            );
+
+            context.collectibles->push_back(std::move(goal));
+        }
     }
     void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -117,7 +135,7 @@ namespace fp
         {
             removeEnemyAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
         }
-        else if (brush == BrushType::LifeFruit)
+        else if (brush == BrushType::LifeFruit || brush == BrushType::Goal)
         {
             removeCollectibleAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
         }

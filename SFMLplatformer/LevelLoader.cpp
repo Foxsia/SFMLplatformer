@@ -83,6 +83,18 @@ namespace fp
                 {
                     tileMap.addMovingTile(x, y);
                 }
+
+                if (value == 5)
+                {
+                    auto goal = std::make_unique<Goal>();
+
+                    goal->setPosition(
+                        x * tileMap.getTileSize(),
+                        y * tileMap.getTileSize()
+                    );
+
+                    collectibles.push_back(std::move(goal));
+                }
             }
         }
     }

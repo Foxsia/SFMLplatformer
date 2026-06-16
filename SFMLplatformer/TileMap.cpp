@@ -180,7 +180,14 @@ namespace fp
 
 					if (collectibleX == x && collectibleY == y)
 					{
-						value = 3;
+						if (dynamic_cast<LifeFruit*>(collectible))
+						{
+							value = 3;
+						}
+						else if (dynamic_cast<Goal*>(collectible))
+						{
+							value = 5;
+						}
 					}
 				}
 
