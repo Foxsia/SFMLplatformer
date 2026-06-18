@@ -27,6 +27,8 @@ namespace fp
 
 		const float JOYSTICK_THRESHOLD_LEFT = -50.f;
 		const float JOYSTICK_THRESHOLD_RIGHT = 50.f;
+
+		const float LEVEL_DURATION = 300.f;
 	}
 
 	void Game::initWindow()
@@ -146,8 +148,13 @@ namespace fp
 		}
 	}
 
+	void Game::restartLevelTimer()
+	{
+		levelTimer.restart();
+	}
+
 	Game::Game()
-		: deltaTime(0.f)
+		: deltaTime(0.f), levelDuration(LEVEL_DURATION)
 	{
 		initWindow();
 		initInput();
@@ -246,6 +253,8 @@ namespace fp
 
 		context.input = input.get();
 
+		context.levelTime = levelDuration - levelTimer.getElapsedTime().asSeconds();
+
 		if (auto* state = stateManager.getCurrentState())
 		{
 			state->update(deltaTime, context);
@@ -286,6 +295,8 @@ namespace fp
 		context.camera = &camera;
 
 		context.input = input.get();
+
+		context.levelTime = levelDuration - levelTimer.getElapsedTime().asSeconds();
 
 		if (auto* state = stateManager.getCurrentState())
 		{

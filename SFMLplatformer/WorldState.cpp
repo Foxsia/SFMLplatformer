@@ -84,7 +84,7 @@ namespace fp
 
 		if (!context.isEditor)
 		{
-			hud->update(*context.player);
+			hud->update(*context.player, context.levelTime);
 			hud->render(window);
 		}
 	}

@@ -116,6 +116,7 @@ namespace fp
 
 		context.game->buildMovingPlatforms();
 
+		context.game->restartLevelTimer();
 
 		context.camera->setCenter(context.camera->getSize().x / 2.f, context.camera->getSize().y / 2.f);
 		context.stateManager->changeState(StateType::Play);

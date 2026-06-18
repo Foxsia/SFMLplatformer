@@ -18,11 +18,27 @@ namespace fp
 
 		healthLivesText.setOutlineColor(sf::Color::Black);
 		healthLivesText.setOutlineThickness(2.f);
+
+		timerText.setFont(font);
+		timerText.setCharacterSize(24);
+		timerText.setFillColor(sf::Color::White);
+
+		timerText.setOutlineColor(sf::Color::Black);
+		timerText.setOutlineThickness(2.f);
 	}
-	void HUD::update(const Player& player)
+	void HUD::update(const Player& player, float timeLeft)
 	{
 		scoreText.setString("Score: " + std::to_string(player.getScore()));
 		healthLivesText.setString("Health: " + std::to_string(player.getHealth()) + "\nLives: " + std::to_string(player.getLives()));
+
+		int totalSeconds = static_cast<int>(timeLeft);
+
+		int minutes = totalSeconds / 60;
+		int seconds = totalSeconds % 60;
+
+		if (timeLeft <= 30) timerText.setFillColor(sf::Color::Red);
+
+		timerText.setString("Time left: " + std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds));
 	}
 	void HUD::render(sf::RenderWindow& window)
 	{
@@ -35,9 +51,18 @@ namespace fp
 
 		window.draw(scoreText);
 
-		healthLivesText.setPosition(
-			view.getCenter().x + view.getSize().x / 2.f - healthLivesText.getLocalBounds().width - 20.f,
+		timerText.setPosition(
+			view.getCenter().x + view.getSize().x / 2.f
+			- timerText.getLocalBounds().width - 20.f,
 			view.getCenter().y - view.getSize().y / 2.f + 20.f
+		);
+
+		window.draw(timerText);
+
+		healthLivesText.setPosition(
+			view.getCenter().x + view.getSize().x / 2.f
+			- healthLivesText.getLocalBounds().width - 20.f,
+			view.getCenter().y - view.getSize().y / 2.f + 60.f
 		);
 
 		window.draw(healthLivesText);

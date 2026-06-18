@@ -23,6 +23,12 @@ namespace fp
             }
         }
 
+        if (context.levelTime <= 0.f)
+        {
+            context.stateManager->changeState(StateType::GameOver);
+            return;
+        }
+
         if (!context.player->isAlive())
         {
             context.stateManager->changeState(StateType::GameOver);

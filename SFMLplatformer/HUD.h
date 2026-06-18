@@ -11,11 +11,12 @@ namespace fp
 	private:
 		sf::Text scoreText;
 		sf::Text healthLivesText;
+		sf::Text timerText;
 
 	public:
 		HUD(sf::Font& font);
 
-		void update(const Player& player);
+		void update(const Player& player, float timeLeft);
 
 		void render(sf::RenderWindow& window);
 	};

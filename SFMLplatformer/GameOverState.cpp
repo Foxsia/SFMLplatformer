@@ -23,6 +23,8 @@ namespace fp
 
 			context.game->buildMovingPlatforms();
 
+			context.game->restartLevelTimer();
+
 			context.stateManager->changeState(StateType::Play);
 		}
 

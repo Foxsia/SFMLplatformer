@@ -39,5 +39,7 @@ namespace fp
 
         bool rebuildPlatforms = false;
         std::vector<std::unique_ptr<MovingPlatform>>* platforms;
+
+        float levelTime = 0.f;
     };
 }

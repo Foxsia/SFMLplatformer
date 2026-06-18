@@ -30,6 +30,7 @@ namespace fp
 
 		void loadLevelList();
 		void buildMovingPlatforms();
+		void restartLevelTimer();
 
 		const sf::RenderWindow& getWindow() const;
 
@@ -71,6 +72,9 @@ namespace fp
 		std::size_t selectedMenuIndex = 0;
 		sf::Text menuText;
 		sf::Text titleMenuText;
+
+		sf::Clock levelTimer;
+		float levelDuration;
 	};
 }
 
