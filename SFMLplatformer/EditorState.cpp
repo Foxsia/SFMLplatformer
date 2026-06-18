@@ -43,6 +43,57 @@ namespace fp
 
             window.draw(marker);
         }
+
+        if (sf::Joystick::isConnected(0))
+        {
+            sf::RectangleShape selection;
+
+            float size = static_cast<float>(context.tileMap->getTileSize());
+
+            selection.setSize({ size, size });
+            selection.setPosition(
+                cursorX * size,
+                cursorY * size
+            );
+
+            selection.setFillColor(sf::Color(255, 255, 0, 80));
+            selection.setOutlineThickness(2.f);
+            selection.setOutlineColor(sf::Color::Yellow);
+
+            window.draw(selection);
+        }
+    }
+    void EditorState::updateGamepadCursor(float dt, GameContext& context)
+    {
+        moveCooldown -= dt;
+
+        if (moveCooldown > 0.f) return;
+
+        bool moved = false;
+
+        if (context.input->isActionPressed("MOVE_CURSOR_RIGHT"))
+        {
+            cursorX++;
+            moved = true;
+        }
+        else if (context.input->isActionPressed("MOVE_CURSOR_LEFT"))
+        {
+            cursorX--;
+            moved = true;
+        }
+
+        if (context.input->isActionPressed("MOVE_CURSOR_UP"))
+        {
+            cursorY++;
+            moved = true;
+        }
+        else if (context.input->isActionPressed("MOVE_CURSOR_DOWN"))
+        {
+            cursorY--;
+            moved = true;
+        }
+
+        if (moved) moveCooldown = 0.15f;
     }
     void EditorState::updateBrush(GameContext& context)
     {
@@ -133,11 +184,23 @@ namespace fp
         }
         else if (brush == BrushType::Enemy)
         {
-            removeEnemyAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+            float tileSize = context.tileMap->getTileSize();
+
+            sf::Vector2f pos(
+                mouseX * tileSize + tileSize / 2,
+                mouseY * tileSize + tileSize / 2
+            );
+            removeEnemyAtPosition(context, pos);
         }
         else if (brush == BrushType::LifeFruit || brush == BrushType::Goal)
         {
-            removeCollectibleAtPosition(context, window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+            float tileSize = context.tileMap->getTileSize();
+
+            sf::Vector2f pos(
+                mouseX * tileSize + tileSize / 2,
+                mouseY * tileSize + tileSize / 2
+            );
+            removeCollectibleAtPosition(context, pos);
         }
         else if (brush == BrushType::Player)
         {
@@ -185,23 +248,43 @@ namespace fp
 		handlePlayerInput(dt, context);
 		sf::RenderWindow& window = *context.window;
 
-		const sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+        int tileX;
+        int tileY;
+        for (unsigned i = 0; i < sf::Joystick::getButtonCount(0); i++)
+        {
+            if (sf::Joystick::isButtonPressed(0, i))
+            {
+                std::cout << "BUTTON: " << i << "\n";
+            }
+        }
 
-		const sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+        if (sf::Joystick::isConnected(0))
+        {
+            updateGamepadCursor(dt, context);
 
-		const int mouseX = static_cast<int>(worldPos.x) / context.tileMap->getTileSize();
+            tileX = cursorX;
+            tileY = cursorY;
+        }
+        else
+        {
+            const sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 
-		const int mouseY = static_cast<int>(worldPos.y) / context.tileMap->getTileSize();
+            const sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+
+            tileX = static_cast<int>(worldPos.x) / context.tileMap->getTileSize();
+
+            tileY = static_cast<int>(worldPos.y) / context.tileMap->getTileSize();
+        }
 
         updateBrush(context);
 
 		if (context.input->isActionPressed("ADD_ELEMENT"))
 		{
-            addElement(context, mouseX, mouseY);
+            addElement(context, tileX, tileY);
 		}
 		if (context.input->isActionPressed("REMOVE_ELEMENT"))
 		{
-            removeElement(context, mouseX, mouseY);
+            removeElement(context, tileX, tileY);
 		}
 	}
 }

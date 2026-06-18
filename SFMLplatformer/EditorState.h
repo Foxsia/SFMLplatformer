@@ -18,6 +18,13 @@ namespace fp
 			Goal
 		};
 		BrushType brush = BrushType::Tile;
+
+		int cursorX = 0;
+		int cursorY = 0;
+
+		float moveCooldown = 0.f;
+
+		void updateGamepadCursor(float dt, GameContext& context);
 		void updateBrush(GameContext& context);
 		void addElement(GameContext& context, int mouseX, int mouseY);
 		void removeElement(GameContext& context, int mouseX, int mouseY);

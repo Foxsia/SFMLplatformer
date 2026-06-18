@@ -28,6 +28,9 @@ namespace fp
 		const float JOYSTICK_THRESHOLD_LEFT = -50.f;
 		const float JOYSTICK_THRESHOLD_RIGHT = 50.f;
 
+		const float JOYSTICK_THRESHOLD_DOWN = -50.f;
+		const float JOYSTICK_THRESHOLD_UP = 50.f;
+
 		const float LEVEL_DURATION = 300.f;
 	}
 
@@ -72,7 +75,7 @@ namespace fp
 		input->bindMouse("REMOVE_ELEMENT", sf::Mouse::Right);
 
 		input->bindGamepadButton("JUMP", 0);
-		input->bindGamepadButton("PLAYER_BRUSH", 1);
+		input->bindGamepadButton("PLAYER_BRUSH", 0);
 		input->bindGamepadButton("TILE_BRUSH", 2);
 		input->bindGamepadButton("ENEMY_BRUSH", 3);
 		input->bindGamepadButton("COLLECTIBLE_BRUSH", 4);
@@ -85,10 +88,25 @@ namespace fp
 		input->bindJoystickAxis("MOVE_RIGHT",sf::Joystick::X, JOYSTICK_THRESHOLD_RIGHT);
 		input->bindJoystickAxis("MOVE_LEFT",sf::Joystick::X, JOYSTICK_THRESHOLD_LEFT);
 
+		input->bindJoystickAxis("MOVE_CURSOR_LEFT",sf::Joystick::Z, JOYSTICK_THRESHOLD_LEFT);
+		input->bindJoystickAxis("MOVE_CURSOR_RIGHT",sf::Joystick::Z, JOYSTICK_THRESHOLD_RIGHT);
+		input->bindJoystickAxis("MOVE_CURSOR_UP", sf::Joystick::R, JOYSTICK_THRESHOLD_UP);
+		input->bindJoystickAxis("MOVE_CURSOR_DOWN", sf::Joystick::R, JOYSTICK_THRESHOLD_DOWN);
+
 		input->bindKey("MENU_UP", sf::Keyboard::Up);
 		input->bindKey("MENU_DOWN", sf::Keyboard::Down);
 		input->bindKey("MENU_SELECT", sf::Keyboard::Enter);
 		input->bindKey("MENU_BACK", sf::Keyboard::M);
+
+		input->bindKey("SAVE", sf::Keyboard::F2);
+		input->bindKey("CANCEL", sf::Keyboard::C);
+		input->bindKey("BACK", sf::Keyboard::BackSpace);
+		input->bindKey("CONFIRM_SAVE", sf::Keyboard::Enter);
+
+		input->bindGamepadButton("SAVE", 10);
+		input->bindGamepadButton("CANCEL", 11);
+		input->bindGamepadButton("BACK", 9);
+		input->bindGamepadButton("CONFIRM_SAVE", 0);
 
 		input->bindJoystickAxis("MENU_UP", sf::Joystick::PovY, JOYSTICK_THRESHOLD_RIGHT);
 		input->bindJoystickAxis("MENU_DOWN", sf::Joystick::PovY, JOYSTICK_THRESHOLD_LEFT);
@@ -178,36 +196,34 @@ namespace fp
 		{
 			if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window.close();
 
-			if (event.type == sf::Event::KeyPressed)
+			if (input.get()->isActionPressed("SAVE"))
 			{
-				if (event.key.code == sf::Keyboard::F2)
-				{
-					if (!tileMap->hasSpawn())
-					{
-						typingFileName = false;
-						return;
-					}
-					typingFileName = true;
-					fileNameInput.clear();
-				}
-				if (typingFileName && event.key.code == sf::Keyboard::C)
+				if (!tileMap->hasSpawn())
 				{
 					typingFileName = false;
-					fileNameInput.clear();
+					return;
 				}
-				if (typingFileName && event.key.code == sf::Keyboard::Enter)
-				{
-					tileMap->saveToFile("levels/" + fileNameInput + ".txt", toRaw(enemies), toRaw(collectibles));
-
-					loadLevelList();
-
-					typingFileName = false;
-				}
-				if (typingFileName && event.key.code == sf::Keyboard::BackSpace)
-				{
-					if (!fileNameInput.empty()) fileNameInput.pop_back();
-				}
+				typingFileName = true;
+				fileNameInput.clear();
 			}
+			if (typingFileName && input.get()->isActionPressed("CANCEL"))
+			{
+				typingFileName = false;
+				fileNameInput.clear();
+			}
+			if (typingFileName && input.get()->isActionPressed("CONFIRM_SAVE"))
+			{
+				tileMap->saveToFile("levels/" + fileNameInput + ".txt", toRaw(enemies), toRaw(collectibles));
+
+				loadLevelList();
+
+				typingFileName = false;
+			}
+			if (typingFileName && input.get()->isActionPressed("BACK"))
+			{
+				if (!fileNameInput.empty()) fileNameInput.pop_back();
+			}
+
 			if (input->isActionPressed("MENU_BACK"))
 			{
 				tileMap->clear();
