@@ -26,7 +26,7 @@ namespace fp
 		void addScore(int points);
 		int getScore() const { return score; };
 
-		void enableFirePower() { firePower = true; }
+		void setFirePower(const bool isFire) { firePower = isFire; }
 		bool hasFirePower() const { return firePower; }
 		bool isFacingRight() const { return facingRight; }
 

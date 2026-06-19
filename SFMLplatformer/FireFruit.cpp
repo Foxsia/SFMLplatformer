@@ -15,7 +15,7 @@ namespace fp
 	}
 	void FireFruit::onCollect(Player& player)
 	{
-		player.enableFirePower();
+		player.setFirePower(true);
 		player.addScore(SCORE_COLLECTIBLE);
 
 		collected = true;

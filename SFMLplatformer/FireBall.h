@@ -14,7 +14,14 @@ namespace fp
 
 		sf::FloatRect getBounds() const;
 
+		sf::Vector2f getVelocity() const { return velocity; }
+
+		void setVelocityY(float y);
+		void setPosition(float x, float y);
+
 		void destroy() { alive = false; }
+
+		void bounce();
 
 		bool isAlive() const { return alive; }
 

@@ -68,6 +68,7 @@ namespace fp
 		CollisionSystem::resolvePlayerEnemyCollision(*context.player, *context.enemies);
 		CollisionSystem::resolvePlayerCollectibleCollision(*context.player, *context.collectibles);
 		CollisionSystem::resolveEnemyFireballCollision(*context.fireballs, *context.enemies);
+		CollisionSystem::resolveFireballTileCollision(*context.fireballs, *context.tileMap);
 	}
 
 	void WorldState::handleInput(float dt, GameContext& context)

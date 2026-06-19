@@ -143,6 +143,50 @@ namespace fp
 		}
 	}
 
+	void CollisionSystem::resolveFireballTileCollision(std::vector<std::unique_ptr<FireBall>>& fireballs, TileMap& map)
+	{
+		const int TILE_SIZE = map.getTileSize();
+
+		for (auto& fireball : fireballs)
+		{
+			sf::FloatRect bounds = fireball->getBounds();
+
+			int leftTile = static_cast<int>(bounds.left / TILE_SIZE);
+			int rightTile = static_cast<int>(bounds.left + bounds.width / TILE_SIZE);
+			int topTile = static_cast<int>(bounds.top / TILE_SIZE);
+			int bottomTile = static_cast<int>(bounds.top + bounds.height / TILE_SIZE);
+
+			for (int x = leftTile; x <= rightTile; x++)
+			{
+				for (int y = topTile; y <= bottomTile; y++)
+				{
+					Tile* tile = map.getTile(x, y);
+					if (!tile) continue;
+
+					const sf::FloatRect tileBounds = tile->getHitbox();
+
+					if (!bounds.intersects(tileBounds)) continue;
+
+					float fireballBottom = bounds.top + bounds.height;
+
+					if (fireball->getVelocity().y > 0 && fireballBottom <= tileBounds.top + COLLISION_TOLERANCE)
+					{
+						fireball->setPosition(
+							bounds.left,
+							tileBounds.top - bounds.height
+						);
+
+						fireball->bounce();
+					}
+					else
+					{
+						fireball->destroy();
+					}
+				}
+			}
+		}
+	}
+
 	void CollisionSystem::resolvePlayerEnemyCollision(Player& player, std::vector < std::unique_ptr<Enemy>>& enemies)
 	{
 		sf::FloatRect playerBounds = player.getHitbox();
@@ -182,6 +226,7 @@ namespace fp
 			}
 
 			player.takeDamage(1);
+			if (player.hasFirePower()) player.setFirePower(false);
 
 			if (player.getHealth() <= 0)
 			{
