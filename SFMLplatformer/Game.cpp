@@ -219,9 +219,16 @@ namespace fp
 
 				typingFileName = false;
 			}
-			if (typingFileName && input.get()->isActionPressed("BACK"))
+			static sf::Clock backspaceClock;
+
+			if (typingFileName &&
+				input->isActionPressed("BACK") &&
+				backspaceClock.getElapsedTime().asMilliseconds() > 150)
 			{
-				if (!fileNameInput.empty()) fileNameInput.pop_back();
+				backspaceClock.restart();
+
+				if (!fileNameInput.empty())
+					fileNameInput.pop_back();
 			}
 
 			if (input->isActionPressed("MENU_BACK"))
