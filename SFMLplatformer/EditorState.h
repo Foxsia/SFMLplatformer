@@ -1,5 +1,7 @@
 #pragma once
 #include "WorldState.h"
+#include "BrushType.h"
+#include "EditorHUD.h"
 
 namespace fp
 {
@@ -8,16 +10,7 @@ namespace fp
 	public:
 		void render(sf::RenderWindow& window, GameContext& context) override;
 	private:
-		enum class BrushType
-		{
-			Tile,
-			MovingTile,
-			Enemy,
-			Player,
-			LifeFruit,
-			FireFruit,
-			Goal
-		};
+		EditorHUD hud;
 		BrushType brush = BrushType::Tile;
 
 		int cursorX = 0;
@@ -26,7 +19,7 @@ namespace fp
 		float moveCooldown = 0.f;
 
 		void updateGamepadCursor(float dt, GameContext& context);
-		void updateBrush(GameContext& context);
+		void updateBrush(float dt, GameContext& context);
 		void addElement(GameContext& context, int mouseX, int mouseY);
 		void removeElement(GameContext& context, int mouseX, int mouseY);
 		void removeEnemyAtPosition(GameContext& context, const sf::Vector2f& pos);

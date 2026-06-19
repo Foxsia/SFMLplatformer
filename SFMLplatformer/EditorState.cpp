@@ -10,24 +10,13 @@ namespace fp
 {
     namespace
     {
-        const unsigned HELP_TEXT_SIZE = 15;
-        const float HELP_TEXT_X = 10.f;
-        const float HELP_TEXT_Y = 10.f;
+        const int BRUSHES_AMOUNT = static_cast<int>(BrushType::Count);
     }
 
     void EditorState::render(sf::RenderWindow& window, GameContext& context)
     {
         window.setView(*context.camera);
         WorldState::render(window, context);
-
-        sf::Text editorHelp;
-        editorHelp.setFont(*context.font);
-        editorHelp.setCharacterSize(HELP_TEXT_SIZE);
-        editorHelp.setFillColor(sf::Color::White);
-        editorHelp.setPosition(HELP_TEXT_X, HELP_TEXT_Y);
-
-        editorHelp.setString("Press F2 to save and Enter to proceed or C to cancel\nPress M to open menu\nPLAYER SPAWN POINT IS REQUIRED!");
-        window.draw(editorHelp);
 
         if (context.tileMap->hasSpawn())
         {
@@ -62,6 +51,12 @@ namespace fp
 
             window.draw(selection);
         }
+        hud.render(
+            window,
+            *context.camera,
+            *context.font,
+            brush
+        );
     }
     void EditorState::updateGamepadCursor(float dt, GameContext& context)
     {
@@ -95,21 +90,29 @@ namespace fp
 
         if (moved) moveCooldown = 0.15f;
     }
-    void EditorState::updateBrush(GameContext& context)
+    void EditorState::updateBrush(float dt, GameContext& context)
     {
-        if (context.input->isActionPressed("TILE_BRUSH")) brush = BrushType::Tile;
+        static float cooldown = 0.f;
+        cooldown -= dt;
 
-        if (context.input->isActionPressed("ENEMY_BRUSH")) brush = BrushType::Enemy;
+        if (cooldown > 0.f) return;
 
-        if (context.input->isActionPressed("PLAYER_BRUSH")) brush = BrushType::Player;
+        if (context.input->isActionPressed("NEXT_BRUSH"))
+        {
+            brush = static_cast<BrushType>((static_cast<int>(brush) + 1) % BRUSHES_AMOUNT);
+            cooldown = 0.2f;
+        }
 
-        if (context.input->isActionPressed("LIFE_BRUSH")) brush = BrushType::LifeFruit;
+        if (context.input->isActionPressed("PREV_BRUSH"))
+        {
+            int value = static_cast<int>(brush) - 1;
 
-        if (context.input->isActionPressed("FIRE_BRUSH")) brush = BrushType::FireFruit;
+            if (value < 0) value = BRUSHES_AMOUNT - 1;
 
-        if (context.input->isActionPressed("GOAL_BRUSH")) brush = BrushType::Goal;
+            brush = static_cast<BrushType>(value);
 
-        if (context.input->isActionPressed("MOVING_TILE_BRUSH")) brush = BrushType::MovingTile;
+            cooldown = 0.2f;
+        }
     }
     void EditorState::addElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -266,15 +269,41 @@ namespace fp
 		handlePlayerInput(dt, context);
 		sf::RenderWindow& window = *context.window;
 
+        if (context.input->isActionPressed("SAVE"))
+        {
+            if (!context.tileMap->hasSpawn())
+            {
+                context.game->setTypingFileName(false);
+                return;
+            }
+            context.game->setTypingFileName(true);
+        }
+        if (context.game->getTypingFileName() && context.input->isActionPressed("CANCEL"))
+        {
+            context.game->setTypingFileName(false);
+        }
+        if (context.game->getTypingFileName() && context.input->isActionPressed("CONFIRM_SAVE"))
+        {
+            context.game->saveLevel();
+
+            context.game->loadLevelList();
+
+            context.game->setTypingFileName(false);
+        }
+        static sf::Clock backspaceClock;
+
+        if (context.game->getTypingFileName() &&
+            context.input->isActionPressed("BACK") &&
+            backspaceClock.getElapsedTime().asMilliseconds() > 150)
+        {
+            backspaceClock.restart();
+
+            if (!context.game->getFileNameInput().empty())
+                context.game->getFileNameInput().pop_back();
+        }
+
         int tileX;
         int tileY;
-        for (unsigned i = 0; i < sf::Joystick::getButtonCount(0); i++)
-        {
-            if (sf::Joystick::isButtonPressed(0, i))
-            {
-                std::cout << "BUTTON: " << i << "\n";
-            }
-        }
 
         if (sf::Joystick::isConnected(0))
         {
@@ -294,7 +323,7 @@ namespace fp
             tileY = static_cast<int>(worldPos.y) / context.tileMap->getTileSize();
         }
 
-        updateBrush(context);
+        updateBrush(dt, context);
 
 		if (context.input->isActionPressed("ADD_ELEMENT"))
 		{

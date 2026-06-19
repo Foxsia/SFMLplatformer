@@ -34,6 +34,10 @@ namespace fp
 		void buildMovingPlatforms();
 		void restartLevelTimer();
 
+		void setTypingFileName(bool isTyping);
+		const bool getTypingFileName() { return typingFileName; };
+		std::string& getFileNameInput() { return fileNameInput; };
+		void saveLevel();
 		const sf::RenderWindow& getWindow() const;
 
 	private:

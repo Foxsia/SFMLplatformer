@@ -64,24 +64,16 @@ namespace fp
 		input->bindKey("MOVE_RIGHT", sf::Keyboard::D);
 		input->bindKey("JUMP", sf::Keyboard::Space);
 
-		input->bindKey("PLAYER_BRUSH", sf::Keyboard::Num1);
-		input->bindKey("TILE_BRUSH", sf::Keyboard::Num2);
-		input->bindKey("ENEMY_BRUSH", sf::Keyboard::Num3);
-		input->bindKey("LIFE_BRUSH", sf::Keyboard::Num4);
-		input->bindKey("MOVING_TILE_BRUSH", sf::Keyboard::Num5);
-		input->bindKey("GOAL_BRUSH", sf::Keyboard::Num6);
-		input->bindKey("FIRE_BRUSH", sf::Keyboard::Num7);
-
 		input->bindMouse("ADD_ELEMENT", sf::Mouse::Left);
 		input->bindMouse("REMOVE_ELEMENT", sf::Mouse::Right);
 
 		input->bindGamepadButton("JUMP", 0);
-		input->bindGamepadButton("PLAYER_BRUSH", 0);
-		input->bindGamepadButton("TILE_BRUSH", 2);
-		input->bindGamepadButton("ENEMY_BRUSH", 3);
-		input->bindGamepadButton("LIFE_BRUSH", 4);
-		input->bindGamepadButton("MOVING_TILE_BRUSH", 5);
-		input->bindGamepadButton("GOAL_BRUSH", 8);
+
+		input->bindGamepadButton("PREV_BRUSH", 4);
+		input->bindGamepadButton("NEXT_BRUSH", 5);
+
+		input->bindKey("PREV_BRUSH", sf::Keyboard::Q);
+		input->bindKey("NEXT_BRUSH", sf::Keyboard::E);
 
 		input->bindGamepadButton("ADD_ELEMENT", 7); 
 		input->bindGamepadButton("REMOVE_ELEMENT", 6);
@@ -105,9 +97,9 @@ namespace fp
 		input->bindKey("CONFIRM_SAVE", sf::Keyboard::Enter);
 
 		input->bindGamepadButton("SAVE", 10);
-		input->bindGamepadButton("CANCEL", 11);
-		input->bindGamepadButton("BACK", 9);
-		input->bindGamepadButton("CONFIRM_SAVE", 0);
+		input->bindGamepadButton("CANCEL", 2);
+		input->bindGamepadButton("BACK", 3);
+		input->bindGamepadButton("CONFIRM_SAVE", 11);
 
 		input->bindJoystickAxis("MENU_UP", sf::Joystick::PovY, JOYSTICK_THRESHOLD_RIGHT);
 		input->bindJoystickAxis("MENU_DOWN", sf::Joystick::PovY, JOYSTICK_THRESHOLD_LEFT);
@@ -175,6 +167,19 @@ namespace fp
 		levelTimer.restart();
 	}
 
+	void Game::setTypingFileName(bool isTyping)
+	{
+		typingFileName = isTyping;
+		fileNameInput.clear();
+	}
+
+	void Game::saveLevel()
+	{
+		tileMap->saveToFile("levels/" + fileNameInput + ".txt",
+			toRaw(enemies),
+			toRaw(collectibles));
+	}
+
 	Game::Game()
 		: deltaTime(0.f), levelDuration(LEVEL_DURATION)
 	{
@@ -200,41 +205,6 @@ namespace fp
 		{
 			if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window.close();
 
-			if (input.get()->isActionPressed("SAVE"))
-			{
-				if (!tileMap->hasSpawn())
-				{
-					typingFileName = false;
-					return;
-				}
-				typingFileName = true;
-				fileNameInput.clear();
-			}
-			if (typingFileName && input.get()->isActionPressed("CANCEL"))
-			{
-				typingFileName = false;
-				fileNameInput.clear();
-			}
-			if (typingFileName && input.get()->isActionPressed("CONFIRM_SAVE"))
-			{
-				tileMap->saveToFile("levels/" + fileNameInput + ".txt", toRaw(enemies), toRaw(collectibles));
-
-				loadLevelList();
-
-				typingFileName = false;
-			}
-			static sf::Clock backspaceClock;
-
-			if (typingFileName &&
-				input->isActionPressed("BACK") &&
-				backspaceClock.getElapsedTime().asMilliseconds() > 150)
-			{
-				backspaceClock.restart();
-
-				if (!fileNameInput.empty())
-					fileNameInput.pop_back();
-			}
-
 			if (input->isActionPressed("MENU_BACK"))
 			{
 				tileMap->clear();
@@ -245,6 +215,7 @@ namespace fp
 
 				stateManager.changeState(StateType::Menu);
 			}
+
 			if (typingFileName && event.type == sf::Event::TextEntered)
 			{
 				if (event.text.unicode < 128)

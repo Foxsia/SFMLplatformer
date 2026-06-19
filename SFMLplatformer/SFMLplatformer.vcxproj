@@ -139,6 +139,7 @@
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="Collectible.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="EditorHUD.cpp" />
     <ClCompile Include="EditorState.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -169,9 +170,11 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="BrushType.h" />
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="Collectible.h" />
     <ClInclude Include="CollisionSystem.h" />
+    <ClInclude Include="EditorHUD.h" />
     <ClInclude Include="EditorState.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
