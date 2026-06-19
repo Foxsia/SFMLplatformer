@@ -67,9 +67,10 @@ namespace fp
 		input->bindKey("PLAYER_BRUSH", sf::Keyboard::Num1);
 		input->bindKey("TILE_BRUSH", sf::Keyboard::Num2);
 		input->bindKey("ENEMY_BRUSH", sf::Keyboard::Num3);
-		input->bindKey("COLLECTIBLE_BRUSH", sf::Keyboard::Num4);
+		input->bindKey("LIFE_BRUSH", sf::Keyboard::Num4);
 		input->bindKey("MOVING_TILE_BRUSH", sf::Keyboard::Num5);
 		input->bindKey("GOAL_BRUSH", sf::Keyboard::Num6);
+		input->bindKey("FIRE_BRUSH", sf::Keyboard::Num7);
 
 		input->bindMouse("ADD_ELEMENT", sf::Mouse::Left);
 		input->bindMouse("REMOVE_ELEMENT", sf::Mouse::Right);
@@ -78,7 +79,7 @@ namespace fp
 		input->bindGamepadButton("PLAYER_BRUSH", 0);
 		input->bindGamepadButton("TILE_BRUSH", 2);
 		input->bindGamepadButton("ENEMY_BRUSH", 3);
-		input->bindGamepadButton("COLLECTIBLE_BRUSH", 4);
+		input->bindGamepadButton("LIFE_BRUSH", 4);
 		input->bindGamepadButton("MOVING_TILE_BRUSH", 5);
 		input->bindGamepadButton("GOAL_BRUSH", 8);
 
@@ -117,6 +118,9 @@ namespace fp
 		input->bindGamepadButton("MENU_SELECT", 0);
 
 		input->bindGamepadButton("MENU_BACK", 1);
+
+		input->bindKey("SHOOT", sf::Keyboard::F);
+		input->bindGamepadButton("SHOOT", 2);
 	}
 
 	void Game::initTileSheet()
@@ -265,6 +269,7 @@ namespace fp
 		context.player = player.get();
 		context.enemies = &enemies;
 		context.collectibles = &collectibles;
+		context.fireballs = &fireballs;
 
 		context.selectedMenuIndex = &selectedMenuIndex;
 		context.levelFiles = &levelFiles;
@@ -308,6 +313,7 @@ namespace fp
 		context.player = player.get();
 		context.enemies = &enemies;
 		context.collectibles = &collectibles;
+		context.fireballs = &fireballs;
 
 		context.selectedMenuIndex = &selectedMenuIndex;
 		context.levelFiles = &levelFiles;

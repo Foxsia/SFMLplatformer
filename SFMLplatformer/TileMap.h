@@ -2,6 +2,7 @@
 #include "Tile.h"
 #include "Enemy.h"
 #include "LifeFruit.h"
+#include "FireFruit.h"
 #include "Goal.h"
 #include <vector>
 #include <memory>

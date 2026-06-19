@@ -6,9 +6,15 @@
 #include "CollisionSystem.h"
 #include "CameraController.h"
 #include "Enemy.h"
+#include "FireBall.h"
 
 namespace fp
 {
+	namespace
+	{
+		const int SHOOT_COOLDOWN = 300;
+		const float FIREBALL_SPAWN_OFFSET_Y = 40.f;
+	}
 	void WorldState::update(float dt, GameContext& context)
 	{
 		handleInput(dt, context);
@@ -19,6 +25,16 @@ namespace fp
 			{
 				platform->update(dt);
 			}
+		}
+
+		for (auto& fireball : *context.fireballs)
+		{
+			fireball->update(dt);
+		}
+
+		for (auto it = context.fireballs->begin(); it != context.fireballs->end(); )
+		{
+			!(*it)->isAlive() ? it = context.fireballs->erase(it) : ++it;
 		}
 
 		if (!context.isEditor) updatePlayer(dt, context);
@@ -51,6 +67,7 @@ namespace fp
 
 		CollisionSystem::resolvePlayerEnemyCollision(*context.player, *context.enemies);
 		CollisionSystem::resolvePlayerCollectibleCollision(*context.player, *context.collectibles);
+		CollisionSystem::resolveEnemyFireballCollision(*context.fireballs, *context.enemies);
 	}
 
 	void WorldState::handleInput(float dt, GameContext& context)
@@ -69,6 +86,11 @@ namespace fp
 		}
 
 		context.tileMap->render(window);
+
+		for (auto& fireball : *context.fireballs)
+		{
+			fireball->render(window);
+		}
 
 		for (auto& collectible : *context.collectibles)
 		{
@@ -120,6 +142,22 @@ namespace fp
 		if (context.input->isActionPressed("JUMP") && player->getCanJump())
 		{
 			player->jump();
+		}
+
+		if (player->hasFirePower() && context.input->isActionPressed("SHOOT") && fireClock.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN)
+		{
+			fireClock.restart();
+
+			sf::Vector2f pos = player->getPosition();
+
+			pos.y += FIREBALL_SPAWN_OFFSET_Y;
+
+			context.fireballs->push_back(
+				std::make_unique<FireBall>(
+					pos,
+					player->isFacingRight()
+				)
+			);
 		}
 	}
 }

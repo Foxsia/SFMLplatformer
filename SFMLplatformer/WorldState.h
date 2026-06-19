@@ -19,5 +19,7 @@ namespace fp
 		void update( float dt, GameContext& context) override;
 		virtual void handleInput(float dt, GameContext& context);
 		void render(sf::RenderWindow& window, GameContext& context) override;
+
+		sf::Clock fireClock;
 	};
 }

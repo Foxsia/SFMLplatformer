@@ -3,6 +3,7 @@
 #include "TileMap.h"
 #include "Enemy.h"
 #include "LifeFruit.h"
+#include "FireFruit.h"
 #include "Game.h"
 
 #include <fstream>
@@ -50,24 +51,22 @@ namespace fp
 
                 file >> value;
 
-                if (value == 1)
+                switch (value)
                 {
+                case 1:
                     tileMap.addTile(x, y);
-                }
-
-                if (value == 2)
+                    break;
+                case 2:
                 {
                     auto enemy = std::make_unique<Enemy>();
-
                     enemy->setPosition(
                         x * tileMap.getTileSize(),
                         y * tileMap.getTileSize()
                     );
-
                     enemies.push_back(std::move(enemy));
+                    break;
                 }
-
-                if (value == 3)
+                case 3:
                 {
                     auto lifeFruit = std::make_unique<LifeFruit>();
 
@@ -77,14 +76,12 @@ namespace fp
                     );
 
                     collectibles.push_back(std::move(lifeFruit));
+                    break;
                 }
-
-                if (value == 4)
-                {
+                case 4:
                     tileMap.addMovingTile(x, y);
-                }
-
-                if (value == 5)
+                    break;
+                case 5:
                 {
                     auto goal = std::make_unique<Goal>();
 
@@ -94,6 +91,22 @@ namespace fp
                     );
 
                     collectibles.push_back(std::move(goal));
+                    break;
+                }
+                case 6:
+                {
+                    auto fireFruit = std::make_unique<FireFruit>();
+
+                    fireFruit->setPosition(
+                        x * tileMap.getTileSize(),
+                        y * tileMap.getTileSize()
+                    );
+
+                    collectibles.push_back(std::move(fireFruit));
+                    break;
+                }
+                default:
+                    break;
                 }
             }
         }

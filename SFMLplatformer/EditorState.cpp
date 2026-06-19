@@ -103,7 +103,9 @@ namespace fp
 
         if (context.input->isActionPressed("PLAYER_BRUSH")) brush = BrushType::Player;
 
-        if (context.input->isActionPressed("COLLECTIBLE_BRUSH")) brush = BrushType::LifeFruit;
+        if (context.input->isActionPressed("LIFE_BRUSH")) brush = BrushType::LifeFruit;
+
+        if (context.input->isActionPressed("FIRE_BRUSH")) brush = BrushType::FireFruit;
 
         if (context.input->isActionPressed("GOAL_BRUSH")) brush = BrushType::Goal;
 
@@ -173,6 +175,22 @@ namespace fp
 
             context.collectibles->push_back(std::move(goal));
         }
+        else if (brush == BrushType::FireFruit)
+        {
+            auto fireFruit = std::make_unique<FireFruit>();
+
+            const float tileSize = static_cast<float>(context.tileMap->getTileSize());
+
+            const float collectibleWidth = fireFruit->getGlobalBounds().width;
+            const float collectibleHeight = fireFruit->getGlobalBounds().height;
+
+            fireFruit->setPosition(
+                mouseX * tileSize + (tileSize - collectibleWidth) / 2.f,
+                mouseY * tileSize + (tileSize - collectibleHeight)
+            );
+
+            context.collectibles->push_back(std::move(fireFruit));
+        }
     }
     void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -192,7 +210,7 @@ namespace fp
             );
             removeEnemyAtPosition(context, pos);
         }
-        else if (brush == BrushType::LifeFruit || brush == BrushType::Goal)
+        else if (brush == BrushType::LifeFruit || brush == BrushType::Goal || brush == BrushType::FireFruit)
         {
             float tileSize = context.tileMap->getTileSize();
 

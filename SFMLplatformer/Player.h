@@ -26,6 +26,10 @@ namespace fp
 		void addScore(int points);
 		int getScore() const { return score; };
 
+		void enableFirePower() { firePower = true; }
+		bool hasFirePower() const { return firePower; }
+		bool isFacingRight() const { return facingRight; }
+
 		void setPosition(const float x, const float y);
 		void resetVelocityY();
 		void resetVelocityX();
@@ -60,6 +64,9 @@ namespace fp
 		bool canJump;
 
 		int score = 0;
+
+		bool firePower = false;
+		bool facingRight = true;
 	};
 }
 

@@ -190,6 +190,28 @@ namespace fp
 		}
 	}
 
+	void CollisionSystem::resolveEnemyFireballCollision(std::vector<std::unique_ptr<FireBall>>& fireballs, std::vector<std::unique_ptr<Enemy>>& enemies)
+	{
+		for (auto& fireball : fireballs)
+		{
+			if (!fireball->isAlive()) continue;
+
+			for (auto& enemy : enemies)
+			{
+				if (!enemy->isAlive()) continue;
+
+				if (fireball->getBounds().intersects(enemy->getHitbox()))
+				{
+					enemy->takeDamage(1);
+
+					fireball->destroy();
+
+					break;
+				}
+			}
+		}
+	}
+
 	void CollisionSystem::resolvePlayerCollectibleCollision(Player& player, std::vector < std::unique_ptr<Collectible>>& collectibles)
 	{
 		for (auto& collectible : collectibles)

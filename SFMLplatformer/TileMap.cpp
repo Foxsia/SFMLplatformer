@@ -188,6 +188,10 @@ namespace fp
 						{
 							value = 5;
 						}
+						else if (dynamic_cast<FireFruit*>(collectible))
+						{
+							value = 6;
+						}
 					}
 				}
 

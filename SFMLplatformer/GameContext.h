@@ -13,6 +13,7 @@ namespace fp
     class Game;
     class MovingPlatform;
     class StateManager;
+    class FireBall;
 
     struct GameContext
     {
@@ -27,6 +28,7 @@ namespace fp
 
         std::vector<std::unique_ptr<Enemy>>* enemies = nullptr;
         std::vector< std::unique_ptr<Collectible>>* collectibles = nullptr;
+        std::vector< std::unique_ptr<FireBall>>* fireballs = nullptr;
 
         size_t* selectedMenuIndex = nullptr;
         std::vector<std::string>* levelFiles = nullptr;

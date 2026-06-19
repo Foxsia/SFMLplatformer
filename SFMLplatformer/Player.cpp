@@ -184,6 +184,9 @@ namespace fp
 		{
 			animState = IDLE;
 		}
+
+		if (movementComponent->getVelocity().x > 0.f) facingRight = true;
+		if (movementComponent->getVelocity().x < 0.f) facingRight = false;
 	}
 
 	void Player::updateAnimation(float dt)

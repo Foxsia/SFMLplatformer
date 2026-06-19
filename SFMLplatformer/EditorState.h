@@ -15,6 +15,7 @@ namespace fp
 			Enemy,
 			Player,
 			LifeFruit,
+			FireFruit,
 			Goal
 		};
 		BrushType brush = BrushType::Tile;

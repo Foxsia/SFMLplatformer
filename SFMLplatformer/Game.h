@@ -10,6 +10,8 @@
 #include "InputManager.h"
 #include "Enemy.h"
 #include "LifeFruit.h"
+#include "FireFruit.h"
+#include "FireBall.h"
 #include "Goal.h"
 #include "MovingPlatform.h"
 #include "StateManager.h"
@@ -56,6 +58,7 @@ namespace fp
 
 		std::vector<std::unique_ptr<Enemy>> enemies;
 		std::vector<std::unique_ptr<Collectible>> collectibles;
+		std::vector<std::unique_ptr<FireBall>> fireballs;
 		std::vector<std::unique_ptr<MovingPlatform>> movingPlatforms;
 
 		std::unique_ptr<InputManager> input;
