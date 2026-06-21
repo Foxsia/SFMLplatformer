@@ -204,6 +204,7 @@ namespace fp
 		updateAnimation(dt);
 
 		if (damageCooldown > 0.f) damageCooldown -= dt;
+		if (portalCooldown > 0.f) portalCooldown -= dt;
 	}
 
 	void Player::render(sf::RenderTarget& target)

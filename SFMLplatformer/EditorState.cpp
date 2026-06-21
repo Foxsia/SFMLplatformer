@@ -3,6 +3,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Collectible.h"
+#include "Portal.h"
 #include "Game.h"
 #include <memory>
 
@@ -194,6 +195,39 @@ namespace fp
 
             context.collectibles->push_back(std::move(fireFruit));
         }
+        else if (brush == BrushType::Portal)
+        {
+            auto portal = std::make_unique<Portal>(nextPortalPairId);
+
+            const float tileSize = static_cast<float>(context.tileMap->getTileSize());
+
+            const float collectibleWidth = portal->getGlobalBounds().width;
+            const float collectibleHeight = portal->getGlobalBounds().height;
+
+            portal->setPosition(
+                mouseX * tileSize + (tileSize - collectibleWidth) / 2.f,
+                mouseY * tileSize + (tileSize - collectibleHeight)
+            );
+
+            Portal* portalPtr = portal.get();
+
+            context.collectibles->push_back(std::move(portal));
+
+            if (pendingPortal == nullptr)
+            {
+                pendingPortal = portalPtr;
+            }
+            else
+            {
+                pendingPortal->setLinkedPortal(portalPtr);
+
+                portalPtr->setLinkedPortal(pendingPortal);
+
+                pendingPortal = nullptr;
+
+                nextPortalPairId++;
+            }
+        }
     }
     void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -213,7 +247,7 @@ namespace fp
             );
             removeEnemyAtPosition(context, pos);
         }
-        else if (brush == BrushType::LifeFruit || brush == BrushType::Goal || brush == BrushType::FireFruit)
+        else if (brush == BrushType::LifeFruit || brush == BrushType::Goal || brush == BrushType::FireFruit || brush == BrushType::Portal)
         {
             float tileSize = context.tileMap->getTileSize();
 
@@ -268,6 +302,7 @@ namespace fp
 	{
 		handlePlayerInput(dt, context);
 		sf::RenderWindow& window = *context.window;
+        placeCooldown -= dt;
 
         if (context.input->isActionPressed("SAVE"))
         {
@@ -325,9 +360,11 @@ namespace fp
 
         updateBrush(dt, context);
 
-		if (context.input->isActionPressed("ADD_ELEMENT"))
+		if (context.input->isActionPressed("ADD_ELEMENT") &&
+            placeCooldown <= 0.f)
 		{
             addElement(context, tileX, tileY);
+            placeCooldown = 0.15f;
 		}
 		if (context.input->isActionPressed("REMOVE_ELEMENT"))
 		{

@@ -205,7 +205,7 @@ namespace fp
 		{
 			if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window.close();
 
-			if (input->isActionPressed("MENU_BACK"))
+			if (input->isActionPressed("MENU_BACK") && !typingFileName)
 			{
 				tileMap->clear();
 

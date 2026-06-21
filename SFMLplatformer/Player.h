@@ -20,6 +20,9 @@ namespace fp
 		const sf::FloatRect getHitbox() const;
 		const sf::Vector2f& getVelocity() const;
 
+		const float getPortalCooldown() const { return portalCooldown; };
+		void setPortalCooldown(const float coolDown)  { portalCooldown = coolDown; };
+
 		inline const bool& getCanJump() const { return canJump; }
 		inline void setCanJump(const bool canJump) { this->canJump = canJump; }
 
@@ -67,6 +70,8 @@ namespace fp
 
 		bool firePower = false;
 		bool facingRight = true;
+
+		float portalCooldown = 0.f;
 	};
 }
 

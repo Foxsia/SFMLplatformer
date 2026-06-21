@@ -137,6 +137,11 @@ namespace fp
             brushSprite.setTextureRect(sf::IntRect(128, 0, 32, 32));
             brushSprite.setScale(1.f, 1.f);
             break;
+        case BrushType::Portal:
+            brushSprite.setTexture(tileTexture, true);
+            brushSprite.setTextureRect(sf::IntRect(0, 320, 32, 32));
+            brushSprite.setScale(1.f, 1.f);
+            break;
         }
         brushSprite.setPosition(pos.x + 110.f, pos.y + 70.f);
 
@@ -154,6 +159,7 @@ namespace fp
             case BrushType::FireFruit: return "Fire";
             case BrushType::Goal: return "Goal";
             case BrushType::MovingTile: return "Moving";
+            case BrushType::Portal: return "Portal";
             default: return "Unknown";
         }
 	}

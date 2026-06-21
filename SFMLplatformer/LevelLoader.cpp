@@ -1,11 +1,12 @@
 #include "LevelLoader.h"
-
+#include "Portal.h"
 #include "TileMap.h"
 #include "Enemy.h"
 #include "LifeFruit.h"
 #include "FireFruit.h"
 #include "Game.h"
 
+#include <unordered_map>
 #include <fstream>
 
 namespace fp
@@ -34,6 +35,8 @@ namespace fp
         enemies.clear();
 
         collectibles.clear();
+
+        std::unordered_map<int, std::vector<Portal*>> portalGroups;
 
         for (unsigned x = 0; x < tileMap.getWidth(); x++)
         {
@@ -108,6 +111,46 @@ namespace fp
                 default:
                     break;
                 }
+            }
+        }
+
+        std::string token;
+        file >> token;
+
+        if (token == "PORTALS")
+        {
+            int count;
+            file >> count;
+
+            for (int i = 0; i < count; i++)
+            {
+                int x;
+                int y;
+                int pairId;
+
+                file >> x >> y >> pairId;
+
+                auto portal = std::make_unique<Portal>(pairId);
+
+                portal->setPosition(
+                    x * tileMap.getTileSize(),
+                    y * tileMap.getTileSize()
+                );
+
+                Portal* ptr = portal.get();
+
+                collectibles.push_back(std::move(portal));
+
+                portalGroups[pairId].push_back(ptr);
+            }
+        }
+
+        for (auto& [id, portals] : portalGroups)
+        {
+            if (portals.size() == 2)
+            {
+                portals[0]->setLinkedPortal(portals[1]);
+                portals[1]->setLinkedPortal(portals[0]);
             }
         }
     }

@@ -1,4 +1,5 @@
 #include "TileMap.h"
+#include "Portal.h"
 #include <fstream>
 
 namespace fp
@@ -132,6 +133,8 @@ namespace fp
 		std::ofstream file(filename);
 		if (!file.is_open()) return;
 
+		std::vector<Portal*> portals;
+
 		file << playerSpawn.x << " " << playerSpawn.y << "\n";
 
 		for (size_t y = 0; y < tiles[0].size(); y++)
@@ -192,6 +195,10 @@ namespace fp
 						{
 							value = 6;
 						}
+						else if (auto portal = dynamic_cast<Portal*>(collectible))
+						{
+							portals.push_back(portal);
+						}
 					}
 				}
 
@@ -199,6 +206,18 @@ namespace fp
 			}
 
 			file << "\n";
+		}
+
+		file << "PORTALS\n";
+		file << portals.size() << "\n";
+
+		for (auto portal : portals)
+		{
+			unsigned x = static_cast<unsigned>(portal->getPosition().x) / tileSize;
+
+			unsigned y = static_cast<unsigned>(portal->getPosition().y) / tileSize;
+
+			file << x << " " << y << " " << portal->getPairId() << "\n";
 		}
 	}
 	void TileMap::loadBackground(const std::string& path)

@@ -2,6 +2,7 @@
 #include "WorldState.h"
 #include "BrushType.h"
 #include "EditorHUD.h"
+#include "Portal.h"
 
 namespace fp
 {
@@ -17,6 +18,10 @@ namespace fp
 		int cursorY = 0;
 
 		float moveCooldown = 0.f;
+		float placeCooldown = 0.f;
+
+		Portal* pendingPortal = nullptr;
+		int nextPortalPairId = 1;
 
 		void updateGamepadCursor(float dt, GameContext& context);
 		void updateBrush(float dt, GameContext& context);

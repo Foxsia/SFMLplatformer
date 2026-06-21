@@ -11,6 +11,7 @@ namespace fp
 		LifeFruit,
 		FireFruit,
 		Goal,
+		Portal,
 
 		Count
 	};

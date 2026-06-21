@@ -157,6 +157,7 @@
     <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayState.cpp" />
+    <ClCompile Include="Portal.cpp" />
     <ClCompile Include="SFMLplatformer.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayState.h" />
+    <ClInclude Include="Portal.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="StateType.h" />
     <ClInclude Include="Tile.h" />
