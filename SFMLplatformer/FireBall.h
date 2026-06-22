@@ -18,6 +18,7 @@ namespace fp
 
 		void setVelocityY(float y);
 		void setPosition(float x, float y);
+		sf::Vector2f getPosition() { return shape.getPosition(); }
 
 		void destroy() { alive = false; }
 
