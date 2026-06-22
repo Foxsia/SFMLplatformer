@@ -282,4 +282,22 @@ namespace fp
 			return;
 		}
 	}
+	void CollisionSystem::resolveFireballBounds(std::vector<std::unique_ptr<FireBall>>& fireballs, sf::RenderWindow& window)
+	{
+		float screenBottom = static_cast<float>(window.getSize().y);
+
+		for (auto& fireball : fireballs)
+		{
+			if (!fireball->isAlive()) continue;
+
+			float fireballBottom =
+				fireball->getBounds().top +
+				fireball->getBounds().height;
+
+			if (fireballBottom > screenBottom)
+			{
+				fireball->destroy();
+			}
+		}
+	}
 }

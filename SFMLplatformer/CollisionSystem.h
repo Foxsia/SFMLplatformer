@@ -20,5 +20,7 @@ namespace fp
 		static void resolveEnemyFireballCollision(std::vector<std::unique_ptr<FireBall>>& fireballs, std::vector<std::unique_ptr<Enemy>>& enemies);
 		static void resolvePlayerCollectibleCollision(Player& player, std::vector<std::unique_ptr<Collectible>>& collectibles);
 		static void resolveWorldBounds(Player& player, sf::RenderWindow& window, const GameContext& context);
+		static void resolveFireballBounds(std::vector<std::unique_ptr<FireBall>>& fireballs,
+			sf::RenderWindow& window);
 	};
 }

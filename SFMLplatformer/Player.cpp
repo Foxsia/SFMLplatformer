@@ -148,6 +148,7 @@ namespace fp
 		heal();
 		alive = true;
 		score = 0;
+		firePower = false;
 	}
 
 	void Player::move(float dir_x, float dir_y, float dt)
