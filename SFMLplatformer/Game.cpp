@@ -54,6 +54,10 @@ namespace fp
 		fileNameText.setFont(font);
 		fileNameText.setCharacterSize(24);
 		fileNameText.setFillColor(sf::Color::White);
+
+		debugText.setFont(font);
+		debugText.setCharacterSize(20);
+		debugText.setFillColor(sf::Color::White);
 	}
 
 	void Game::initInput()
@@ -113,6 +117,13 @@ namespace fp
 
 		input->bindKey("SHOOT", sf::Keyboard::F);
 		input->bindGamepadButton("SHOOT", 2);
+
+		input->bindGamepadButton("DEBUG_MENU", 8);
+		input->bindKey("DEBUG_MENU", sf::Keyboard::F1);
+
+		input->bindKey("DEBUG_KILL_ENEMIES", sf::Keyboard::F7);
+		input->bindKey("DEBUG_REFILL_HEALTH", sf::Keyboard::F8);
+
 	}
 
 	void Game::initTileSheet()
@@ -227,6 +238,14 @@ namespace fp
 					}
 				}
 			}
+			if (input->isActionPressed("DEBUG_MENU")) showDebugMenu = !showDebugMenu;
+		}
+
+		if (showDebugMenu)
+		{
+			if (input->isActionPressed("DEBUG_KILL_ENEMIES")) enemies.clear();
+
+			if (input->isActionPressed("DEBUG_REFILL_HEALTH")) player->heal();
 		}
 
 		fp::GameContext context;
@@ -312,6 +331,22 @@ namespace fp
 				camera.getCenter().y
 			);
 			window.draw(fileNameText);
+		}
+
+		if (showDebugMenu)
+		{
+			debugText.setString(
+				"DEBUG MENU\n\n"
+				"[F7] Kill All Enemies\n"
+				"[F8] Refill Health\n"
+			);
+
+			debugText.setPosition(
+				camera.getCenter().x - camera.getSize().x / 2.f + 20.f,
+				camera.getCenter().y - 200.f
+			);
+
+			window.draw(debugText);
 		}
 
 		window.display();

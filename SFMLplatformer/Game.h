@@ -82,6 +82,9 @@ namespace fp
 
 		sf::Clock levelTimer;
 		float levelDuration;
+
+		bool showDebugMenu = false;
+		sf::Text debugText;
 	};
 }
 
