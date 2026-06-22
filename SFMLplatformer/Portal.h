@@ -11,6 +11,7 @@ namespace fp
 		int getPairId() const { return pairId; };
 
 		void setLinkedPortal(Portal* portal);
+		Portal* getLinkedPortal() { return linkedPortal; };
 
 		void onCollect(Player& player) override;
 

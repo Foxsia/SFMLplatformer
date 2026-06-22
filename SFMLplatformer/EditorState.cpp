@@ -286,15 +286,42 @@ namespace fp
     }
     void EditorState::removeCollectibleAtPosition(GameContext& context, const sf::Vector2f& pos)
     {
+        Portal* linkedPortal = nullptr;
+
         for (auto it = context.collectibles->begin(); it != context.collectibles->end(); )
         {
             if ((*it)->getGlobalBounds().contains(pos))
             {
+                if (auto portal = dynamic_cast<Portal*>(it->get()))
+                {
+                    linkedPortal = portal->getLinkedPortal();
+
+                    if (portal == pendingPortal)
+                    {
+                        pendingPortal = nullptr;
+                    }
+                }
+
                 it = context.collectibles->erase(it);
             }
             else
             {
                 ++it;
+            }
+        }
+
+        if (linkedPortal)
+        {
+            for (auto it = context.collectibles->begin(); it != context.collectibles->end(); )
+            {
+                if (it->get() == linkedPortal)
+                {
+                    it = context.collectibles->erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
             }
         }
     }
