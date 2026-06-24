@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Portal.h"
 #include <iostream>
 
 namespace fp
@@ -34,6 +35,8 @@ namespace fp
 
 		const float PLAYER_HITBOX_PADDING_TOP = 5.f;
 		const float PLAYER_HITBOX_PADDING_BOTTOM = 0.f;
+
+		const float PORTAL_OFFSET = 10.f;
 	}
 
 	void Player::initVariables()
@@ -205,7 +208,23 @@ namespace fp
 		updateAnimation(dt);
 
 		if (damageCooldown > 0.f) damageCooldown -= dt;
-		if (portalCooldown > 0.f) portalCooldown -= dt;
+
+		if (blockedPortal)
+		{
+			sf::FloatRect portalBounds = blockedPortal->getGlobalBounds();
+
+			sf::FloatRect expanded(
+				portalBounds.left - PORTAL_OFFSET,
+				portalBounds.top - PORTAL_OFFSET,
+				portalBounds.width + PORTAL_OFFSET,
+				portalBounds.height + PORTAL_OFFSET
+			);
+
+			if (!getGlobalBounds().intersects(expanded))
+			{
+				blockedPortal = nullptr;
+			}
+		}
 	}
 
 	void Player::render(sf::RenderTarget& target)

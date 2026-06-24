@@ -15,11 +15,14 @@ namespace fp
 	}
 	void Portal::onCollect(Player& player)
 	{
-		if (player.getPortalCooldown() > 0.f) return;
+		if (player.getBlockedPortal() == this) return;
 		if (!linkedPortal) return;
-		if (linkedPortal) player.setPosition(linkedPortal->getPosition().x - linkedPortal->getGlobalBounds().width,
-			linkedPortal->getPosition().y - player.getGlobalBounds().height / 2.f);
 
-		player.setPortalCooldown(0.5f);
+		player.setPosition(
+			linkedPortal->getPosition().x - linkedPortal->getGlobalBounds().width,
+			linkedPortal->getPosition().y - player.getGlobalBounds().height / 2.f
+		);
+
+		player.setBlockedPortal(linkedPortal);
 	}
 }

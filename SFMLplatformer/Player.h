@@ -10,6 +10,8 @@ namespace fp
 {
 	enum PLAYER_ANIMATION_STATES { IDLE = 0, MOVING_LEFT, MOVING_RIGHT };
 
+	class Portal;
+
 	class Player : public Entity
 	{
 	public:
@@ -20,8 +22,8 @@ namespace fp
 		const sf::FloatRect getHitbox() const;
 		const sf::Vector2f& getVelocity() const;
 
-		const float getPortalCooldown() const { return portalCooldown; };
-		void setPortalCooldown(const float coolDown)  { portalCooldown = coolDown; };
+		const Portal* getBlockedPortal() const { return blockedPortal; };
+		void setBlockedPortal(Portal* portal)  { blockedPortal = portal; };
 
 		inline const bool& getCanJump() const { return canJump; }
 		inline void setCanJump(const bool canJump) { this->canJump = canJump; }
@@ -71,7 +73,7 @@ namespace fp
 		bool firePower = false;
 		bool facingRight = true;
 
-		float portalCooldown = 0.f;
+		Portal* blockedPortal = nullptr;
 	};
 }
 
