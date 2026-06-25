@@ -146,11 +146,15 @@ namespace fp
 
 				if (!bounds.intersects(tileBounds)) continue;
 
+				float enemyBottom = bounds.top + bounds.height;
+
 				// simple ground collision
-				if (enemy.getVelocity().y > 0.f)
+				if (enemy.getVelocity().y > 0.f &&
+					enemyBottom <= tileBounds.top + COLLISION_TOLERANCE)
 				{
 					enemy.setPosition(bounds.left, tileBounds.top - bounds.height);
 					enemy.setVelocityY(0.f);
+					return;
 				}
 			}
 		}
