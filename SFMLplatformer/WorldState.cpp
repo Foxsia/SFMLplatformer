@@ -58,6 +58,7 @@ namespace fp
 
 		context.isEditor ? CameraController::moveEditor(*context.camera, *context.input, *context.tileMap) : CameraController::followPlayer(*context.camera, *context.player, *context.tileMap);
 
+		dt = std::min(dt, 1.f / 30.f);
 		if (!context.isEditor)
 		{
 			for (auto& enemy : *context.enemies)

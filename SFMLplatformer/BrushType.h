@@ -12,6 +12,7 @@ namespace fp
 		FireFruit,
 		Goal,
 		Portal,
+		InvulnerabilityFruit,
 
 		Count
 	};

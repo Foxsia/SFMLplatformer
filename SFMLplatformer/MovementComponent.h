@@ -19,11 +19,13 @@ namespace fp
 
 		const sf::Vector2f& getVelocity() const;
 
-		void move(float dir_x, float dir_y, float dt);
+		void move(float dir_x, float dir_y, float dt, float speedMultiplier);
 		void jump(float force);
 
 		void stopVelocityY();
 		void stopVelocityX();
+
+		void setVelocityMax(float max);
 
 		void update(float dt);
 

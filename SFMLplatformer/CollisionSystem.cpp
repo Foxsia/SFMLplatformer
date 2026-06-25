@@ -221,6 +221,16 @@ namespace fp
 
 			if (!playerBounds.intersects(enemyBounds)) continue;
 
+			if(player.isInvulnerable())
+			{
+				enemy->takeDamage(enemy->getMaxHealth());
+				enemy->loseLife(enemy->getStartLives());
+
+				if (!enemy->isAlive()) player.addScore(SCORE_ENEMY);
+
+				continue;
+			}
+
 			float playerBottom = playerBounds.top + playerBounds.height;
 			float enemyTop = enemyBounds.top;
 

@@ -38,10 +38,11 @@ namespace fp
 	void MovementComponent::move(
 		float dir_x,
 		float dir_y,
-		float dt
+		float dt,
+		float speedMultiplier
 	)
 	{
-		velocity.x += dir_x * acceleration * dt;
+		velocity.x += dir_x * speedMultiplier * acceleration * dt;
 		velocity.y += dir_y * acceleration * dt;
 
 		if (std::abs(velocity.x) > velocityMax)
@@ -65,6 +66,11 @@ namespace fp
 	void MovementComponent::stopVelocityX()
 	{
 		velocity.x = 0.f;
+	}
+
+	void MovementComponent::setVelocityMax(float max)
+	{
+		velocityMax = max;
 	}
 
 	void MovementComponent::update(float dt)

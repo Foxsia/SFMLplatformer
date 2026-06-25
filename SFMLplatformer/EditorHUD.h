@@ -18,6 +18,7 @@ namespace fp
 		sf::Texture lifeTexture;
 		sf::Texture fireTexture;
 		sf::Texture goalTexture;
+		sf::Texture invulnerabilityTexture;
 
 		sf::Sprite brushSprite;
 	};

@@ -17,6 +17,7 @@ namespace fp
         lifeTexture.loadFromFile("assets/fruit.png");
         fireTexture.loadFromFile("assets/fire_fruit.png");
         goalTexture.loadFromFile("assets/end_mushroom.png");
+        invulnerabilityTexture.loadFromFile("assets/flash_fruit.png");
     }
     void EditorHUD::render(sf::RenderWindow& window, const sf::View& camera, const sf::Font& font, BrushType currentBrush)
 	{
@@ -142,6 +143,11 @@ namespace fp
             brushSprite.setTextureRect(sf::IntRect(0, 320, 32, 32));
             brushSprite.setScale(1.f, 1.f);
             break;
+        case BrushType::InvulnerabilityFruit:
+            brushSprite.setTexture(invulnerabilityTexture, true);
+            brushSprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+            brushSprite.setScale(1.f, 1.f);
+            break;
         }
         brushSprite.setPosition(pos.x + 110.f, pos.y + 70.f);
 
@@ -160,6 +166,7 @@ namespace fp
             case BrushType::Goal: return "Goal";
             case BrushType::MovingTile: return "Moving";
             case BrushType::Portal: return "Portal";
+            case BrushType::InvulnerabilityFruit: return "Invulnerability";
             default: return "Unknown";
         }
 	}

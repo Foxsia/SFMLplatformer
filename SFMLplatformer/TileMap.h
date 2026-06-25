@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "LifeFruit.h"
 #include "FireFruit.h"
+#include "InvulnerabilityFruit.h"
 #include "Goal.h"
 #include <vector>
 #include <memory>

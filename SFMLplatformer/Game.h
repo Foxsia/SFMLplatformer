@@ -11,6 +11,7 @@
 #include "Enemy.h"
 #include "LifeFruit.h"
 #include "FireFruit.h"
+#include "InvulnerabilityFruit.h"
 #include "FireBall.h"
 #include "Goal.h"
 #include "MovingPlatform.h"

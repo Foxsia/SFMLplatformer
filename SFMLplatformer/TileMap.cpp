@@ -195,6 +195,10 @@ namespace fp
 						{
 							value = 6;
 						}
+						else if (dynamic_cast<InvulnerabilityFruit*>(collectible))
+						{
+							value = 7;
+						}
 						else if (auto portal = dynamic_cast<Portal*>(collectible))
 						{
 							portals.push_back(portal);

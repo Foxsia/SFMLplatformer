@@ -44,6 +44,13 @@ namespace fp
 		void move(float dir_x, float dir_y, float dt);
 		void jump();
 
+		void activateInvulnerability();
+		bool isInvulnerable() const { return invulnerable; }
+
+		float getSpeedMultiplier() const { return speedMultiplier; }
+
+		void setSpeedMultiplier(float multiplier) { speedMultiplier = multiplier; }
+
 		void updatePhysics(float dt);
 		void updateMovement();
 		void updateAnimation(float dt);
@@ -74,6 +81,12 @@ namespace fp
 		bool facingRight = true;
 
 		Portal* blockedPortal = nullptr;
+
+		bool invulnerable = false;
+		sf::Clock invunerabilityClock;
+		float invulnerabilityDuration;
+
+		float speedMultiplier = 1.f;
 	};
 }
 

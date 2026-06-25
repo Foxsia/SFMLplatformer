@@ -228,6 +228,22 @@ namespace fp
                 nextPortalPairId++;
             }
         }
+        else if (brush == BrushType::InvulnerabilityFruit)
+        {
+            auto invulFruit = std::make_unique<InvulnerabilityFruit>();
+
+            const float tileSize = static_cast<float>(context.tileMap->getTileSize());
+
+            const float collectibleWidth = invulFruit->getGlobalBounds().width;
+            const float collectibleHeight = invulFruit->getGlobalBounds().height;
+
+            invulFruit->setPosition(
+                mouseX * tileSize + (tileSize - collectibleWidth) / 2.f,
+                mouseY * tileSize + (tileSize - collectibleHeight)
+            );
+
+            context.collectibles->push_back(std::move(invulFruit));
+            }
     }
     void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
     {
@@ -247,7 +263,7 @@ namespace fp
             );
             removeEnemyAtPosition(context, pos);
         }
-        else if (brush == BrushType::LifeFruit || brush == BrushType::Goal || brush == BrushType::FireFruit || brush == BrushType::Portal)
+        else if (brush == BrushType::LifeFruit || brush == BrushType::Goal || brush == BrushType::FireFruit || brush == BrushType::Portal || brush == BrushType::InvulnerabilityFruit)
         {
             float tileSize = context.tileMap->getTileSize();
 

@@ -108,6 +108,18 @@ namespace fp
                     collectibles.push_back(std::move(fireFruit));
                     break;
                 }
+                case 7:
+                {
+                    auto invulFruit = std::make_unique<InvulnerabilityFruit>();
+
+                    invulFruit->setPosition(
+                        x * tileMap.getTileSize(),
+                        y * tileMap.getTileSize()
+                    );
+
+                    collectibles.push_back(std::move(invulFruit));
+                    break;
+                }
                 default:
                     break;
                 }

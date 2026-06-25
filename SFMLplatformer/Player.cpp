@@ -37,11 +37,16 @@ namespace fp
 		const float PLAYER_HITBOX_PADDING_BOTTOM = 0.f;
 
 		const float PORTAL_OFFSET = 10.f;
+
+		const float INVULNERABILITY_DURATION = 10.f;
+
+		const float STAR_VELOCITY_MAX = 750.f;
 	}
 
 	void Player::initVariables()
 	{
 		animState = IDLE;
+		invulnerabilityDuration = INVULNERABILITY_DURATION;
 	}
 
 	void Player::initTexture()
@@ -152,17 +157,27 @@ namespace fp
 		alive = true;
 		score = 0;
 		firePower = false;
+		invulnerable = false;
+		invunerabilityClock.restart();
 	}
 
 	void Player::move(float dir_x, float dir_y, float dt)
 	{
-		movementComponent->move(dir_x, dir_y, dt);
+		movementComponent->move(dir_x, dir_y, dt, speedMultiplier);
 	}
 
 	void Player::jump()
 	{
 		movementComponent->jump(PLAYER_JUMP_FORCE);
 		canJump = false;
+	}
+
+	void Player::activateInvulnerability()
+	{
+		invulnerable = true;
+		speedMultiplier = 3.5f;
+
+		invunerabilityClock.restart();
 	}
 
 	void Player::updatePhysics(float dt)
@@ -208,6 +223,29 @@ namespace fp
 		updateAnimation(dt);
 
 		if (damageCooldown > 0.f) damageCooldown -= dt;
+
+		if (invulnerable && invunerabilityClock.getElapsedTime().asSeconds() >= invulnerabilityDuration)
+		{
+			invulnerable = false;
+			speedMultiplier = 1.f;
+
+			movementComponent->setVelocityMax(VELOCITY_MAX);
+		}
+
+		if (invulnerable)
+		{
+			movementComponent->setVelocityMax(STAR_VELOCITY_MAX);
+			float time = invunerabilityClock.getElapsedTime().asSeconds();
+
+			if (static_cast<int>(time * 10) % 2 == 0)
+				sprite.setColor(sf::Color::Yellow);
+			else
+				sprite.setColor(sf::Color::Magenta);
+		}
+		else
+		{
+			sprite.setColor(sf::Color::White);
+		}
 
 		if (blockedPortal)
 		{
