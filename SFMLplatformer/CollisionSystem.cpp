@@ -71,37 +71,47 @@ namespace fp
 			}
 		}
 
-		player.setCanJump(grounded);
+		player.setCanJump(player.getCanJump() || grounded);
 	}
 
-	void CollisionSystem::resolvePlayerMovingPlatform(Player& player, std::vector<std::unique_ptr<MovingPlatform>>& platforms)
+	void CollisionSystem::resolvePlayerMovingPlatform(
+		Player& player,
+		std::vector<std::unique_ptr<MovingPlatform>>& platforms)
 	{
+		sf::FloatRect playerBounds = player.getHitbox();
+
+		const float playerBottom = playerBounds.top + playerBounds.height;
+
+		bool onPlatform = false;
+
 		for (auto& platform : platforms)
 		{
-			sf::FloatRect playerBounds = player.getHitbox();
-
 			for (auto tile : platform->getTiles())
 			{
 				sf::FloatRect tileBounds = tile->getGlobalBounds();
 
 				if (!playerBounds.intersects(tileBounds)) continue;
 
-				float playerBottom = playerBounds.top + playerBounds.height;
+				float tileTop = tileBounds.top;
 
-				bool standing = player.getVelocity().y >= 0.f && playerBottom <= tileBounds.top + COLLISION_TOLERANCE;
+				bool standing = player.getVelocity().y >= 0.f && playerBottom <= tileTop + COLLISION_TOLERANCE &&
+					playerBottom >= tileTop - COLLISION_TOLERANCE / 2.f;
 
 				if (standing)
 				{
 					playerBounds = player.getGlobalBounds();
-
 					player.setPosition(
 						player.getPosition().x + platform->getDelta().x,
-						player.getPosition().y
+						tileTop - playerBounds.height
 					);
+
+					player.resetVelocityY();
+					onPlatform = true;
 					break;
 				}
 			}
 		}
+		player.setCanJump(player.getCanJump() || onPlatform);
 	}
 
 	void CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
