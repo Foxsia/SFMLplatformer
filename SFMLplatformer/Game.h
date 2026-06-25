@@ -35,6 +35,7 @@ namespace fp
 		void restartLevelTimer();
 
 		void setTypingFileName(bool isTyping);
+		void setShowDebug(bool show);
 		const bool getTypingFileName() { return typingFileName; };
 		std::string& getFileNameInput() { return fileNameInput; };
 		void saveLevel();
@@ -85,6 +86,7 @@ namespace fp
 
 		bool showDebugMenu = false;
 		sf::Text debugText;
+		sf::Text debugResultText;
 	};
 }
 

@@ -17,14 +17,14 @@ namespace fp
 	{
 		bool grounded = false;
 
-		sf::FloatRect playerBounds = player.getGlobalBounds();
+		sf::FloatRect playerBounds = player.getHitbox();
 
 		const int TILE_SIZE = map.getTileSize();
 
 		int leftTile = static_cast<int>(playerBounds.left / TILE_SIZE);
-		int rightTile = static_cast<int>(playerBounds.left + playerBounds.width / TILE_SIZE);
+		int rightTile = static_cast<int>((playerBounds.left + playerBounds.width) / TILE_SIZE);
 		int topTile = static_cast<int>(playerBounds.top / TILE_SIZE);
-		int bottomTile = static_cast<int>(playerBounds.top + playerBounds.height / TILE_SIZE);
+		int bottomTile = static_cast<int>((playerBounds.top + playerBounds.height) / TILE_SIZE);
 
 		leftTile--;
 		rightTile++;
@@ -44,7 +44,7 @@ namespace fp
 
 				if (!tile) continue;
 
-				const sf::FloatRect tileBounds = tile->getHitbox();
+				const sf::FloatRect tileBounds = tile->getGlobalBounds();
 
 				if (!playerBounds.intersects(tileBounds)) continue;
 
@@ -58,6 +58,7 @@ namespace fp
 
 				if (insideTileX && player.getVelocity().y >= 0.f && playerBottom <= tileBounds.top + 20.f)
 				{
+					playerBounds = player.getGlobalBounds();
 					player.setPosition(
 						playerBounds.left,
 						tileBounds.top - playerBounds.height
@@ -77,11 +78,11 @@ namespace fp
 	{
 		for (auto& platform : platforms)
 		{
-			sf::FloatRect playerBounds = player.getGlobalBounds();
+			sf::FloatRect playerBounds = player.getHitbox();
 
 			for (auto tile : platform->getTiles())
 			{
-				sf::FloatRect tileBounds = tile->getHitbox();
+				sf::FloatRect tileBounds = tile->getGlobalBounds();
 
 				if (!playerBounds.intersects(tileBounds)) continue;
 
@@ -91,6 +92,8 @@ namespace fp
 
 				if (standing)
 				{
+					playerBounds = player.getGlobalBounds();
+
 					player.setPosition(
 						player.getPosition().x + platform->getDelta().x,
 						player.getPosition().y
@@ -108,9 +111,9 @@ namespace fp
 		const int TILE_SIZE = map.getTileSize();
 
 		int leftTile = static_cast<int>(bounds.left / TILE_SIZE);
-		int rightTile = static_cast<int>(bounds.left + bounds.width / TILE_SIZE);
+		int rightTile = static_cast<int>((bounds.left + bounds.width) / TILE_SIZE);
 		int topTile = static_cast<int>(bounds.top / TILE_SIZE);
-		int bottomTile = static_cast<int>(bounds.top + bounds.height / TILE_SIZE);
+		int bottomTile = static_cast<int>((bounds.top + bounds.height) / TILE_SIZE);
 
 		leftTile--;
 		rightTile++;
@@ -129,7 +132,7 @@ namespace fp
 				Tile* tile = map.getTile(x, y);
 				if (!tile) continue;
 
-				const sf::FloatRect tileBounds = tile->getHitbox();
+				const sf::FloatRect tileBounds = tile->getGlobalBounds();
 
 				if (!bounds.intersects(tileBounds)) continue;
 
@@ -152,24 +155,26 @@ namespace fp
 			sf::FloatRect bounds = fireball->getBounds();
 
 			int leftTile = static_cast<int>(bounds.left / TILE_SIZE);
-			int rightTile = static_cast<int>(bounds.left + bounds.width / TILE_SIZE);
+			int rightTile = static_cast<int>((bounds.left + bounds.width) / TILE_SIZE);
 			int topTile = static_cast<int>(bounds.top / TILE_SIZE);
-			int bottomTile = static_cast<int>(bounds.top + bounds.height / TILE_SIZE);
+			int bottomTile = static_cast<int>((bounds.top + bounds.height) / TILE_SIZE);
 
-			for (int x = leftTile; x <= rightTile; x++)
+			bool handled = false;
+
+			for (int x = leftTile; x <= rightTile && !handled; x++)
 			{
-				for (int y = topTile; y <= bottomTile; y++)
+				for (int y = topTile; y <= bottomTile && !handled; y++)
 				{
 					Tile* tile = map.getTile(x, y);
 					if (!tile) continue;
 
-					const sf::FloatRect tileBounds = tile->getHitbox();
+					const sf::FloatRect tileBounds = tile->getGlobalBounds();
 
 					if (!bounds.intersects(tileBounds)) continue;
 
 					float fireballBottom = bounds.top + bounds.height;
 
-					if (fireball->getVelocity().y > 0 && fireballBottom <= tileBounds.top + COLLISION_TOLERANCE)
+					if (fireball->getVelocity().y > 0.f && fireballBottom <= tileBounds.top + COLLISION_TOLERANCE)
 					{
 						fireball->setPosition(
 							bounds.left,
@@ -182,6 +187,9 @@ namespace fp
 					{
 						fireball->destroy();
 					}
+
+					handled = true;
+					break;
 				}
 			}
 		}
@@ -211,17 +219,6 @@ namespace fp
 				if (!enemy->isAlive()) player.addScore(SCORE_ENEMY);
 
 				player.resetVelocityY();
-				continue;
-			}
-
-			float playerCenterY = playerBounds.top + playerBounds.height * 0.5f;
-
-			float enemyCenterY = enemyBounds.top + enemyBounds.height * 0.5f;
-
-			bool fromBelow = playerCenterY > enemyCenterY;
-
-			if (fromBelow)
-			{
 				continue;
 			}
 
@@ -272,7 +269,7 @@ namespace fp
 
 	void CollisionSystem::resolveWorldBounds(Player& player, sf::RenderWindow& window, const GameContext& context)
 	{
-		float playerBottom = player.getPosition().y + player.getGlobalBounds().height;
+		float playerBottom = player.getPosition().y + player.getHitbox().height;
 
 		float windowBottom = static_cast<float>(window.getSize().y);
 

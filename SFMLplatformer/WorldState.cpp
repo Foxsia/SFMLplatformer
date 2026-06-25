@@ -17,6 +17,7 @@ namespace fp
 	}
 	void WorldState::update(float dt, GameContext& context)
 	{
+		dt = std::min(dt, 1.f / 30.f);
 		handleInput(dt, context);
 
 		if (!context.isEditor)

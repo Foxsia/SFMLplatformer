@@ -17,6 +17,7 @@ namespace fp
             {
                 if (goal->isCollected())
                 {
+                    context.game->setShowDebug(false);
                     context.stateManager->changeState(StateType::Win);
                     return;
                 }
@@ -31,6 +32,7 @@ namespace fp
 
         if (!context.player->isAlive())
         {
+            context.game->setShowDebug(false);
             context.stateManager->changeState(StateType::GameOver);
         }
     }

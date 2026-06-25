@@ -58,6 +58,10 @@ namespace fp
 		debugText.setFont(font);
 		debugText.setCharacterSize(20);
 		debugText.setFillColor(sf::Color::White);
+
+		debugResultText.setFont(font);
+		debugResultText.setCharacterSize(20);
+		debugResultText.setFillColor(sf::Color::Red);
 	}
 
 	void Game::initInput()
@@ -182,6 +186,11 @@ namespace fp
 	{
 		typingFileName = isTyping;
 		fileNameInput.clear();
+	}
+
+	void Game::setShowDebug(bool show)
+	{
+		showDebugMenu = show;
 	}
 
 	void Game::saveLevel()
@@ -347,6 +356,79 @@ namespace fp
 			);
 
 			window.draw(debugText);
+
+			sf::RectangleShape hitbox;
+
+			auto hitBoxbounds = player->getHitbox();
+
+			hitbox.setPosition(hitBoxbounds.left, hitBoxbounds.top);
+			hitbox.setSize({ hitBoxbounds.width, hitBoxbounds.height });
+
+			hitbox.setFillColor(sf::Color::Transparent);
+			hitbox.setOutlineColor(sf::Color::Red);
+			hitbox.setOutlineThickness(2.f);
+
+			window.draw(hitbox);
+
+			sf::RectangleShape boundsRect;
+
+			auto bounds = player->getGlobalBounds();
+
+			boundsRect.setPosition(bounds.left, bounds.top);
+			boundsRect.setSize({ bounds.width, bounds.height });
+
+			boundsRect.setFillColor(sf::Color::Transparent);
+			boundsRect.setOutlineColor(sf::Color::Blue);
+			boundsRect.setOutlineThickness(2.f);
+
+			window.draw(boundsRect);
+
+			for (unsigned x = 0; x < tileMap->getWidth(); x++)
+			{
+				for (unsigned y = 0; y < tileMap->getHeight(); y++)
+				{
+					Tile* tile = tileMap->getTile(x, y);
+
+					if (!tile) continue;
+
+					auto hitbox = tile->getHitbox();
+
+					sf::RectangleShape boxHitbox;
+					boxHitbox.setPosition(hitbox.left, hitbox.top);
+					boxHitbox.setSize({ hitbox.width, hitbox.height });
+
+					boxHitbox.setFillColor(sf::Color::Transparent);
+					boxHitbox.setOutlineColor(sf::Color::Green);
+					boxHitbox.setOutlineThickness(1.f);
+
+					window.draw(boxHitbox);
+
+					auto bounds = tile->getGlobalBounds();
+
+					sf::RectangleShape boxBounds;
+					boxBounds.setPosition(bounds.left, bounds.top);
+					boxBounds.setSize({ bounds.width, bounds.height });
+
+					boxBounds.setFillColor(sf::Color::Transparent);
+					boxBounds.setOutlineColor(sf::Color::Yellow);
+					boxBounds.setOutlineThickness(1.f);
+
+					window.draw(boxBounds);
+				}
+			}
+
+			debugResultText.setString(
+				"Player Y: " + std::to_string(player->getPosition().y) +
+				"\nVelY: " + std::to_string(player->getVelocity().y) +
+				"\nCanJump: " + std::string(player->getCanJump() ? "YES" : "NO")
+			);
+
+			debugResultText.setPosition(
+				camera.getCenter().x - camera.getSize().x / 2.f + 20.f,
+				camera.getCenter().y - 100.f
+			);
+
+			window.draw(debugResultText);
 		}
 
 		window.display();

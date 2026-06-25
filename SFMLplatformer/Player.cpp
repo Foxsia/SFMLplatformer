@@ -30,10 +30,10 @@ namespace fp
 		const float RIGHT_MOVEMENT_THRESHOLD = 0.f;
 		const float LEFT_MOVEMENT_THRESHOLD = 0.f;
 
-		const float PLAYER_HITBOX_PADDING_LEFT = 10.f;
-		const float PLAYER_HITBOX_PADDING_RIGHT = 10.f;
+		const float PLAYER_HITBOX_PADDING_LEFT = 28.f;
+		const float PLAYER_HITBOX_PADDING_RIGHT = 28.f;
 
-		const float PLAYER_HITBOX_PADDING_TOP = 5.f;
+		const float PLAYER_HITBOX_PADDING_TOP = 28.f;
 		const float PLAYER_HITBOX_PADDING_BOTTOM = 0.f;
 
 		const float PORTAL_OFFSET = 10.f;
