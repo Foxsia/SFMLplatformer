@@ -2,6 +2,11 @@
 
 namespace fp
 {
+	WinState::WinState()
+	{
+		w_backgroundTexture.loadFromFile("assets/winBackground.png");
+		w_backgroundSprite.setTexture(w_backgroundTexture);
+	}
 	void WinState::update(float dt, GameContext& context)
 	{
 		if (context.input->isActionPressed("MENU_SELECT"))
@@ -31,6 +36,17 @@ namespace fp
 	void WinState::render(sf::RenderWindow& window, GameContext& context)
 	{
 		window.setView(window.getDefaultView());
+
+		sf::Vector2u windowSize = window.getSize();
+		sf::Vector2u textureSize = w_backgroundTexture.getSize();
+
+		w_backgroundSprite.setScale(
+			static_cast<float>(windowSize.x) / textureSize.x,
+			static_cast<float>(windowSize.y) / textureSize.y
+		);
+
+		window.draw(w_backgroundSprite);
+
 
 		sf::Text text;
 		text.setFont(*context.font);

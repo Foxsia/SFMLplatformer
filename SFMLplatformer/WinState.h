@@ -11,7 +11,11 @@ namespace fp
 	class WinState : public IState
 	{
 	public:
+		WinState();
 		void update(float dt, GameContext& context) override;
 		void render(sf::RenderWindow& window, GameContext& context) override;
+	private:
+		sf::Texture w_backgroundTexture;
+		sf::Sprite w_backgroundSprite;
 	};
 }

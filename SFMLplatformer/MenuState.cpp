@@ -19,6 +19,12 @@ namespace fp
 		const float MENU_SPACING = 50.f;
 	}
 
+	MenuState::MenuState()
+	{
+		m_backgroundTexture.loadFromFile("assets/menuBackground.png");
+		m_backgroundSprite.setTexture(m_backgroundTexture);
+	}
+
 	void MenuState::update(float dt, GameContext& context)
 	{
 		handleNavigation(context);
@@ -32,7 +38,17 @@ namespace fp
 	void MenuState::render(sf::RenderWindow& window, GameContext& context)
 	{
 		window.setView(window.getDefaultView());
-		window.clear(sf::Color::Black);
+		window.clear();
+		
+		sf::Vector2u windowSize = window.getSize();
+		sf::Vector2u textureSize = m_backgroundTexture.getSize();
+
+		m_backgroundSprite.setScale(
+			static_cast<float>(windowSize.x) / textureSize.x,
+			static_cast<float>(windowSize.y) / textureSize.y
+		);
+
+		window.draw(m_backgroundSprite);
 
 		sf::Text title;
 		title.setFont(*context.font);

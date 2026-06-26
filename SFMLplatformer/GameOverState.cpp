@@ -7,6 +7,11 @@
 
 namespace fp
 {
+	GameOverState::GameOverState()
+	{
+		gO_backgroundTexture.loadFromFile("assets/gameOverBackground.png");
+		gO_backgroundSprite.setTexture(gO_backgroundTexture);
+	}
 	void GameOverState::update(float dt, GameContext& context)
 	{
 		if (context.input->isActionPressed("MENU_SELECT"))
@@ -36,6 +41,16 @@ namespace fp
 	void GameOverState::render(sf::RenderWindow& window, GameContext& context)
 	{
 		window.setView(window.getDefaultView());
+
+		sf::Vector2u windowSize = window.getSize();
+		sf::Vector2u textureSize = gO_backgroundTexture.getSize();
+
+		gO_backgroundSprite.setScale(
+			static_cast<float>(windowSize.x) / textureSize.x,
+			static_cast<float>(windowSize.y) / textureSize.y
+		);
+
+		window.draw(gO_backgroundSprite);
 
 		sf::Text text;
 		text.setFont(*context.font);
