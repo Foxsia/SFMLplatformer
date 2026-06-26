@@ -22,5 +22,14 @@ namespace fp
 		static void resolveWorldBounds(Player& player, sf::RenderWindow& window, const GameContext& context);
 		static void resolveFireballBounds(std::vector<std::unique_ptr<FireBall>>& fireballs,
 			sf::RenderWindow& window);
+	private:
+		struct TileRange
+		{
+			int left;
+			int right;
+			int top;
+			int bottom;
+		};
+		static TileRange CalculateTileRange(const sf::FloatRect& bounds, const TileMap& map, int padding = 1);
 	};
 }

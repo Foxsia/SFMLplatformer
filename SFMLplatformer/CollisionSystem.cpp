@@ -8,9 +8,6 @@ namespace fp
 	{
 		const int SCORE_ENEMY = 100;
 		const int SCORE_COLLECTIBLE = 50;
-	}
-	namespace
-	{
 		const float COLLISION_TOLERANCE = 10.f;
 	}
 	void CollisionSystem::resolvePlayerTileCollision(Player& player, TileMap& map)
@@ -19,26 +16,11 @@ namespace fp
 
 		sf::FloatRect playerBounds = player.getHitbox();
 
-		const int TILE_SIZE = map.getTileSize();
+		TileRange range = CalculateTileRange(playerBounds, map);
 
-		int leftTile = static_cast<int>(playerBounds.left / TILE_SIZE);
-		int rightTile = static_cast<int>((playerBounds.left + playerBounds.width) / TILE_SIZE);
-		int topTile = static_cast<int>(playerBounds.top / TILE_SIZE);
-		int bottomTile = static_cast<int>((playerBounds.top + playerBounds.height) / TILE_SIZE);
-
-		leftTile--;
-		rightTile++;
-		topTile--;
-		bottomTile++;
-
-		leftTile = std::max(0, leftTile);
-		rightTile = std::min((int)map.getWidth() - 1, rightTile);
-		topTile = std::max(0, topTile);
-		bottomTile = std::min((int)map.getHeight() - 1, bottomTile);
-
-		for (int x = leftTile; x <= rightTile; x++)
+		for (int x = range.left; x <= range.right; x++)
 		{
-			for (int y = topTile; y <= bottomTile; y++)
+			for (int y = range.top; y <= range.bottom; y++)
 			{
 				Tile* tile = map.getTile(x, y);
 
@@ -118,26 +100,11 @@ namespace fp
 	{
 		const sf::FloatRect bounds = enemy.getGlobalBounds();
 
-		const int TILE_SIZE = map.getTileSize();
+		TileRange range = CalculateTileRange(bounds, map);
 
-		int leftTile = static_cast<int>(bounds.left / TILE_SIZE);
-		int rightTile = static_cast<int>((bounds.left + bounds.width) / TILE_SIZE);
-		int topTile = static_cast<int>(bounds.top / TILE_SIZE);
-		int bottomTile = static_cast<int>((bounds.top + bounds.height) / TILE_SIZE);
-
-		leftTile--;
-		rightTile++;
-		topTile--;
-		bottomTile++;
-
-		leftTile = std::max(0, leftTile);
-		rightTile = std::min((int)map.getWidth() - 1, rightTile);
-		topTile = std::max(0, topTile);
-		bottomTile = std::min((int)map.getHeight() - 1, bottomTile);
-
-		for (int x = leftTile; x <= rightTile; x++)
+		for (int x = range.left; x <= range.right; x++)
 		{
-			for (int y = topTile; y <= bottomTile; y++)
+			for (int y = range.top; y <= range.bottom; y++)
 			{
 				Tile* tile = map.getTile(x, y);
 				if (!tile) continue;
@@ -320,5 +287,18 @@ namespace fp
 				fireball->destroy();
 			}
 		}
+	}
+	CollisionSystem::TileRange CollisionSystem::CalculateTileRange(const sf::FloatRect& bounds, const TileMap& map, int padding)
+	{
+		const int TILE_SIZE = map.getTileSize();
+
+		CollisionSystem::TileRange range;
+
+		range.left = std::max(0, static_cast<int>(bounds.left / TILE_SIZE) - padding);
+		range.right = std::min(static_cast<int>(map.getWidth()) - 1, static_cast<int>((bounds.left + bounds.width) / TILE_SIZE) + padding);
+		range.top = std::max(0, static_cast<int>(bounds.top / TILE_SIZE) - padding);
+		range.bottom = std::min(static_cast<int>(map.getHeight()) - 1, static_cast<int>((bounds.top + bounds.height) / TILE_SIZE) + padding);
+
+		return range;
 	}
 }
