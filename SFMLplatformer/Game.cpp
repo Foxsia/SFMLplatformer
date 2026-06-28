@@ -3,9 +3,17 @@
 #include "EditorState.h"
 #include "GameContext.h"
 #include "LevelLoader.h"
+#include "EntityFactory.h"
 #include "Utils.h"
 #include <iostream>
 #include <filesystem>
+#include "TileCreator.h"
+#include "EnemyCreator.h"
+#include "LifeFruitCreator.h"
+#include "MovingTileCreator.h"
+#include "GoalCreator.h"
+#include "FireFruitCreator.h"
+#include "InvulnerabilityFruitCreator.h"
 
 namespace fp
 {
@@ -152,6 +160,37 @@ namespace fp
 		tileMap->loadBackground("assets/background.png");
 	}
 
+	void Game::initCreators()
+	{
+		EntityFactory::registerCreator(
+			1,
+			std::make_unique<TileCreator>());
+
+		EntityFactory::registerCreator(
+			2,
+			std::make_unique<EnemyCreator>());
+
+		EntityFactory::registerCreator(
+			3,
+			std::make_unique<LifeFruitCreator>());
+
+		EntityFactory::registerCreator(
+			4,
+			std::make_unique<MovingTileCreator>());
+
+		EntityFactory::registerCreator(
+			5,
+			std::make_unique<GoalCreator>());
+
+		EntityFactory::registerCreator(
+			6,
+			std::make_unique<FireFruitCreator>());
+
+		EntityFactory::registerCreator(
+			7,
+			std::make_unique<InvulnerabilityFruitCreator>());
+	}
+
 	void Game::buildMovingPlatforms()
 	{
 		movingPlatforms.clear();
@@ -205,6 +244,7 @@ namespace fp
 	{
 		initWindow();
 		initInput();
+		initCreators();
 		initTileSheet();
 		initPlayer();
 		initTileMap();

@@ -5,6 +5,7 @@
 #include "LifeFruit.h"
 #include "FireFruit.h"
 #include "Game.h"
+#include "EntityFactory.h"
 
 #include <unordered_map>
 #include <fstream>
@@ -54,75 +55,7 @@ namespace fp
 
                 file >> value;
 
-                switch (value)
-                {
-                case 1:
-                    tileMap.addTile(x, y);
-                    break;
-                case 2:
-                {
-                    auto enemy = std::make_unique<Enemy>();
-                    enemy->setPosition(
-                        x * tileMap.getTileSize(),
-                        y * tileMap.getTileSize()
-                    );
-                    enemies.push_back(std::move(enemy));
-                    break;
-                }
-                case 3:
-                {
-                    auto lifeFruit = std::make_unique<LifeFruit>();
-
-                    lifeFruit->setPosition(
-                        x * tileMap.getTileSize(),
-                        y * tileMap.getTileSize()
-                    );
-
-                    collectibles.push_back(std::move(lifeFruit));
-                    break;
-                }
-                case 4:
-                    tileMap.addMovingTile(x, y);
-                    break;
-                case 5:
-                {
-                    auto goal = std::make_unique<Goal>();
-
-                    goal->setPosition(
-                        x * tileMap.getTileSize(),
-                        y * tileMap.getTileSize()
-                    );
-
-                    collectibles.push_back(std::move(goal));
-                    break;
-                }
-                case 6:
-                {
-                    auto fireFruit = std::make_unique<FireFruit>();
-
-                    fireFruit->setPosition(
-                        x * tileMap.getTileSize(),
-                        y * tileMap.getTileSize()
-                    );
-
-                    collectibles.push_back(std::move(fireFruit));
-                    break;
-                }
-                case 7:
-                {
-                    auto invulFruit = std::make_unique<InvulnerabilityFruit>();
-
-                    invulFruit->setPosition(
-                        x * tileMap.getTileSize(),
-                        y * tileMap.getTileSize()
-                    );
-
-                    collectibles.push_back(std::move(invulFruit));
-                    break;
-                }
-                default:
-                    break;
-                }
+                EntityFactory::create(value, x, y, tileMap, enemies, collectibles);
             }
         }
 

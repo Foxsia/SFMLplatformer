@@ -48,6 +48,7 @@ namespace fp
 		void initTileSheet();
 		void initPlayer();
 		void initTileMap();
+		void initCreators();
 
 		StateManager stateManager;
 		std::string currentLevel;
