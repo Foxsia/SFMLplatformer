@@ -135,6 +135,7 @@ namespace fp
 
 		input->bindKey("DEBUG_KILL_ENEMIES", sf::Keyboard::F7);
 		input->bindKey("DEBUG_REFILL_HEALTH", sf::Keyboard::F8);
+		input->bindKey("DEBUG_TELEPORT_END", sf::Keyboard::F9);
 
 	}
 
@@ -295,6 +296,25 @@ namespace fp
 			if (input->isActionPressed("DEBUG_KILL_ENEMIES")) enemies.clear();
 
 			if (input->isActionPressed("DEBUG_REFILL_HEALTH")) player->heal();
+
+			if (input->isActionPressed("DEBUG_TELEPORT_END"))
+			{
+				for (auto& collectible : collectibles)
+				{
+					if (auto* goal = dynamic_cast<Goal*>(collectible.get()))
+					{
+						auto pos = goal->getPosition();
+
+						player->setPosition(
+							pos.x - 3 * tileMap->getTileSize(),
+							pos.y - 2 * tileMap->getTileSize()
+						);
+						player->resetVelocityY();
+						player->resetVelocityX();
+						break;
+					}
+				}
+			}
 		}
 
 		fp::GameContext context;
@@ -388,6 +408,7 @@ namespace fp
 				"DEBUG MENU\n\n"
 				"[F7] Kill All Enemies\n"
 				"[F8] Refill Health\n"
+				"[F9] Teleport to end\n"
 			);
 
 			debugText.setPosition(
@@ -465,7 +486,7 @@ namespace fp
 
 			debugResultText.setPosition(
 				camera.getCenter().x - camera.getSize().x / 2.f + 20.f,
-				camera.getCenter().y - 100.f
+				camera.getCenter().y + 200.f
 			);
 
 			window.draw(debugResultText);
