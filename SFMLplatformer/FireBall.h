@@ -3,10 +3,16 @@
 
 namespace fp
 {
+	enum class Team
+	{
+		Player,
+		Enemy
+	};
+
 	class FireBall
 	{
 	public:
-		FireBall(sf::Vector2f pos, bool right);
+		FireBall(sf::Vector2f pos, bool right, Team team);
 
 		void update(float dt);
 
@@ -26,12 +32,15 @@ namespace fp
 
 		bool isAlive() const { return alive; }
 
+		Team getTeam() const { return team; }
+
 	private:
 		sf::CircleShape shape;
 
 		sf::Vector2f velocity;
 
 		bool alive = true;
+		Team team;
 	};
 }
 

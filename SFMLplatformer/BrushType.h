@@ -6,13 +6,14 @@ namespace fp
 	{
 		Tile,
 		MovingTile,
-		Enemy,
+		Slime,
 		Player,
 		LifeFruit,
 		FireFruit,
 		Goal,
 		Portal,
 		InvulnerabilityFruit,
+		FireEnemy,
 
 		Count
 	};

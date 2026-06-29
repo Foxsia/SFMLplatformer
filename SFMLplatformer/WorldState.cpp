@@ -63,13 +63,13 @@ namespace fp
 		{
 			for (auto& enemy : *context.enemies)
 			{
-				enemy->update(dt, *context.tileMap);
+				enemy->update(dt, *context.tileMap, context);
 			}
 		}
 
 		CollisionSystem::resolvePlayerEnemyCollision(*context.player, *context.enemies);
 		CollisionSystem::resolvePlayerCollectibleCollision(*context.player, *context.collectibles);
-		CollisionSystem::resolveEnemyFireballCollision(*context.fireballs, *context.enemies);
+		CollisionSystem::resolveFireballEnemyPlayerCollision(*context.fireballs, *context.player, *context.enemies);
 		CollisionSystem::resolveFireballTileCollision(*context.fireballs, *context.tileMap);
 		CollisionSystem::resolveFireballBounds(
 			*context.fireballs,
@@ -162,7 +162,8 @@ namespace fp
 			context.fireballs->push_back(
 				std::make_unique<FireBall>(
 					pos,
-					player->isFacingRight()
+					player->isFacingRight(),
+					Team::Player
 				)
 			);
 		}

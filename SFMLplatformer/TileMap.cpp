@@ -167,7 +167,7 @@ namespace fp
 
 					if (enemyX == x && enemyY == y)
 					{
-						value = 2;
+						value = static_cast<int>(enemy->getType());;
 					}
 				}
 

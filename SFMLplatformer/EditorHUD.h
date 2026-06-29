@@ -15,6 +15,7 @@ namespace fp
 		sf::Texture tileTexture;
 		sf::Texture playerTexture;
 		sf::Texture enemyTexture;
+		sf::Texture fireEnemyTexture;
 		sf::Texture lifeTexture;
 		sf::Texture fireTexture;
 		sf::Texture goalTexture;

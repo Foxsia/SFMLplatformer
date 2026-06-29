@@ -6,6 +6,8 @@
 #include "Portal.h"
 #include "Game.h"
 #include <memory>
+#include "FireEnemy.h"
+#include "SlimeEnemy.h"
 
 namespace fp
 {
@@ -121,9 +123,9 @@ namespace fp
         {
             context.tileMap->addTile(mouseX, mouseY);
         }
-        else if (brush == BrushType::Enemy)
+        else if (brush == BrushType::Slime)
         {
-            auto enemy = std::make_unique<Enemy>();
+            auto enemy = std::make_unique<SlimeEnemy>();
 
             const float tileSize = static_cast<float>(context.tileMap->getTileSize());
 
@@ -243,6 +245,22 @@ namespace fp
             );
 
             context.collectibles->push_back(std::move(invulFruit));
+        }
+        else if (brush == BrushType::FireEnemy)
+        {
+            auto enemy = std::make_unique<FireEnemy>();
+
+            const float tileSize = static_cast<float>(context.tileMap->getTileSize());
+
+            const float width = enemy->getGlobalBounds().width;
+            const float height = enemy->getGlobalBounds().height;
+
+            enemy->setPosition(
+                mouseX * tileSize + (tileSize - width) / 2.f,
+                mouseY * tileSize + (tileSize - height)
+            );
+
+            context.enemies->push_back(std::move(enemy));
             }
     }
     void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
@@ -253,7 +271,7 @@ namespace fp
         {
             context.tileMap->removeTile(mouseX, mouseY);
         }
-        else if (brush == BrushType::Enemy)
+        else if (brush == BrushType::Slime)
         {
             float tileSize = context.tileMap->getTileSize();
 
@@ -284,6 +302,17 @@ namespace fp
                     context.tileMap->removePlayerSpawn();
                 }
             }
+        }
+        else if (brush == BrushType::FireEnemy)
+        {
+            float tileSize = context.tileMap->getTileSize();
+
+            sf::Vector2f pos(
+                mouseX * tileSize + tileSize / 2,
+                mouseY * tileSize + tileSize / 2
+            );
+
+            removeEnemyAtPosition(context, pos);
         }
     }
     void EditorState::removeEnemyAtPosition(GameContext& context, const sf::Vector2f& pos)

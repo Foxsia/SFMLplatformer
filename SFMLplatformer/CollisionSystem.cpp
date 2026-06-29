@@ -223,23 +223,36 @@ namespace fp
 		}
 	}
 
-	void CollisionSystem::resolveEnemyFireballCollision(std::vector<std::unique_ptr<FireBall>>& fireballs, std::vector<std::unique_ptr<Enemy>>& enemies)
+	void CollisionSystem::resolveFireballEnemyPlayerCollision(std::vector<std::unique_ptr<FireBall>>& fireballs, Player& player, std::vector<std::unique_ptr<Enemy>>& enemies)
 	{
 		for (auto& fireball : fireballs)
 		{
 			if (!fireball->isAlive()) continue;
 
-			for (auto& enemy : enemies)
+			if (fireball->getTeam() == Team::Enemy)
 			{
-				if (!enemy->isAlive()) continue;
-
-				if (fireball->getBounds().intersects(enemy->getHitbox()))
+				if (fireball->getBounds().intersects(player.getHitbox()))
 				{
-					enemy->takeDamage(1);
-
+					player.takeDamage(1);
 					fireball->destroy();
+					continue;
+				}
+			}
 
-					break;
+			if (fireball->getTeam() == Team::Player)
+			{
+				for (auto& enemy : enemies)
+				{
+					if (!enemy->isAlive()) continue;
+
+					if (fireball->getTeam() == Team::Player && fireball->getBounds().intersects(enemy->getHitbox()))
+					{
+						enemy->takeDamage(1);
+
+						fireball->destroy();
+
+						break;
+					}
 				}
 			}
 		}

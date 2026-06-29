@@ -18,6 +18,7 @@ namespace fp
         fireTexture.loadFromFile("assets/fire_fruit.png");
         goalTexture.loadFromFile("assets/end_mushroom.png");
         invulnerabilityTexture.loadFromFile("assets/flash_fruit.png");
+        fireEnemyTexture.loadFromFile("assets/slime_purple.png");
     }
     void EditorHUD::render(sf::RenderWindow& window, const sf::View& camera, const sf::Font& font, BrushType currentBrush)
 	{
@@ -106,8 +107,14 @@ namespace fp
             brushSprite.setScale(2.f, 2.f);
             break;
 
-        case BrushType::Enemy:
+        case BrushType::Slime:
             brushSprite.setTexture(enemyTexture, true);
+            brushSprite.setTextureRect(sf::IntRect(77, 5, 14, 18));
+            brushSprite.setScale(2.f, 2.f);
+            break;
+
+        case BrushType::FireEnemy:
+            brushSprite.setTexture(fireEnemyTexture, true);
             brushSprite.setTextureRect(sf::IntRect(77, 5, 14, 18));
             brushSprite.setScale(2.f, 2.f);
             break;
@@ -160,13 +167,14 @@ namespace fp
         {
             case BrushType::Player: return "Player";
             case BrushType::Tile: return "Tile";
-            case BrushType::Enemy: return "Enemy";
+            case BrushType::Slime: return "Slime";
             case BrushType::LifeFruit: return "Life";
             case BrushType::FireFruit: return "Fire";
             case BrushType::Goal: return "Goal";
             case BrushType::MovingTile: return "Moving";
             case BrushType::Portal: return "Portal";
             case BrushType::InvulnerabilityFruit: return "Invulnerability";
+            case BrushType::FireEnemy: return "FireEnemy";
             default: return "Unknown";
         }
 	}

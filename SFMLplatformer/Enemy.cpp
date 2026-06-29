@@ -1,6 +1,5 @@
 #include "Enemy.h"
 #include "TileMap.h"
-#include "Tile.h"
 #include "CollisionSystem.h"
 
 namespace fp
@@ -14,34 +13,28 @@ namespace fp
         const float ENEMY_HITBOX_PADDING_BOTTOM = 0.f;
     }
 
-    Enemy::Enemy() : Entity(1, 1)
+    Enemy::Enemy(int health, int lives, EnemyType type) : Entity(health, lives), type(type)
     {
-        textureSheet.loadFromFile("assets/slime_green.png");
-
-        sprite.setTexture(textureSheet);
-        sprite.setTextureRect(sf::IntRect(0, 24, 24, 24));
-        sprite.setScale(3.f, 3.f);
-
         velocity = { 0.f, 0.f };
     }
 
-    void Enemy::update(float dt, TileMap& map)
+    void Enemy::update(float dt, TileMap& map, GameContext& context)
     {
         if (!isAlive()) return;
+
         applyGravity(dt);
         move(dt);
 
-        CollisionSystem::resolveEnemyTileCollision(
-            *this, map
-        );
-        checkDirectionChange(map);
+        CollisionSystem::resolveEnemyTileCollision(*this, map);
 
         if (damageCooldown > 0.f) damageCooldown -= dt;
     }
 
     void Enemy::render(sf::RenderWindow& window)
     {
-        if (!isAlive()) return;
+        if (!isAlive())
+            return;
+
         window.draw(sprite);
     }
 
@@ -53,37 +46,7 @@ namespace fp
     void Enemy::move(float dt)
     {
         velocity.x = speed * direction;
-
         sprite.move(velocity * dt);
-    }
-
-    void Enemy::checkDirectionChange(TileMap& map)
-    {
-        const sf::FloatRect bounds = sprite.getGlobalBounds();
-
-        const float footX = bounds.left + bounds.width / 2.f;
-        const float footY = bounds.top + bounds.height + 5.f;
-
-        const int tileX = static_cast<int>(footX) / map.getTileSize();
-        const int tileY = static_cast<int>(footY) / map.getTileSize();
-
-        Tile* tile = map.getTile(tileX, tileY);
-
-        if (!tile)
-        {
-            direction *= -1;
-        }
-
-        if (direction > 0)
-        {
-            sprite.setScale(3.f, 3.f);
-            sprite.setOrigin(0.f, 0.f);
-        }
-        else
-        {
-            sprite.setScale(-3.f, 3.f);
-            sprite.setOrigin(sprite.getLocalBounds().width, 0.f);
-        }
     }
 
     sf::FloatRect Enemy::getGlobalBounds() const
@@ -111,11 +74,11 @@ namespace fp
 
     void Enemy::setVelocityY(float vel)
     {
-        this->velocity.y = vel;
+        velocity.y = vel;
     }
 
     void Enemy::setPosition(float x, float y)
     {
-        sprite.setPosition({ x, y });
+        sprite.setPosition(x, y);
     }
 }

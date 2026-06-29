@@ -9,7 +9,7 @@ namespace fp
 
 		const float BOUNCE_FORCE = -300.f;
 	}
-	FireBall::FireBall(sf::Vector2f pos, bool right)
+	FireBall::FireBall(sf::Vector2f pos, bool right, Team team) : team(team)
 	{
 		shape.setRadius(8.f);
 
@@ -20,8 +20,8 @@ namespace fp
 		velocity.x = right ? VELOCITY : -VELOCITY;
 	}
 	void FireBall::update(float dt)
-	{
-		velocity.y += GRAVITY * dt;
+	{ 
+		if(this->getTeam() == Team::Player) velocity.y += GRAVITY * dt;
 		shape.move(velocity * dt);
 	}
 	void FireBall::render(sf::RenderTarget& target)

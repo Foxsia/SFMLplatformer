@@ -14,6 +14,7 @@
 #include "GoalCreator.h"
 #include "FireFruitCreator.h"
 #include "InvulnerabilityFruitCreator.h"
+#include "FireEnemyCreator.h"
 #include <sstream>
 
 namespace fp
@@ -192,6 +193,9 @@ namespace fp
 		EntityFactory::registerCreator(
 			7,
 			std::make_unique<InvulnerabilityFruitCreator>());
+		EntityFactory::registerCreator(
+			8,
+			std::make_unique<FireEnemyCreator>());
 	}
 
 	void Game::buildMovingPlatforms()
