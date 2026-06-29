@@ -89,6 +89,12 @@ namespace fp
 		bool showDebugMenu = false;
 		sf::Text debugText;
 		sf::Text debugResultText;
+
+		bool typingTeleport = false;
+		std::string teleportInput;
+
+		float teleportX = 0.f;
+		float teleportY = 0.f;
 	};
 }
 

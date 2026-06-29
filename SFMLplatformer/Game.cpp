@@ -14,6 +14,7 @@
 #include "GoalCreator.h"
 #include "FireFruitCreator.h"
 #include "InvulnerabilityFruitCreator.h"
+#include <sstream>
 
 namespace fp
 {
@@ -136,6 +137,7 @@ namespace fp
 		input->bindKey("DEBUG_KILL_ENEMIES", sf::Keyboard::F7);
 		input->bindKey("DEBUG_REFILL_HEALTH", sf::Keyboard::F8);
 		input->bindKey("DEBUG_TELEPORT_END", sf::Keyboard::F9);
+		input->bindKey("DEBUG_TELEPORT", sf::Keyboard::F10);
 
 	}
 
@@ -288,6 +290,25 @@ namespace fp
 					}
 				}
 			}
+
+			if (typingTeleport && event.type == sf::Event::TextEntered)
+			{
+				if (event.text.unicode < 128)
+				{
+					char c = static_cast<char>(event.text.unicode);
+
+					if (c == '\b')
+					{
+						if (!teleportInput.empty())
+							teleportInput.pop_back();
+					}
+					else if (c != '\r')
+					{
+						teleportInput += c;
+					}
+				}
+			}
+
 			if (input->isActionPressed("DEBUG_MENU")) showDebugMenu = !showDebugMenu;
 		}
 
@@ -314,6 +335,28 @@ namespace fp
 						break;
 					}
 				}
+			}
+
+			if (input->isActionPressed("DEBUG_TELEPORT"))
+			{
+				typingTeleport = true;
+				teleportInput.clear();
+			}
+
+			if (typingTeleport && input->isActionPressed("CONFIRM_SAVE"))
+			{
+				std::stringstream ss(teleportInput);
+
+				ss >> teleportX >> teleportY;
+
+				std::cout << "X = " << teleportX << " Y = " << teleportY << std::endl;
+
+				player->setPosition(teleportX, teleportY);
+
+				player->resetVelocityX();
+				player->resetVelocityY();
+
+				typingTeleport = false;
 			}
 		}
 
@@ -402,6 +445,17 @@ namespace fp
 			window.draw(fileNameText);
 		}
 
+		if (typingTeleport)
+		{
+			fileNameText.setString("X Y: " + teleportInput);
+
+			fileNameText.setPosition(
+				camera.getCenter().x - 300.f,
+				camera.getCenter().y
+			);
+			window.draw(fileNameText);
+		}
+
 		if (showDebugMenu)
 		{
 			debugText.setString(
@@ -409,6 +463,7 @@ namespace fp
 				"[F7] Kill All Enemies\n"
 				"[F8] Refill Health\n"
 				"[F9] Teleport to end\n"
+				"[F10] Teleport to XY\n"
 			);
 
 			debugText.setPosition(
@@ -480,6 +535,7 @@ namespace fp
 
 			debugResultText.setString(
 				"Player Y: " + std::to_string(player->getPosition().y) +
+				"\nPlayer X: " + std::to_string(player->getPosition().x) +
 				"\nVelY: " + std::to_string(player->getVelocity().y) +
 				"\nCanJump: " + std::string(player->getCanJump() ? "YES" : "NO")
 			);
