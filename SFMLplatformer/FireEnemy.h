@@ -12,6 +12,8 @@ namespace fp
 		void render(sf::RenderWindow&) override;
 
 	private:
+		void checkDirectionChange(TileMap& map);
+		bool chasingPlayer = false;
 
 		float shootTimer = 0.f;
 		float shootCooldown = 2.f;
