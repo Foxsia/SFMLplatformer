@@ -15,4 +15,34 @@ namespace fp
 			res.push_back(element.get());
 		return res;
 	}
+
+	inline std::string formatTime(float seconds)
+	{
+		int total = static_cast<int>(seconds);
+
+		int minutes = total / 60;
+		int secs = total % 60;
+
+		return std::to_string(minutes) + ":" +
+			(secs < 10 ? "0" : "") + std::to_string(secs);
+	}
+
+	inline std::string formatLevelName(const std::string& path)
+	{
+		std::string name = path;
+
+		size_t pos = name.find("levels\\");
+		if (pos != std::string::npos)
+			name.erase(pos, 7);
+
+		pos = name.find("levels/");
+		if (pos != std::string::npos)
+			name.erase(pos, 7);
+
+		pos = name.find(".txt");
+		if (pos != std::string::npos)
+			name.erase(pos, 4);
+
+		return name;
+	}
 }

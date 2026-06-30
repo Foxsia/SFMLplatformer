@@ -1,5 +1,6 @@
 #pragma once
 #include "IState.h"
+#include "ScoreManager.h"
 
 namespace fp
 {
@@ -17,5 +18,8 @@ namespace fp
 
 		sf::Texture m_backgroundTexture;
 		sf::Sprite m_backgroundSprite;
+
+		bool showScores = false;
+		std::vector<ScoreEntry> scores;
 	};
 }

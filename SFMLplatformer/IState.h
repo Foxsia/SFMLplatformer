@@ -12,5 +12,7 @@ namespace fp
 
 		virtual void update(float dt, GameContext& context) = 0;
 		virtual void render(sf::RenderWindow& window, GameContext& context) = 0;
+		virtual void handleEvent(const sf::Event& event) {}
+		virtual bool blocksGameInput() const { return false; }
 	};
 }

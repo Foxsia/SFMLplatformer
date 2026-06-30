@@ -85,10 +85,23 @@ namespace fp
 			editor.setFillColor(sf::Color::White);
 
 		window.draw(editor);
+
+		sf::Text scores;
+		scores.setFont(*context.font);
+		scores.setString("SCORES");
+		scores.setCharacterSize(28);
+		scores.setPosition(MENU_X, MENU_START_Y + context.levelFiles->size() * MENU_SPACING + MENU_SPACING);
+
+		if (*context.selectedMenuIndex == context.levelFiles->size() + 1)
+			scores.setFillColor(sf::Color::Magenta);
+		else
+			scores.setFillColor(sf::Color::White);
+
+		window.draw(scores);
 	}
 	void MenuState::handleNavigation(GameContext& context)
 	{
-		const int totalOptions = context.levelFiles->size() + 1;
+		const int totalOptions = context.levelFiles->size() + 2;
 
 		if (context.input->isActionPressed("MENU_DOWN"))
 		{
@@ -112,10 +125,15 @@ namespace fp
 		{
 			loadLevel(context);
 		}
-		else
+		else if (*context.selectedMenuIndex == context.levelFiles->size())
 		{
 			openEditor(context);
 		}
+		else if (*context.selectedMenuIndex == context.levelFiles->size() + 1)
+		{
+			context.stateManager->changeState(StateType::Scores);
+		}
+
 		sf::sleep(sf::milliseconds(MENU_INPUT_DELAY_MS));
 	}
 	void MenuState::loadLevel(GameContext& context)

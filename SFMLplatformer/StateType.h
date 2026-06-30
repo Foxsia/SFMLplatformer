@@ -8,6 +8,7 @@ namespace fp
         Play,
         Editor,
         GameOver,
-        Win
+        Win,
+        Scores
     };
 }

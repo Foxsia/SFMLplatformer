@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\SFML\include;$(SolutionDir)External;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -168,6 +168,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="ScoreManager.cpp" />
+    <ClCompile Include="ScoresState.cpp" />
     <ClCompile Include="SFMLplatformer.cpp" />
     <ClCompile Include="SlimeEnemy.cpp" />
     <ClCompile Include="SpikeCreator.cpp" />
@@ -220,6 +222,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="ScoreManager.h" />
+    <ClInclude Include="ScoresState.h" />
     <ClInclude Include="SlimeEnemy.h" />
     <ClInclude Include="SpikeCreator.h" />
     <ClInclude Include="StateManager.h" />

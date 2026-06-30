@@ -37,10 +37,12 @@ namespace fp
 
 		void setTypingFileName(bool isTyping);
 		void setShowDebug(bool show);
-		const bool getTypingFileName() { return typingFileName; };
-		std::string& getFileNameInput() { return fileNameInput; };
+		const bool getTypingFileName() { return typingFileName; }
+		std::string& getFileNameInput() { return fileNameInput; }
 		void saveLevel();
 		const sf::RenderWindow& getWindow() const;
+
+		float getLevelRunTime() const { return levelTimer.getElapsedTime().asSeconds(); }
 
 	private:
 		void initWindow();

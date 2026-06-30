@@ -16,6 +16,7 @@
 #include "InvulnerabilityFruitCreator.h"
 #include "FireEnemyCreator.h"
 #include <sstream>
+#include <fstream>
 #include "SpikeCreator.h"
 #include "CollisionSystem.h"
 
@@ -146,6 +147,8 @@ namespace fp
 		input->bindKey("DEBUG_TELEPORT_END", sf::Keyboard::F9);
 		input->bindKey("DEBUG_TELEPORT", sf::Keyboard::F10);
 
+		input->bindKey("SUBMIT_SCORE", sf::Keyboard::Tab);
+		input->bindGamepadButton("SUBMIT_SCORE", 5);
 	}
 
 	void Game::initTileSheet()
@@ -279,10 +282,20 @@ namespace fp
 
 		while (window.pollEvent(event))
 		{
+			if (auto* state = stateManager.getCurrentState())
+			{
+				state->handleEvent(event);
+			}
+
 			if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window.close();
 
 			if (input->isActionPressed("MENU_BACK") && !typingFileName)
 			{
+				if (auto* state = stateManager.getCurrentState())
+				{
+					if (state->blocksGameInput()) return;
+				}
+
 				tileMap->clear();
 
 				enemies.clear();

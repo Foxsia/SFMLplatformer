@@ -5,6 +5,7 @@
 #include "EditorState.h"
 #include "GameOverState.h"
 #include "WinState.h"
+#include "ScoresState.h"
 
 namespace fp
 {
@@ -26,6 +27,9 @@ namespace fp
 				break;
 			case StateType::Win:
 				currentState = std::make_unique<WinState>();
+				break;
+			case StateType::Scores:
+				currentState = std::make_unique<ScoresState>();
 				break;
 		}
 	}

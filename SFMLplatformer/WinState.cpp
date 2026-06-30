@@ -1,4 +1,6 @@
 #include "WinState.h"
+#include "ScoreManager.h"
+#include "Utils.h"
 
 namespace fp
 {
@@ -9,6 +11,23 @@ namespace fp
 	}
 	void WinState::update(float dt, GameContext& context)
 	{
+		if (typingName)
+		{
+			if (context.input->isActionPressed("SUBMIT_SCORE"))
+			{
+				ScoreEntry entry;
+				entry.name = nameInput;
+				entry.score = context.player->getScore();
+				entry.time = formatTime(context.game->getLevelRunTime());
+				entry.level = formatLevelName(*context.currentLevel);
+				ScoreManager::addScore(entry);
+
+				typingName = false;
+				savedScore = true;
+			}
+			return;
+		}
+
 		if (context.input->isActionPressed("MENU_SELECT"))
 		{
 			context.player->hardReset();
@@ -48,18 +67,45 @@ namespace fp
 		window.draw(w_backgroundSprite);
 
 
-		sf::Text text;
 		text.setFont(*context.font);
-		text.setString(
-			"YOU WIN\n\n"
-			"Score: " + std::to_string(context.player->getScore()) +
-			"\nENTER - Restart\n"
-			"M - Menu"
-		);
+
+		if (typingName)
+			text.setString("YOU WIN\n\n ENTER NAME + PRESS TAB");
+		else
+			text.setString("YOU WIN\n\nScore: " + std::to_string(context.player->getScore()) + "\nENTER - RESTART\nM - MENU");
 
 		text.setCharacterSize(40);
 		text.setPosition(200.f, 200.f);
 
 		window.draw(text);
+
+		if (typingName)
+		{
+			nameText.setFont(*context.font);
+			nameText.setString("ENTER NAME: " + nameInput);
+			nameText.setCharacterSize(30);
+			nameText.setPosition(100.f, 100.f);
+
+			window.draw(nameText);
+		}
+	}
+	void WinState::handleEvent(const sf::Event& event)
+	{
+		if (!typingName) return;
+
+		if (event.type == sf::Event::TextEntered)
+		{
+			char c = static_cast<char>(event.text.unicode);
+
+			if (std::isprint(c))
+				nameInput += c;
+		}
+
+		if (event.type == sf::Event::KeyPressed &&
+			event.key.code == sf::Keyboard::BackSpace)
+		{
+			if (!nameInput.empty())
+				nameInput.pop_back();
+		}
 	}
 }
