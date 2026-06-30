@@ -23,6 +23,8 @@ namespace fp
 		static void resolveFireballBounds(std::vector<std::unique_ptr<FireBall>>& fireballs,
 			sf::RenderWindow& window);
 		static void resolvePlayerSpikeCollision(Player& player, TileMap& map);
+
+		static bool canTeleportTo(const sf::FloatRect& bounds, TileMap& map, std::vector<std::unique_ptr<Enemy>>& enemies);
 	private:
 		struct TileRange
 		{

@@ -331,6 +331,39 @@ namespace fp
 			}
 		}
 	}
+	bool CollisionSystem::canTeleportTo(const sf::FloatRect& bounds, TileMap& map, std::vector<std::unique_ptr<Enemy>>& enemies)
+	{
+		for (const auto& enemy : enemies)
+		{
+			if (!enemy->isAlive()) continue;
+
+			if (bounds.intersects(enemy->getHitbox()))
+			{
+				return false;
+			}
+		}
+
+		TileRange range = CalculateTileRange(bounds, map);
+
+		for (int x = range.left; x <= range.right; x++)
+		{
+			for (int y = range.top; y <= range.bottom; y++)
+			{
+				Tile* tile = map.getTile(x, y);
+
+				if (!tile) continue;
+
+				if (tile->getType() != TileType::Spike) continue;
+
+				if (bounds.intersects(tile->getGlobalBounds()))
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
 	CollisionSystem::TileRange CollisionSystem::CalculateTileRange(const sf::FloatRect& bounds, const TileMap& map, int padding)
 	{
 		const int TILE_SIZE = map.getTileSize();

@@ -89,6 +89,9 @@ namespace fp
 		bool showDebugMenu = false;
 		sf::Text debugText;
 		sf::Text debugResultText;
+		sf::Text teleportResultText;
+		bool showTeleportError = false;
+		sf::Clock teleportErrorClock;
 
 		bool typingTeleport = false;
 		std::string teleportInput;

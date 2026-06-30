@@ -17,6 +17,7 @@
 #include "FireEnemyCreator.h"
 #include <sstream>
 #include "SpikeCreator.h"
+#include "CollisionSystem.h"
 
 namespace fp
 {
@@ -73,6 +74,10 @@ namespace fp
 		debugResultText.setFont(font);
 		debugResultText.setCharacterSize(20);
 		debugResultText.setFillColor(sf::Color::Red);
+
+		teleportResultText.setFont(font);
+		teleportResultText.setCharacterSize(20);
+		teleportResultText.setFillColor(sf::Color::Red);
 	}
 
 	void Game::initInput()
@@ -284,6 +289,8 @@ namespace fp
 
 				collectibles.clear();
 
+				showDebugMenu = false;
+
 				stateManager.changeState(StateType::Menu);
 			}
 
@@ -357,15 +364,31 @@ namespace fp
 
 				ss >> teleportX >> teleportY;
 
-				std::cout << "X = " << teleportX << " Y = " << teleportY << std::endl;
+				sf::FloatRect targetBounds(teleportX, teleportY, player->getHitbox().width, player->getHitbox().height);
 
-				player->setPosition(teleportX, teleportY);
+				if (CollisionSystem::canTeleportTo(targetBounds, *tileMap, enemies))
+				{
+					player->setPosition(teleportX, teleportY);
 
-				player->resetVelocityX();
-				player->resetVelocityY();
+					player->resetVelocityX();
+					player->resetVelocityY();
+					showTeleportError = false;
+				}
+				else
+				{
+					showTeleportError = true;
+					teleportErrorClock.restart();
+				}
 
 				typingTeleport = false;
 			}
+		}
+
+
+		if (showTeleportError &&
+			teleportErrorClock.getElapsedTime().asSeconds() > 2.f)
+		{
+			showTeleportError = false;
 		}
 
 		fp::GameContext context;
@@ -462,6 +485,17 @@ namespace fp
 				camera.getCenter().y
 			);
 			window.draw(fileNameText);
+		}
+
+		if (showTeleportError)
+		{
+			teleportResultText.setString("Cannot teleport there!");
+			teleportResultText.setPosition(
+				camera.getCenter().x - 300.f,
+				camera.getCenter().y + 40.f
+			);
+
+			window.draw(teleportResultText);
 		}
 
 		if (showDebugMenu)
