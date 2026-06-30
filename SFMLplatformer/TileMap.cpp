@@ -12,6 +12,8 @@ namespace fp
 
 		const unsigned MOVING_TILE_TEXTURE_X = 128;
 		const unsigned MOVING_TILE_TEXTURE_Y = 0;
+		const unsigned SPIKE_TEXTURE_X = 128;
+		const unsigned SPIKE_TEXTURE_Y = 288;
 	}
 
 	TileMap::TileMap()
@@ -95,6 +97,14 @@ namespace fp
 		}
 	}
 
+	void TileMap::addSpikeTile(unsigned x, unsigned y)
+	{
+		if (tiles[x][y] == nullptr)
+		{
+			tiles[x][y] = std::make_unique<Tile>( x, y, tileSheet, sf::IntRect(SPIKE_TEXTURE_X, SPIKE_TEXTURE_Y, tileSize, tileSize), TileType::Spike);
+		}
+	}
+
 	void TileMap::clear()
 	{
 		for (auto& col : tiles)
@@ -128,6 +138,18 @@ namespace fp
 		}
 	}
 
+	void TileMap::update(float dt)
+	{
+		for (auto& col : tiles)
+		{
+			for (auto& tile : col)
+			{
+				if (tile)
+					tile->update(dt);
+			}
+		}
+	}
+
 	void TileMap::saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies, const std::vector<Collectible*>& collectibles)
 	{
 		std::ofstream file(filename);
@@ -149,9 +171,13 @@ namespace fp
 					{
 						value = 4;
 					}
-					else
+					else if(tiles[x][y]->getType() == TileType::Static)
 					{
 						value = 1;
+					}
+					else
+					{
+						value = 9;
 					}
 				}
 

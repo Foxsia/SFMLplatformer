@@ -16,6 +16,7 @@
 #include "InvulnerabilityFruitCreator.h"
 #include "FireEnemyCreator.h"
 #include <sstream>
+#include "SpikeCreator.h"
 
 namespace fp
 {
@@ -196,6 +197,9 @@ namespace fp
 		EntityFactory::registerCreator(
 			8,
 			std::make_unique<FireEnemyCreator>());
+		EntityFactory::registerCreator(
+			9,
+			std::make_unique<SpikeCreator>());
 	}
 
 	void Game::buildMovingPlatforms()

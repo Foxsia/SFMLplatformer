@@ -170,6 +170,7 @@
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="SFMLplatformer.cpp" />
     <ClCompile Include="SlimeEnemy.cpp" />
+    <ClCompile Include="SpikeCreator.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileCreator.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="SlimeEnemy.h" />
+    <ClInclude Include="SpikeCreator.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="StateType.h" />
     <ClInclude Include="Tile.h" />

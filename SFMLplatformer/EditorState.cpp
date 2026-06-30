@@ -261,13 +261,17 @@ namespace fp
             );
 
             context.enemies->push_back(std::move(enemy));
-            }
+        }
+        if (brush == BrushType::Spike)
+        {
+            context.tileMap->addSpikeTile(mouseX, mouseY);
+        }
     }
     void EditorState::removeElement(GameContext& context, int mouseX, int mouseY)
     {
         sf::RenderWindow& window = *context.window;
 
-        if (brush == BrushType::Tile || brush == BrushType::MovingTile)
+        if (brush == BrushType::Tile || brush == BrushType::MovingTile || brush == BrushType::Spike)
         {
             context.tileMap->removeTile(mouseX, mouseY);
         }

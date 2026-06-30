@@ -28,6 +28,8 @@ namespace fp
 			}
 		}
 
+		context.tileMap->update(dt);
+
 		for (auto& fireball : *context.fireballs)
 		{
 			fireball->update(dt);
@@ -71,10 +73,8 @@ namespace fp
 		CollisionSystem::resolvePlayerCollectibleCollision(*context.player, *context.collectibles);
 		CollisionSystem::resolveFireballEnemyPlayerCollision(*context.fireballs, *context.player, *context.enemies);
 		CollisionSystem::resolveFireballTileCollision(*context.fireballs, *context.tileMap);
-		CollisionSystem::resolveFireballBounds(
-			*context.fireballs,
-			*context.window
-		);
+		CollisionSystem::resolveFireballBounds(*context.fireballs, *context.window);
+		CollisionSystem::resolvePlayerSpikeCollision(*context.player, *context.tileMap);
 	}
 
 	void WorldState::handleInput(float dt, GameContext& context)

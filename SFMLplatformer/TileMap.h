@@ -34,10 +34,12 @@ namespace fp
 		void removeTile(unsigned x, unsigned y);
 
 		void addMovingTile(unsigned x, unsigned y);
+		void addSpikeTile(unsigned x, unsigned y);
 
 		void clear();
 
 		void render(sf::RenderTarget& target);
+		void update(float dt);
 		void saveToFile(const std::string& filename, const std::vector<Enemy*>& enemies, const std::vector<Collectible*>& collectibles);
 
 		void loadBackground(const std::string& path);

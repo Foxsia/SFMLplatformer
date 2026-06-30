@@ -155,6 +155,11 @@ namespace fp
             brushSprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
             brushSprite.setScale(1.f, 1.f);
             break;
+        case BrushType::Spike:
+            brushSprite.setTexture(tileTexture, true);
+            brushSprite.setTextureRect(sf::IntRect(128, 256, 32, 32));
+            brushSprite.setScale(1.f, 1.f);
+            break;
         }
         brushSprite.setPosition(pos.x + 110.f, pos.y + 70.f);
 
@@ -175,6 +180,7 @@ namespace fp
             case BrushType::Portal: return "Portal";
             case BrushType::InvulnerabilityFruit: return "Invulnerability";
             case BrushType::FireEnemy: return "FireEnemy";
+            case BrushType::Spike: return "Spike";
             default: return "Unknown";
         }
 	}

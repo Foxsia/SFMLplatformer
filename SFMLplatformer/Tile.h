@@ -8,7 +8,8 @@ namespace fp
 	enum class TileType
 	{
 		Static,
-		Moving
+		Moving,
+		Spike
 	};
 
 	class Tile
@@ -29,9 +30,12 @@ namespace fp
 
 		TileType getType() const { return type; };
 
+		bool isSpikeActive() const { return spikeActive; }
+
 		void move(const sf::Vector2f& offset);
 
 		void render(sf::RenderTarget& target);
+		void update(float dt);
 
 	private:
 		sf::Sprite sprite;
@@ -44,6 +48,10 @@ namespace fp
 
 		static constexpr float hitboxWidth = 28.f;
 		static constexpr float hitboxHeight = 32.f;
+
+		float spikeTimer = 0.f;
+		bool spikeActive = false;
+		bool spikeExtending = true;
 
 	};
 }

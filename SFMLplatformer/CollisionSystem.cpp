@@ -26,6 +26,11 @@ namespace fp
 
 				if (!tile) continue;
 
+				if (tile->getType() == TileType::Spike)
+				{
+					continue;
+				}
+
 				const sf::FloatRect tileBounds = tile->getGlobalBounds();
 
 				if (!playerBounds.intersects(tileBounds)) continue;
@@ -298,6 +303,31 @@ namespace fp
 			if (fireballBottom > screenBottom)
 			{
 				fireball->destroy();
+			}
+		}
+	}
+	void CollisionSystem::resolvePlayerSpikeCollision(Player& player, TileMap& map)
+	{
+		sf::FloatRect playerBounds = player.getHitbox();
+
+		TileRange range = CalculateTileRange(playerBounds, map);
+
+		for (int x = range.left; x <= range.right; x++)
+		{
+			for (int y = range.top; y <= range.bottom; y++)
+			{
+				Tile* tile = map.getTile(x, y);
+
+				if (!tile) continue;
+
+				if (tile->getType() != TileType::Spike) continue;
+
+				if (!tile->isSpikeActive()) continue;
+
+				if (playerBounds.intersects(tile->getGlobalBounds()))
+				{
+					player.takeDamage(1);
+				}
 			}
 		}
 	}

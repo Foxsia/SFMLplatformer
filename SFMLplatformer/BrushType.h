@@ -14,6 +14,7 @@ namespace fp
 		Portal,
 		InvulnerabilityFruit,
 		FireEnemy,
+		Spike,
 
 		Count
 	};
