@@ -5,15 +5,6 @@
 
 namespace fp
 {
-    namespace
-    {
-        const float ENEMY_HITBOX_PADDING_LEFT = 10.f;
-        const float ENEMY_HITBOX_PADDING_RIGHT = 10.f;
-
-        const float ENEMY_HITBOX_PADDING_TOP = 5.f;
-        const float ENEMY_HITBOX_PADDING_BOTTOM = 0.f;
-    }
-
     SlimeEnemy::SlimeEnemy() : Enemy(1, 1, EnemyType::Slime)
     {
         textureSheet.loadFromFile("assets/slime_green.png");

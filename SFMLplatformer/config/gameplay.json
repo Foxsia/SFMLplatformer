@@ -1,0 +1,71 @@
+{
+  "player": {
+    "jumpForce": 700,
+    "velocityMax": 500,
+    "velocityMin": 1,
+    "acceleration": 4000,
+    "drag": 0.95,
+    "gravity": 1500,
+    "velocityMaxY": 1000,
+
+    "invulnerabilityDuration": 10,
+    "starVelocityMax": 750,
+
+    "hitboxPaddingLeft": 28,
+    "hitboxPaddingRight": 28,
+    "hitboxPaddingTop": 28,
+    "hitboxPaddingBottom": 0,
+
+    "portalOffset": 10
+  },
+  "animations": {
+    "idleDelay": 40.0,
+    "runDelay": 20.0
+  },
+  "collision": {
+    "enemyScore": 100,
+    "collisionTolerance": 10.0,
+    "groundSnapTolerance": 20.0
+  },
+  "enemy": {
+    "hitboxPaddingLeft": 10,
+    "hitboxPaddingRight": 10,
+    "hitboxPaddingTop": 5,
+    "hitboxPaddingBottom": 0
+  },
+  "fireball": {
+    "velocity": 500.0,
+    "gravity": 1000.0,
+    "bounceForce": -300.0
+  },
+  "fireEnemy": {
+    "followDistance": 300.0,
+    "loseDistance": 360.0,
+    "stopDistance": 20.0,
+    "verticalSightDistance": 200.0,
+
+    "fireballOffsetXRight": 40.0,
+    "fireballOffsetXLeft": -10.0,
+    "fireballOffsetY": 20.0,
+
+    "groundCheckOffsetX": 1.0,
+    "groundCheckOffsetY": 5.0
+  },
+  "collectibles": {
+    "fireFruit": 75,
+    "lifeFruit": 50,
+    "invulFruit": 200
+  },
+  "game": {
+    "levelDuration": 300.0,
+    "teleportErrorDuration": 2.0
+  },
+  "spikes": {
+    "hiddenTime": 2.0,
+    "activeTime": 1.0
+  },
+  "world": {
+    "shootCooldownMs": 300,
+    "fireballSpawnOffsetY": 40.0
+  }
+}

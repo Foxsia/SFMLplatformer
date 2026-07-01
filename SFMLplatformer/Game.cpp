@@ -19,6 +19,7 @@
 #include <fstream>
 #include "SpikeCreator.h"
 #include "CollisionSystem.h"
+#include "ConfigManager.h"
 
 namespace fp
 {
@@ -36,15 +37,11 @@ namespace fp
 
 		const float PLAYER_MOVE_Y = 0.f;
 
-		const float TILE_TOP_COLLISION_OFFSET = 20.f;
-
 		const float JOYSTICK_THRESHOLD_LEFT = -50.f;
 		const float JOYSTICK_THRESHOLD_RIGHT = 50.f;
 
 		const float JOYSTICK_THRESHOLD_DOWN = -50.f;
 		const float JOYSTICK_THRESHOLD_UP = 50.f;
-
-		const float LEVEL_DURATION = 300.f;
 	}
 
 	void Game::initWindow()
@@ -259,8 +256,10 @@ namespace fp
 	}
 
 	Game::Game()
-		: deltaTime(0.f), levelDuration(LEVEL_DURATION)
+		: deltaTime(0.f)
 	{
+		ConfigManager::load("config/gameplay.json");
+		levelDuration = ConfigManager::get("game").at("levelDuration").get<float>();
 		initWindow();
 		initInput();
 		initCreators();
@@ -399,7 +398,7 @@ namespace fp
 
 
 		if (showTeleportError &&
-			teleportErrorClock.getElapsedTime().asSeconds() > 2.f)
+			teleportErrorClock.getElapsedTime().asSeconds() > ConfigManager::get("game").at("teleportErrorDuration").get<float>())
 		{
 			showTeleportError = false;
 		}

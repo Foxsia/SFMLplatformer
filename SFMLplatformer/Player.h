@@ -5,6 +5,7 @@
 #include "AnimationComponent.h"
 #include "MovementComponent.h"
 #include "Entity.h"
+#include <nlohmann/json.hpp>
 
 namespace fp
 {
@@ -87,6 +88,8 @@ namespace fp
 		float invulnerabilityDuration;
 
 		float speedMultiplier = 1.f;
+
+		const nlohmann::json* cfg;
 	};
 }
 

@@ -1,17 +1,13 @@
 #include "CollisionSystem.h"
 #include "EditorState.h"
 #include <algorithm>
+#include "ConfigManager.h"
 
 namespace fp
 {
-	namespace
-	{
-		const int SCORE_ENEMY = 100;
-		const int SCORE_COLLECTIBLE = 50;
-		const float COLLISION_TOLERANCE = 10.f;
-	}
 	void CollisionSystem::resolvePlayerTileCollision(Player& player, TileMap& map)
 	{
+		const auto& cfg = ConfigManager::get("collision");
 		bool grounded = false;
 
 		sf::FloatRect playerBounds = player.getHitbox();
@@ -43,7 +39,7 @@ namespace fp
 					playerCenterX > tileBounds.left &&
 					playerCenterX < tileBounds.left + tileBounds.width;
 
-				if (insideTileX && player.getVelocity().y >= 0.f && playerBottom <= tileBounds.top + 20.f)
+				if (insideTileX && player.getVelocity().y >= 0.f && playerBottom <= tileBounds.top + cfg["groundSnapTolerance"])
 				{
 					playerBounds = player.getGlobalBounds();
 					player.setPosition(
@@ -65,6 +61,7 @@ namespace fp
 		Player& player,
 		std::vector<std::unique_ptr<MovingPlatform>>& platforms)
 	{
+		const auto& cfg = ConfigManager::get("collision");
 		sf::FloatRect playerBounds = player.getHitbox();
 
 		const float playerBottom = playerBounds.top + playerBounds.height;
@@ -81,8 +78,8 @@ namespace fp
 
 				float tileTop = tileBounds.top;
 
-				bool standing = player.getVelocity().y >= 0.f && playerBottom <= tileTop + COLLISION_TOLERANCE &&
-					playerBottom >= tileTop - COLLISION_TOLERANCE / 2.f;
+				bool standing = player.getVelocity().y >= 0.f && playerBottom <= tileTop + cfg["collisionTolerance"] &&
+					playerBottom >= tileTop - cfg["collisionTolerance"] / 2.f;
 
 				if (standing)
 				{
@@ -103,6 +100,7 @@ namespace fp
 
 	void CollisionSystem::resolveEnemyTileCollision(Enemy& enemy, TileMap& map)
 	{
+		const auto& cfg = ConfigManager::get("collision");
 		const sf::FloatRect bounds = enemy.getGlobalBounds();
 
 		TileRange range = CalculateTileRange(bounds, map);
@@ -122,7 +120,7 @@ namespace fp
 
 				// simple ground collision
 				if (enemy.getVelocity().y > 0.f &&
-					enemyBottom <= tileBounds.top + COLLISION_TOLERANCE)
+					enemyBottom <= tileBounds.top + cfg["collisionTolerance"])
 				{
 					enemy.setPosition(bounds.left, tileBounds.top - bounds.height);
 					enemy.setVelocityY(0.f);
@@ -134,6 +132,7 @@ namespace fp
 
 	void CollisionSystem::resolveFireballTileCollision(std::vector<std::unique_ptr<FireBall>>& fireballs, TileMap& map)
 	{
+		const auto& cfg = ConfigManager::get("collision");
 		const int TILE_SIZE = map.getTileSize();
 
 		for (auto& fireball : fireballs)
@@ -160,7 +159,7 @@ namespace fp
 
 					float fireballBottom = bounds.top + bounds.height;
 
-					if (fireball->getVelocity().y > 0.f && fireballBottom <= tileBounds.top + COLLISION_TOLERANCE)
+					if (fireball->getVelocity().y > 0.f && fireballBottom <= tileBounds.top + cfg["collisionTolerance"])
 					{
 						fireball->setPosition(
 							bounds.left,
@@ -183,6 +182,7 @@ namespace fp
 
 	void CollisionSystem::resolvePlayerEnemyCollision(Player& player, std::vector < std::unique_ptr<Enemy>>& enemies)
 	{
+		const auto& cfg = ConfigManager::get("collision");
 		sf::FloatRect playerBounds = player.getHitbox();
 
 		for (const auto& enemy : enemies)
@@ -198,7 +198,7 @@ namespace fp
 				enemy->takeDamage(enemy->getMaxHealth());
 				enemy->loseLife(enemy->getStartLives());
 
-				if (!enemy->isAlive()) player.addScore(SCORE_ENEMY);
+				if (!enemy->isAlive()) player.addScore(cfg["enemyScore"]);
 
 				continue;
 			}
@@ -206,13 +206,13 @@ namespace fp
 			float playerBottom = playerBounds.top + playerBounds.height;
 			float enemyTop = enemyBounds.top;
 
-			bool stomp = player.getVelocity().y > 0.f && playerBottom <= enemyTop + COLLISION_TOLERANCE;
+			bool stomp = player.getVelocity().y > 0.f && playerBottom <= enemyTop + cfg["collisionTolerance"];
 
 			if (stomp)
 			{
 				enemy->takeDamage(1);
 
-				if (!enemy->isAlive()) player.addScore(SCORE_ENEMY);
+				if (!enemy->isAlive()) player.addScore(cfg["enemyScore"]);
 
 				player.resetVelocityY();
 				continue;

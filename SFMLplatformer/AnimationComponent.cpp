@@ -1,4 +1,5 @@
 #include "AnimationComponent.h"
+#include "ConfigManager.h"
 
 namespace fp
 {
@@ -10,30 +11,29 @@ namespace fp
         const int IDLE_START_X = 0;
         const int IDLE_START_Y = 0;
         const int IDLE_FRAME_COUNT = 3;
-        const float IDLE_DELAY = 40.f;
 
         const int RUN_START_X = 0;
         const int RUN_START_Y = 64;
         const int RUN_FRAME_COUNT = 8;
-        const float RUN_DELAY = 20.f;
     }
 
     AnimationComponent::AnimationComponent(sf::Sprite& sprite, sf::Texture& textureSheet)
         : sprite(sprite), textureSheet(textureSheet)
     {
+        const auto& cfg = ConfigManager::get("animations");
         add("IDLE",
             std::make_unique<Animation>(sprite,
                 IDLE_START_X, IDLE_START_Y,
                 FRAME_WIDTH, FRAME_HEIGHT,
                 IDLE_FRAME_COUNT,
-                IDLE_DELAY));
+                cfg["idleDelay"]));
 
         add("RUN",
             std::make_unique<Animation>(sprite,
                 RUN_START_X, RUN_START_Y,
                 FRAME_WIDTH, FRAME_HEIGHT,
                 RUN_FRAME_COUNT,
-                RUN_DELAY));
+                cfg["runDelay"]));
     }
 
     void AnimationComponent::add(const std::string& key, std::unique_ptr<Animation> animation)

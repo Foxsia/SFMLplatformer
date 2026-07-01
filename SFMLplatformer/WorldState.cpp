@@ -7,14 +7,10 @@
 #include "CameraController.h"
 #include "Enemy.h"
 #include "FireBall.h"
+#include "ConfigManager.h"
 
 namespace fp
 {
-	namespace
-	{
-		const int SHOOT_COOLDOWN = 300;
-		const float FIREBALL_SPAWN_OFFSET_Y = 40.f;
-	}
 	void WorldState::update(float dt, GameContext& context)
 	{
 		dt = std::min(dt, 1.f / 30.f);
@@ -124,6 +120,7 @@ namespace fp
 	}
 	void WorldState::handlePlayerInput(float dt, GameContext& context)
 	{
+		auto& cfg = ConfigManager::get("world");
 		sf::RenderWindow& window = *context.window;
 
 		const sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
@@ -151,13 +148,13 @@ namespace fp
 			player->jump();
 		}
 
-		if (player->hasFirePower() && context.input->isActionPressed("SHOOT") && fireClock.getElapsedTime().asMilliseconds() > SHOOT_COOLDOWN)
+		if (player->hasFirePower() && context.input->isActionPressed("SHOOT") && fireClock.getElapsedTime().asMilliseconds() > cfg.at("shootCooldownMs").get<int>())
 		{
 			fireClock.restart();
 
 			sf::Vector2f pos = player->getPosition();
 
-			pos.y += FIREBALL_SPAWN_OFFSET_Y;
+			pos.y += cfg.at("fireballSpawnOffsetY").get<float>();
 
 			context.fireballs->push_back(
 				std::make_unique<FireBall>(

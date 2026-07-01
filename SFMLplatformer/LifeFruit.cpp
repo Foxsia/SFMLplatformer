@@ -1,12 +1,9 @@
 #include "LifeFruit.h"
 #include "Player.h"
+#include "ConfigManager.h"
 
 namespace fp
 {
-	namespace
-	{
-		const int SCORE_COLLECTIBLE = 50;
-	}
 	LifeFruit::LifeFruit()
 	{
 		texture.loadFromFile("assets/fruit.png");
@@ -15,8 +12,9 @@ namespace fp
 	}
 	void LifeFruit::onCollect(Player& player)
 	{
+		const auto& cfg = ConfigManager::get("collectibles");
 		player.addLife(1);
-		player.addScore(SCORE_COLLECTIBLE);
+		player.addScore(cfg.at("lifeFruit").get<int>());
 
 		collected = true;
 	}

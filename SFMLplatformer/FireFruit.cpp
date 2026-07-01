@@ -1,12 +1,9 @@
 #include "FireFruit.h"
 #include "Player.h"
+#include "ConfigManager.h"
 
 namespace fp
 {
-	namespace
-	{
-		const int SCORE_COLLECTIBLE = 75;
-	}
 	FireFruit::FireFruit()
 	{
 		texture.loadFromFile("assets/fire_fruit.png");
@@ -15,8 +12,9 @@ namespace fp
 	}
 	void FireFruit::onCollect(Player& player)
 	{
+		const auto& cfg = ConfigManager::get("collectibles");
 		player.setFirePower(true);
-		player.addScore(SCORE_COLLECTIBLE);
+		player.addScore(cfg.at("fireFruit").get<int>());
 
 		collected = true;
 	}

@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Portal.h"
 #include <iostream>
+#include "ConfigManager.h"
 
 namespace fp
 {
@@ -14,39 +15,14 @@ namespace fp
 		const float SPRITE_ORIGIN_X = 0.f;
 		const float SPRITE_ORIGIN_Y = 0.f;
 
-		const float PLAYER_JUMP_FORCE = 700.f;
-
-		const float VELOCITY_MAX = 500.f;
-		const float VELOCITY_MIN = 1.f;
-
-		const float ACCELERATION = 4000.f;
-
-		const float DRAG = 0.95f;
-
-		const float GRAVITY = 1500.f;
-
-		const float VELOCITY_MAX_Y = 1000.f;
-
 		const float RIGHT_MOVEMENT_THRESHOLD = 0.f;
 		const float LEFT_MOVEMENT_THRESHOLD = 0.f;
-
-		const float PLAYER_HITBOX_PADDING_LEFT = 28.f;
-		const float PLAYER_HITBOX_PADDING_RIGHT = 28.f;
-
-		const float PLAYER_HITBOX_PADDING_TOP = 28.f;
-		const float PLAYER_HITBOX_PADDING_BOTTOM = 0.f;
-
-		const float PORTAL_OFFSET = 10.f;
-
-		const float INVULNERABILITY_DURATION = 10.f;
-
-		const float STAR_VELOCITY_MAX = 750.f;
 	}
 
 	void Player::initVariables()
 	{
 		animState = IDLE;
-		invulnerabilityDuration = INVULNERABILITY_DURATION;
+		invulnerabilityDuration = cfg->at("invulnerabilityDuration").get<float>();
 	}
 
 	void Player::initTexture()
@@ -72,12 +48,12 @@ namespace fp
 	{
 		movementComponent = std::make_unique<MovementComponent>(
 			sprite,
-			VELOCITY_MAX,
-			VELOCITY_MIN,
-			ACCELERATION,
-			DRAG,
-			GRAVITY,
-			VELOCITY_MAX_Y
+			cfg->at("velocityMax").get<float>(),
+			cfg->at("velocityMin").get<float>(),
+			cfg->at("acceleration").get<float>(),
+			cfg->at("drag").get<float>(),
+			cfg->at("gravity").get<float>(),
+			cfg->at("velocityMaxY").get<float>()
 		);
 
 		canJump = false;
@@ -87,6 +63,7 @@ namespace fp
 
 	Player::Player() : Entity(2, 1)
 	{
+		cfg = &ConfigManager::get("player");
 		initVariables();
 		initTexture();
 		initSprite();
@@ -110,11 +87,16 @@ namespace fp
 	{
 		auto hitBox = sprite.getGlobalBounds();
 
-		hitBox.left += PLAYER_HITBOX_PADDING_LEFT;
-		hitBox.width -= PLAYER_HITBOX_PADDING_LEFT + PLAYER_HITBOX_PADDING_RIGHT;
+		float left = cfg->at("hitboxPaddingLeft").get<float>();
+		float right = cfg->at("hitboxPaddingRight").get<float>();
+		float top = cfg->at("hitboxPaddingTop").get<float>();
+		float bottom = cfg->at("hitboxPaddingBottom").get<float>();
 
-		hitBox.top += PLAYER_HITBOX_PADDING_TOP;
-		hitBox.height -= PLAYER_HITBOX_PADDING_TOP + PLAYER_HITBOX_PADDING_BOTTOM;
+		hitBox.left += left;
+		hitBox.width -= left + right;
+
+		hitBox.top += top;
+		hitBox.height -= top + bottom;
 
 		return hitBox;
 	}
@@ -168,7 +150,7 @@ namespace fp
 
 	void Player::jump()
 	{
-		movementComponent->jump(PLAYER_JUMP_FORCE);
+		movementComponent->jump(cfg->at("jumpForce").get<float>());
 		canJump = false;
 	}
 
@@ -229,12 +211,12 @@ namespace fp
 			invulnerable = false;
 			speedMultiplier = 1.f;
 
-			movementComponent->setVelocityMax(VELOCITY_MAX);
+			movementComponent->setVelocityMax(cfg->at("velocityMax").get<float>());
 		}
 
 		if (invulnerable)
 		{
-			movementComponent->setVelocityMax(STAR_VELOCITY_MAX);
+			movementComponent->setVelocityMax(cfg->at("starVelocityMax").get<float>());
 			float time = invunerabilityClock.getElapsedTime().asSeconds();
 
 			if (static_cast<int>(time * 10) % 2 == 0)
@@ -251,11 +233,13 @@ namespace fp
 		{
 			sf::FloatRect portalBounds = blockedPortal->getGlobalBounds();
 
+			float offset = cfg->at("portalOffset").get<float>();
+
 			sf::FloatRect expanded(
-				portalBounds.left - PORTAL_OFFSET,
-				portalBounds.top - PORTAL_OFFSET,
-				portalBounds.width + PORTAL_OFFSET,
-				portalBounds.height + PORTAL_OFFSET
+				portalBounds.left - offset,
+				portalBounds.top - offset,
+				portalBounds.width + offset,
+				portalBounds.height + offset
 			);
 
 			if (!getGlobalBounds().intersects(expanded))

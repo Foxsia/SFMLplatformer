@@ -1,27 +1,22 @@
 #include "FireBall.h"
+#include "ConfigManager.h"
 
 namespace fp
 {
-	namespace
-	{
-		const float VELOCITY = 500.f;
-		const float GRAVITY = 1000.f;
-
-		const float BOUNCE_FORCE = -300.f;
-	}
 	FireBall::FireBall(sf::Vector2f pos, bool right, Team team) : team(team)
 	{
+		const auto& cfg = ConfigManager::get("fireball");
 		shape.setRadius(8.f);
 
 		shape.setFillColor(sf::Color::Red);
 
 		shape.setPosition(pos);
 
-		velocity.x = right ? VELOCITY : -VELOCITY;
+		velocity.x = right ? cfg["velocity"].get<float>() : -cfg["velocity"].get<float>();
 	}
 	void FireBall::update(float dt)
 	{ 
-		if(this->getTeam() == Team::Player) velocity.y += GRAVITY * dt;
+		if(this->getTeam() == Team::Player) velocity.y += ConfigManager::get("fireball")["gravity"].get<float>() * dt;
 		shape.move(velocity * dt);
 	}
 	void FireBall::render(sf::RenderTarget& target)
@@ -42,6 +37,6 @@ namespace fp
 	}
 	void FireBall::bounce()
 	{
-		velocity.y = BOUNCE_FORCE;
+		velocity.y = ConfigManager::get("fireball")["bounceForce"].get<float>();
 	}
 }

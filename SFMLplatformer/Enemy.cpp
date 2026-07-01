@@ -1,18 +1,10 @@
 #include "Enemy.h"
 #include "TileMap.h"
 #include "CollisionSystem.h"
+#include "ConfigManager.h"
 
 namespace fp
 {
-    namespace
-    {
-        const float ENEMY_HITBOX_PADDING_LEFT = 10.f;
-        const float ENEMY_HITBOX_PADDING_RIGHT = 10.f;
-
-        const float ENEMY_HITBOX_PADDING_TOP = 5.f;
-        const float ENEMY_HITBOX_PADDING_BOTTOM = 0.f;
-    }
-
     Enemy::Enemy(int health, int lives, EnemyType type) : Entity(health, lives), type(type)
     {
         velocity = { 0.f, 0.f };
@@ -56,13 +48,14 @@ namespace fp
 
     sf::FloatRect Enemy::getHitbox() const
     {
+        const auto& cfg = ConfigManager::get("enemy");
         auto hitBox = sprite.getGlobalBounds();
 
-        hitBox.left += ENEMY_HITBOX_PADDING_LEFT;
-        hitBox.width -= ENEMY_HITBOX_PADDING_LEFT + ENEMY_HITBOX_PADDING_RIGHT;
+        hitBox.left += cfg["hitboxPaddingLeft"];
+        hitBox.width -= cfg.at("hitboxPaddingLeft").get<float>() + cfg.at("hitboxPaddingRight").get<float>();
 
-        hitBox.top += ENEMY_HITBOX_PADDING_TOP;
-        hitBox.height -= ENEMY_HITBOX_PADDING_TOP + ENEMY_HITBOX_PADDING_BOTTOM;
+        hitBox.top += cfg["hitboxPaddingTop"];
+        hitBox.height -= cfg.at("hitboxPaddingTop").get<float>() + cfg.at("hitboxPaddingBottom").get<float>();
 
         return hitBox;
     }

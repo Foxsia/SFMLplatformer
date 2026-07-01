@@ -1,15 +1,8 @@
 #include "Tile.h"
-
+#include "ConfigManager.h"
 
 namespace fp
 {
-	namespace
-	{
-		const float SPIKE_HIDDEN_TIME = 2.0f;
-		const float SPIKE_RAISE_TIME = 0.2f;
-		const float SPIKE_ACTIVE_TIME = 1.0f;
-		const float SPIKE_LOWER_TIME = 0.2f;
-	}
 	Tile::Tile(unsigned grid_pos_x, unsigned grid_pos_y, sf::Texture* texture_sheet, sf::IntRect texture_rect, TileType type) : type(type), gridX(grid_pos_x), gridY(grid_pos_y)
 	{
 		sprite.setTexture(*texture_sheet);
@@ -54,13 +47,14 @@ namespace fp
 	}
 	void Tile::update(float dt)
 	{
+		auto& cfg = ConfigManager::get("spikes");
 		if (type != TileType::Spike) return;
 
 		spikeTimer += dt;
 
 		if (!spikeActive)
 		{
-			if (spikeTimer >= SPIKE_HIDDEN_TIME)
+			if (spikeTimer >= cfg.at("hiddenTime").get<float>())
 			{
 				spikeTimer = 0.f;
 				spikeActive = true;
@@ -69,7 +63,7 @@ namespace fp
 		}
 		else
 		{
-			if (spikeTimer >= SPIKE_ACTIVE_TIME)
+			if (spikeTimer >= cfg.at("activeTime").get<float>())
 			{
 				spikeTimer = 0.f;
 				spikeActive = false;

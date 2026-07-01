@@ -4,23 +4,12 @@
 #include "GameContext.h"
 #include "Player.h"
 #include "Tile.h"
+#include "ConfigManager.h"
 
 namespace fp
 {
     namespace
     {
-        constexpr float FollowDistance = 300.f;
-        constexpr float LoseDistance = 360.f;
-        constexpr float StopDistance = 20.f;
-        constexpr float VerticalSightDistance = 200.f;
-
-        constexpr float FireballOffsetXRight = 40.f;
-        constexpr float FireballOffsetXLeft = -10.f;
-        constexpr float FireballOffsetY = 20.f;
-
-        constexpr float GroundCheckOffsetX = 1.f;
-        constexpr float GroundCheckOffsetY = 5.f;
-
         constexpr float SpriteScale = 3.f;
     }
 
@@ -38,6 +27,7 @@ namespace fp
 
     void FireEnemy::update(float dt, TileMap& map, GameContext& context)
     {
+        const auto& cfg = ConfigManager::get("fireEnemy");
         if (!isAlive()) return;
 
         shootTimer += dt;
@@ -55,16 +45,16 @@ namespace fp
             facing = (dx >= 0) ? 1 : -1;
         }
 
-        if (dy <= VerticalSightDistance)
+        if (dy <= cfg.at("verticalSightDistance").get<float>())
         {
             if (!chasingPlayer)
             {
-                if (std::abs(dx) <= FollowDistance)
+                if (std::abs(dx) <= cfg.at("followDistance").get<float>())
                     chasingPlayer = true;
             }
             else
             {
-                if (std::abs(dx) >= LoseDistance)
+                if (std::abs(dx) >= cfg.at("loseDistance").get<float>())
                     chasingPlayer = false;
             }
         }
@@ -80,9 +70,9 @@ namespace fp
             return;
         }
 
-        if (dx > StopDistance)
+        if (dx > cfg.at("stopDistance").get<float>())
             direction = 1;
-        else if (dx < -StopDistance)
+        else if (dx < -cfg.at("stopDistance").get<float>())
             direction = -1;
         else
             direction = 0;
@@ -110,8 +100,8 @@ namespace fp
 
             sf::Vector2f pos = sprite.getPosition();
 
-            pos.x += (right ? FireballOffsetXRight : FireballOffsetXLeft);
-            pos.y += FireballOffsetY;
+            pos.x += (right ? cfg.at("fireballOffsetXRight").get<float>() : cfg.at("fireballOffsetXLeft").get<float>());
+            pos.y += cfg.at("fireballOffsetY").get<float>();
 
             context.fireballs->push_back(
                 std::make_unique<FireBall>(pos, right, Team::Enemy)
@@ -124,13 +114,14 @@ namespace fp
     }
     void FireEnemy::checkDirectionChange(TileMap& map)
     {
+        const auto& cfg = ConfigManager::get("fireEnemy");
         const sf::FloatRect bounds = sprite.getGlobalBounds();
 
         const float footX = direction > 0
-            ? bounds.left + bounds.width + GroundCheckOffsetX
-            : bounds.left - GroundCheckOffsetX;
+            ? bounds.left + bounds.width + cfg.at("groundCheckOffsetX").get<float>()
+            : bounds.left - cfg.at("groundCheckOffsetX").get<float>();
 
-        const float footY = bounds.top + bounds.height + GroundCheckOffsetY;
+        const float footY = bounds.top + bounds.height + cfg.at("groundCheckOffsetY").get<float>();
 
         const int tileX = static_cast<int>(footX) / map.getTileSize();
         const int tileY = static_cast<int>(footY) / map.getTileSize();
