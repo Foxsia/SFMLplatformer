@@ -13,7 +13,7 @@ namespace fp
         constexpr float SpriteScale = 3.f;
     }
 
-    FireEnemy::FireEnemy() : Enemy(1, 1, EnemyType::Fire)
+    FireEnemy::FireEnemy() : Enemy(3, 1, EnemyType::Fire)
     {
         textureSheet.loadFromFile("assets/slime_purple.png");
 

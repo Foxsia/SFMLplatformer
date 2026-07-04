@@ -4,5 +4,17 @@
         "name": "knight1",
         "score": 0,
         "time": "0:10"
+    },
+    {
+        "level": "lvl5",
+        "name": "name",
+        "score": 0,
+        "time": "0:07"
+    },
+    {
+        "level": "Level1",
+        "name": "",
+        "score": 50,
+        "time": "0:33"
     }
 ]

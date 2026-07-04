@@ -61,6 +61,11 @@ namespace fp
 		damageCooldown = 0.f;
 	}
 
+	void Player::setSpriteColor(const sf::Color& color)
+	{
+		sprite.setColor(color);
+	}
+
 	Player::Player() : Entity(2, 1)
 	{
 		cfg = &ConfigManager::get("player");
@@ -204,6 +209,8 @@ namespace fp
 		updateMovement();
 		updateAnimation(dt);
 
+		updateDamageFlash();
+
 		if (damageCooldown > 0.f) damageCooldown -= dt;
 
 		if (invulnerable && invunerabilityClock.getElapsedTime().asSeconds() >= invulnerabilityDuration)
@@ -213,20 +220,22 @@ namespace fp
 
 			movementComponent->setVelocityMax(cfg->at("velocityMax").get<float>());
 		}
-
-		if (invulnerable)
+		if (!damageFlash)
 		{
-			movementComponent->setVelocityMax(cfg->at("starVelocityMax").get<float>());
-			float time = invunerabilityClock.getElapsedTime().asSeconds();
+			if (invulnerable)
+			{
+				movementComponent->setVelocityMax(cfg->at("starVelocityMax").get<float>());
+				float time = invunerabilityClock.getElapsedTime().asSeconds();
 
-			if (static_cast<int>(time * 10) % 2 == 0)
-				sprite.setColor(sf::Color::Yellow);
+				if (static_cast<int>(time * 10) % 2 == 0)
+					sprite.setColor(sf::Color::Yellow);
+				else
+					sprite.setColor(sf::Color::Magenta);
+			}
 			else
-				sprite.setColor(sf::Color::Magenta);
-		}
-		else
-		{
-			sprite.setColor(sf::Color::White);
+			{
+				sprite.setColor(sf::Color::White);
+			}
 		}
 
 		if (blockedPortal)

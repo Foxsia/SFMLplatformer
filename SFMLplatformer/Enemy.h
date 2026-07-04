@@ -59,5 +59,7 @@ namespace fp
         int direction = DIRECTION;
 
         EnemyType type;
+
+        void setSpriteColor(const sf::Color& color) override;
     };
 }

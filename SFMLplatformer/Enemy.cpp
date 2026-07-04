@@ -17,6 +17,8 @@ namespace fp
         applyGravity(dt);
         move(dt);
 
+        updateDamageFlash();
+
         CollisionSystem::resolveEnemyTileCollision(*this, map);
 
         if (damageCooldown > 0.f) damageCooldown -= dt;
@@ -39,6 +41,11 @@ namespace fp
     {
         velocity.x = speed * direction;
         sprite.move(velocity * dt);
+    }
+
+    void Enemy::setSpriteColor(const sf::Color& color)
+    {
+        sprite.setColor(color);
     }
 
     sf::FloatRect Enemy::getGlobalBounds() const

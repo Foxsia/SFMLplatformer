@@ -12,6 +12,10 @@ namespace fp
 
 		health -= dmg;
 
+		damageFlash = true;
+		damageFlashClock.restart();
+		setSpriteColor(sf::Color::Red);
+
 		if (health <= 0)
 		{
 			lives--;
@@ -36,5 +40,13 @@ namespace fp
 		lives -= amount;
 		health = maxHealth;
 		lives <= 0 ? alive = false : alive = true;
+	}
+	void Entity::updateDamageFlash()
+	{
+		if (damageFlash == true && damageFlashClock.getElapsedTime().asSeconds() >= 0.15f)
+		{
+			damageFlash = false;
+			setSpriteColor(sf::Color::White);
+		}
 	}
 }

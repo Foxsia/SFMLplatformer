@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 
 namespace fp
 {
@@ -12,6 +13,10 @@ namespace fp
         bool alive;
         float damageCooldown;
 
+        bool damageFlash = false;
+        sf::Clock damageFlashClock;
+
+        virtual void setSpriteColor(const sf::Color& color) = 0;
     public:
         Entity(int hp, int lives);
 
@@ -27,6 +32,8 @@ namespace fp
         void heal();
         void addLife(int amount);
         void loseLife(int amount);
+
+        void updateDamageFlash();
 	};
 }
 

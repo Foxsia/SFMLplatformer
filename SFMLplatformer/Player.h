@@ -66,6 +66,8 @@ namespace fp
 		void initAnimations();
 		void initPhysics();
 
+		void setSpriteColor(const sf::Color& color) override;
+
 		sf::Sprite sprite;
 		sf::Texture textureSheet;
 
