@@ -36,7 +36,8 @@
   "fireball": {
     "velocity": 500.0,
     "gravity": 1000.0,
-    "bounceForce": -300.0
+    "bounceForce": -300.0,
+    "enemyThrowY": -250
   },
   "fireEnemy": {
     "followDistance": 300.0,

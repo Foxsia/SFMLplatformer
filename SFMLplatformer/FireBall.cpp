@@ -13,10 +13,15 @@ namespace fp
 		shape.setPosition(pos);
 
 		velocity.x = right ? cfg["velocity"].get<float>() : -cfg["velocity"].get<float>();
+
+		if (team == Team::Enemy)
+		{
+			velocity.y = cfg["enemyThrowY"].get<float>();
+		}
 	}
 	void FireBall::update(float dt)
 	{ 
-		if(this->getTeam() == Team::Player) velocity.y += ConfigManager::get("fireball")["gravity"].get<float>() * dt;
+		velocity.y += ConfigManager::get("fireball")["gravity"].get<float>() * dt;
 		shape.move(velocity * dt);
 	}
 	void FireBall::render(sf::RenderTarget& target)
