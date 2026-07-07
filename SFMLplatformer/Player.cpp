@@ -146,6 +146,7 @@ namespace fp
 		firePower = false;
 		invulnerable = false;
 		invunerabilityClock.restart();
+		speedMultiplier = 1.f;
 	}
 
 	void Player::move(float dir_x, float dir_y, float dt)
