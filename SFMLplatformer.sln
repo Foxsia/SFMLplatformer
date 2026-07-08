@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFMLplatformer", "SFMLplatf
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFMLPlatformerCore", "SFMLPlatformerCore\SFMLPlatformerCore.vcxproj", "{74B80B04-B6A0-497E-AB3C-693C13165A81}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFMLplatformerTests", "SFMLplatformerTests\SFMLplatformerTests.vcxproj", "{48923FB7-62D8-43BD-BDDC-4B67F42A822F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +36,14 @@ Global
 		{74B80B04-B6A0-497E-AB3C-693C13165A81}.Release|x64.Build.0 = Release|x64
 		{74B80B04-B6A0-497E-AB3C-693C13165A81}.Release|x86.ActiveCfg = Release|Win32
 		{74B80B04-B6A0-497E-AB3C-693C13165A81}.Release|x86.Build.0 = Release|Win32
+		{48923FB7-62D8-43BD-BDDC-4B67F42A822F}.Debug|x64.ActiveCfg = Debug|x64
+		{48923FB7-62D8-43BD-BDDC-4B67F42A822F}.Debug|x64.Build.0 = Debug|x64
+		{48923FB7-62D8-43BD-BDDC-4B67F42A822F}.Debug|x86.ActiveCfg = Debug|Win32
+		{48923FB7-62D8-43BD-BDDC-4B67F42A822F}.Debug|x86.Build.0 = Debug|Win32
+		{48923FB7-62D8-43BD-BDDC-4B67F42A822F}.Release|x64.ActiveCfg = Release|x64
+		{48923FB7-62D8-43BD-BDDC-4B67F42A822F}.Release|x64.Build.0 = Release|x64
+		{48923FB7-62D8-43BD-BDDC-4B67F42A822F}.Release|x86.ActiveCfg = Release|Win32
+		{48923FB7-62D8-43BD-BDDC-4B67F42A822F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
