@@ -74,8 +74,6 @@ namespace fp
 		initSprite();
 		initAnimations();
 		initPhysics();
-
-		health = 1;
 	}
 
 	const sf::Vector2f Player::getPosition() const
