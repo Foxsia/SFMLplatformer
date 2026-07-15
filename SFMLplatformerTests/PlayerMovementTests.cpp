@@ -69,3 +69,23 @@ TEST(PlayerMovement, MoveRightFourTiles)
 
     EXPECT_NEAR(player.getPosition().x, 128.f, 3.f);
 }
+
+TEST(PlayerMovement, JumpAboveHeightInTime)
+{
+    fp::ConfigManager::load("../SFMLplatformer/config/gameplay.json");
+
+    fp::Player player;
+    player.setPosition(0.f, 200.f);
+
+    const float startY = player.getPosition().y;
+    const float dt = 1.f / 60.f;
+
+    player.jump();
+
+    for (int i = 0; i < 30; i++)
+    {
+        player.update(dt);
+    }
+
+    EXPECT_LT(player.getPosition().y, startY);
+}

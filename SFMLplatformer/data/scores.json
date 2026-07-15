@@ -16,5 +16,11 @@
         "name": "Katarzyna",
         "score": 875,
         "time": "0:46"
+    },
+    {
+        "level": "Level1",
+        "name": "player",
+        "score": 675,
+        "time": "0:28"
     }
 ]
